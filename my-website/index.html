@@ -22,7 +22,7 @@
 <body>
 
   <!-- =========================
-       OLD NAVBAR (RESTORED)
+       NAVBAR
   ========================== -->
   <div class="navbar">
     <img src="images/primedrama-logo.png" alt="PrimeDrama Logo" class="logo" />
@@ -79,22 +79,23 @@
         </div>
       </div>
 
+      <!-- SERVER SELECTOR (ZXCSTREAM) -->
       <div class="server-selector">
         <label for="server">Change Server:</label>
         <select id="server" onchange="changeServer()">
-          <option value="vidsrc.cc">Vidsrc.cc</option>
-          <option value="vidsrc.me">Vidsrc.me</option>
-          <option value="player.videasy.net">Player.Videasy.net</option>
+          <option value="zxc-player">ZXCStream Player</option>
+          <option value="zxc-embed">ZXCStream Embed</option>
         </select>
       </div>
 
+      <!-- VIDEO PLAYER -->
       <iframe
         id="modal-video"
         width="100%"
-        height="315"
+        height="100%"
         frameborder="0"
-        allowfullscreen
-      ></iframe>
+        allowfullscreen>
+      </iframe>
     </div>
   </div>
 
