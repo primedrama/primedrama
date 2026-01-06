@@ -16,6 +16,35 @@
   <!-- JS -->
   <script defer src="js/home.js"></script>
   <script src="https://hammerartist.com/80/db/87/80db87ca8966a01f222f0774bb4d71fe.js"></script>
+
+  <!-- LOGO FIX -->
+  <style>
+    .logo{
+      height: 55px;
+      width: auto;
+      max-width: 180px;
+      object-fit: contain;
+      border-radius: 0 !important; /* remove circle */
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    /* Tablet */
+    @media (max-width: 768px){
+      .logo{
+        height: 42px;
+        max-width: 140px;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 480px){
+      .logo{
+        height: 34px;
+        max-width: 120px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -24,9 +53,9 @@
 <div class="navbar">
   <img 
     src="https://i.ibb.co/5h4Vx3vG/primedrama-logo.png"
-  alt="PrimeDrama Logo"
-  class="logo"
-/>
+    alt="PrimeDrama Logo"
+    class="logo"
+  />
 
   <div class="nav-links">
     <a href="index.html">Home</a>
@@ -112,6 +141,7 @@
 
 </body>
 </html>
+
 
 
 
