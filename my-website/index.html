@@ -1,69 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Prime Drama</title>
 
-<link rel="stylesheet" href="css/home.css">
-<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script defer src="js/home.js"></script>
 
 <style>
-/* NAVBAR */
-body{
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+body{
   background:#111;
-  color:white;
+  color:#fff;
   font-family:Arial, sans-serif;
 }
 
+/* NAVBAR */
 .navbar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  padding:10px 20px;
+  align-items:center;
+  padding:15px 20px;
   background:#000;
 }
 
+/* LOGO */
 .logo{
   height:80px;
   width:auto;
-  max-width:320px;
-  object-fit:contain;
 }
-
-/* Tablet */
 @media(max-width:768px){
-  .logo{
-    height:60px;
-  }
+  .logo{height:60px;}
 }
-
-/* Mobile */
 @media(max-width:480px){
-  .logo{
-    height:45px;
-  }
+  .logo{height:50px;}
 }
 
 .nav-links{
   display:flex;
-  align-items:center;
   gap:15px;
+  align-items:center;
 }
-
 .nav-links a{
   color:white;
   text-decoration:none;
-  font-size:18px;
 }
-
 .search-bar{
-  padding:6px 10px;
+  padding:6px;
   border-radius:5px;
   border:none;
+}
+
+/* BANNER */
+.banner{
+  height:50vh;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:flex-end;
+  padding:30px;
+}
+.banner h1{
+  background:rgba(0,0,0,.7);
+  padding:10px;
+}
+
+/* LIST */
+.row{
+  margin:20px;
+}
+.list{
+  display:flex;
+  overflow-x:auto;
+}
+.list img{
+  width:150px;
+  margin-right:10px;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+.modal-content{
+  width:90%;
+  max-width:900px;
+  background:#000;
+  padding:15px;
+}
+.modal-body{
+  display:flex;
+  gap:15px;
+}
+.modal-body img{
+  width:200px;
+}
+.close{
+  font-size:28px;
+  cursor:pointer;
+  float:right;
+  color:red;
+}
+
+/* SEARCH */
+.search-modal{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:none;
+  flex-direction:column;
+  padding:20px;
+}
+.results{
+  display:flex;
+  flex-wrap:wrap;
+}
+.results img{
+  width:120px;
+  margin:5px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -73,12 +139,12 @@ body{
 <!-- NAVBAR -->
 <div class="navbar">
   <a href="index.html">
-    <img src="https://i.ibb.co/N2sGm0nC/logo.png" class="logo" alt="PrimeDrama Logo">
+    <img src="https://i.ibb.co/N2sGm0nC/logo.png" class="logo" alt="PrimeDrama">
   </a>
 
   <div class="nav-links">
-    <a href="index.html">Home</a>
-    <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()">
+    <a href="#">Home</a>
+    <input class="search-bar" placeholder="Search..." onfocus="openSearchModal()">
   </div>
 </div>
 
@@ -87,29 +153,15 @@ body{
   <h1 id="banner-title"></h1>
 </div>
 
-<!-- MOVIES -->
-<div class="row">
-  <h2>Trending Movies</h2>
-  <div class="list" id="movies-list"></div>
-</div>
-
-<!-- TV -->
-<div class="row">
-  <h2>Trending TV Shows</h2>
-  <div class="list" id="tvshows-list"></div>
-</div>
-
-<!-- ANIME -->
-<div class="row">
-  <h2>Trending Anime</h2>
-  <div class="list" id="anime-list"></div>
-</div>
+<!-- ROWS -->
+<div class="row"><h2>Trending Movies</h2><div class="list" id="movies-list"></div></div>
+<div class="row"><h2>Trending TV Shows</h2><div class="list" id="tvshows-list"></div></div>
+<div class="row"><h2>Trending Anime</h2><div class="list" id="anime-list"></div></div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-
+    <span class="close" onclick="closeModal()">×</span>
     <div class="modal-body">
       <img id="modal-image">
       <div>
@@ -120,9 +172,8 @@ body{
     </div>
 
     <select id="server" onchange="changeServer()">
-      <option value="vidsrc.cc">Vidsrc.cc</option>
-      <option value="vidsrc.me">Vidsrc.me</option>
-      <option value="player.videasy.net">Videasy</option>
+      <option value="zxc-player">ZXC Player</option>
+      <option value="zxc-embed">ZXC Embed</option>
     </select>
 
     <iframe id="modal-video" width="100%" height="350" allowfullscreen></iframe>
@@ -131,16 +182,85 @@ body{
 
 <!-- SEARCH -->
 <div class="search-modal" id="search-modal">
-  <span onclick="closeSearchModal()">&times;</span>
-  <input type="text" id="search-input" placeholder="Search..." oninput="searchTMDB()">
-  <div id="search-results"></div>
+  <span class="close" onclick="closeSearchModal()">×</span>
+  <input id="search-input" placeholder="Search..." oninput="searchTMDB()">
+  <div class="results" id="search-results"></div>
 </div>
 
-<footer>
-  <p>© 2025 Prime Drama</p>
-</footer>
+<script>
+const API_KEY="e34316a6fe456fe22b50c4033980b236";
+const BASE="https://api.themoviedb.org/3";
+const IMG="https://image.tmdb.org/t/p/original";
+let currentItem;
+
+async function fetchTrending(type){
+  const r=await fetch(`${BASE}/trending/${type}/week?api_key=${API_KEY}`);
+  return (await r.json()).results;
+}
+
+function showDetails(item){
+  currentItem=item;
+  document.getElementById("modal").style.display="flex";
+  document.getElementById("modal-title").innerText=item.title||item.name;
+  document.getElementById("modal-description").innerText=item.overview;
+  document.getElementById("modal-image").src=IMG+item.poster_path;
+  changeServer();
+}
+
+function changeServer(){
+  const s=document.getElementById("server").value;
+  const type=currentItem.media_type=="movie"?"movie":"tv";
+  const season=1,episode=1,lang="en";
+
+  let url="";
+  if(type=="movie"){
+    url=s=="zxc-player"
+      ?`https://zxcstream.xyz/player/movie/${currentItem.id}/${lang}`
+      :`https://zxcstream.xyz/embed/movie/${currentItem.id}`;
+  }else{
+    url=s=="zxc-player"
+      ?`https://zxcstream.xyz/player/tv/${currentItem.id}/${season}/${episode}/${lang}`
+      :`https://zxcstream.xyz/embed/tv/${currentItem.id}/${season}/${episode}`;
+  }
+  document.getElementById("modal-video").src=url;
+}
+
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+  document.getElementById("modal-video").src="";
+}
+
+function openSearchModal(){
+  document.getElementById("search-modal").style.display="flex";
+}
+function closeSearchModal(){
+  document.getElementById("search-modal").style.display="none";
+}
+
+async function init(){
+  const movies=await fetchTrending("movie");
+  const tv=await fetchTrending("tv");
+
+  movies.forEach(m=>{
+    const img=document.createElement("img");
+    img.src=IMG+m.poster_path;
+    img.onclick=()=>showDetails(m);
+    document.getElementById("movies-list").appendChild(img);
+  });
+
+  tv.forEach(t=>{
+    const img=document.createElement("img");
+    img.src=IMG+t.poster_path;
+    img.onclick=()=>showDetails(t);
+    document.getElementById("tvshows-list").appendChild(img);
+  });
+
+  document.getElementById("banner").style.backgroundImage=`url(${IMG+movies[0].backdrop_path})`;
+  document.getElementById("banner-title").innerText=movies[0].title;
+}
+init();
+</script>
 
 </body>
 </html>
-
 
