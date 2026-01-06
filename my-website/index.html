@@ -1,9 +1,8 @@
-<html lang="en"> 
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prime Drama</title>
-
   <link rel="stylesheet" href="css/home.css">
   <link rel="preload" href="css/home.css" as="style">
   <link rel="preload" href="js/home.js" as="script">
@@ -13,90 +12,66 @@
 </head>
 
 <body>
+  <div class="navbar">
+    <img src="logo.png" alt="https://i.ibb.co/nt0Mmzm/logo.png" />
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+    </div>
+  </div>
 
-<!-- ============ NAVBAR ============ -->
-<div class="navbar">
-  <img 
-    src="https://i.ibb.co/nt0Mmzm/logo.png"
-    alt="PrimeDrama Logo"
-    class="logo"
-  />
+  <div class="banner" id="banner">
+    <h1 id="banner-title"></h1>
+  </div>
 
-  <div class="nav-links">
-    <a href="index.html">Home</a>
-    <input 
-      type="text" 
-      class="search-bar" 
-      placeholder="Search..." 
-      onfocus="openSearchModal()" 
-    />
+  <div class="row">
+    <h2>Trending Movies</h2>
+    <div class="list" id="movies-list"></div>
+  </div>
+
+  <div class="row">
+    <h2>Trending TV Shows</h2>
+    <div class="list" id="tvshows-list"></div>
+  </div>
+
+  <div class="row">
+    <h2>Trending Anime</h2>
+    <div class="list" id="anime-list"></div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()" style="color: red;">&times;</span>
+      <div class="modal-body">
+  <img id="modal-image" src="" alt="" />
+  <div class="modal-text">
+    <h2 id="modal-title"></h2>
+    <div class="stars" id="modal-rating"></div>
+    <p id="modal-description"></p>
   </div>
 </div>
-
-<!-- ============ BANNER ============ -->
-<div class="banner" id="banner">
-  <h1 id="banner-title"></h1>
-</div>
-
-<!-- ============ CONTENT ROWS ============ -->
-<div class="row">
-  <h2>Trending Movies</h2>
-  <div class="list" id="movies-list"></div>
-</div>
-
-<div class="row">
-  <h2>Trending TV Shows</h2>
-  <div class="list" id="tvshows-list"></div>
-</div>
-
-<div class="row">
-  <h2>Trending Anime</h2>
-  <div class="list" id="anime-list"></div>
-</div>
-
-<!-- ============ MODAL PLAYER ============ -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()" style="color:red;">&times;</span>
-
-    <div class="modal-body">
-      <img id="modal-image" src="" alt="" />
-      <div class="modal-text">
-        <h2 id="modal-title"></h2>
-        <div class="stars" id="modal-rating"></div>
-        <p id="modal-description"></p>
+      
+      <div class="server-selector">
+        <label for="server">Change Server:</label>
+        <select id="server" onchange="changeServer()">
+          <option value="vidsrc.cc">Vidsrc.cc</option>
+          <option value="vidsrc.me">Vidsrc.me</option>
+          <option value="player.videasy.net">Player.Videasy.net</option>
+        </select>
       </div>
+      <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
     </div>
-
-    <div class="server-selector">
-      <label for="server">Change Server:</label>
-      <select id="server" onchange="changeServer()">
-        <option value="vidsrc.cc">Vidsrc.cc</option>
-        <option value="vidsrc.me">Vidsrc.me</option>
-        <option value="player.videasy.net">Player.Videasy.net</option>
-      </select>
-    </div>
-
-    <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
   </div>
-</div>
 
-<!-- ============ SEARCH MODAL ============ -->
-<div class="search-modal" id="search-modal">
-  <span class="close" onclick="closeSearchModal()" style="color:red;">&times;</span>
-  <input 
-    type="text" 
-    id="search-input" 
-    placeholder="Search for a movie or show..." 
-    oninput="searchTMDB()" 
-  />
-  <div class="results" id="search-results"></div>
-</div>
+  <div class="search-modal" id="search-modal">
+    <span class="close" onclick="closeSearchModal()" style="color: red;">&times;</span>
+    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
+    <div class="results" id="search-results"></div>
+  </div>
 
-<!-- ============ FOOTER ============ -->
 <footer class="footer">
   <div class="footer-content">
-    <p>&copy; 2025 Prime Drama. All rights reserved.</p>
+    <p>&copy; 2025 My Website. All rights reserved.</p>
     <div class="footer-links">
       <a href="#">Disclaimer</a>
       <a href="#">About Us</a>
@@ -105,5 +80,6 @@
   </div>
 </footer>
 
+  
+
 </body>
-</html>
