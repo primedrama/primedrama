@@ -20,17 +20,20 @@ body {
   background: #222;
 }
 
-/* IMPORTANT: logo size override */
+/* ===== FINAL LOGO STYLE ===== */
 .logo {
   height: 90px;
   width: auto;
   cursor: pointer;
   transition: 0.3s ease;
+  background: transparent;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 12px red);
 }
 
 .logo:hover {
   transform: scale(1.1);
-  filter: drop-shadow(0 0 12px red);
+  filter: drop-shadow(0 0 20px red);
 }
 
 .nav-links {
@@ -241,7 +244,7 @@ body {
 
 @media (max-width: 480px) {
   .logo {
-    height: 70px; /* smaller on phones */
+    height: 70px;
   }
 
   .banner h1 {
@@ -291,3 +294,4 @@ body {
 .footer-links a:hover {
   color: #fff;
 }
+
