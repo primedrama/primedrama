@@ -11,112 +11,59 @@
 <script defer src="js/home.js"></script>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
+/* NAVBAR */
 body{
+  margin:0;
   background:#111;
-  color:#fff;
+  color:white;
   font-family:Arial, sans-serif;
 }
 
-/* NAVBAR */
 .navbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:12px 20px;
-  background:#222;
+  padding:10px 20px;
+  background:#000;
 }
 
-/* LOGO FIX */
 .logo{
-  height:60px;
+  height:80px;
   width:auto;
-  max-width:200px;
+  max-width:320px;
   object-fit:contain;
-  background:transparent;
-  border-radius:0;
-  box-shadow:none;
-  display:block;
 }
 
 /* Tablet */
-@media (max-width:768px){
+@media(max-width:768px){
   .logo{
-    height:45px;
+    height:60px;
   }
 }
 
 /* Mobile */
-@media (max-width:480px){
+@media(max-width:480px){
   .logo{
-    height:35px;
+    height:45px;
   }
 }
 
 .nav-links{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:15px;
 }
 
 .nav-links a{
   color:white;
   text-decoration:none;
+  font-size:18px;
 }
 
 .search-bar{
-  padding:6px;
+  padding:6px 10px;
   border-radius:5px;
   border:none;
-}
-
-/* Banner */
-.banner{
-  height:50vh;
-  background:#000;
-  display:flex;
-  align-items:flex-end;
-  padding:20px;
-}
-
-.banner h1{
-  background:rgba(0,0,0,0.7);
-  padding:10px;
-}
-
-/* Rows */
-.row{
-  margin:20px;
-}
-
-.list{
-  display:flex;
-  overflow-x:auto;
-}
-
-.list img{
-  width:150px;
-  margin-right:10px;
-  border-radius:6px;
-}
-
-/* Footer */
-.footer{
-  background:#222;
-  padding:20px;
-  text-align:center;
-  margin-top:40px;
-}
-
-.footer-links a{
-  color:red;
-  margin:0 10px;
-  text-decoration:none;
 }
 </style>
 </head>
@@ -135,36 +82,65 @@ body{
   </div>
 </div>
 
-<!-- Banner -->
+<!-- BANNER -->
 <div class="banner" id="banner">
   <h1 id="banner-title"></h1>
 </div>
 
-<!-- Content -->
+<!-- MOVIES -->
 <div class="row">
   <h2>Trending Movies</h2>
   <div class="list" id="movies-list"></div>
 </div>
 
+<!-- TV -->
 <div class="row">
   <h2>Trending TV Shows</h2>
   <div class="list" id="tvshows-list"></div>
 </div>
 
+<!-- ANIME -->
 <div class="row">
   <h2>Trending Anime</h2>
   <div class="list" id="anime-list"></div>
 </div>
 
-<!-- Footer -->
-<footer class="footer">
-  <p>&copy; 2025 PrimeDrama</p>
-  <div class="footer-links">
-    <a href="#">Disclaimer</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+
+    <div class="modal-body">
+      <img id="modal-image">
+      <div>
+        <h2 id="modal-title"></h2>
+        <div id="modal-rating"></div>
+        <p id="modal-description"></p>
+      </div>
+    </div>
+
+    <select id="server" onchange="changeServer()">
+      <option value="vidsrc.cc">Vidsrc.cc</option>
+      <option value="vidsrc.me">Vidsrc.me</option>
+      <option value="player.videasy.net">Videasy</option>
+    </select>
+
+    <iframe id="modal-video" width="100%" height="350" allowfullscreen></iframe>
   </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-modal" id="search-modal">
+  <span onclick="closeSearchModal()">&times;</span>
+  <input type="text" id="search-input" placeholder="Search..." oninput="searchTMDB()">
+  <div id="search-results"></div>
+</div>
+
+<footer>
+  <p>© 2025 Prime Drama</p>
 </footer>
 
 </body>
 </html>
+
+
