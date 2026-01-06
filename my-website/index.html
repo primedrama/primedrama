@@ -1,121 +1,129 @@
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PrimeDrama</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PrimeDrama</title>
 
-  <style>
-  /* ============ GLOBAL ============ */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+<style>
+/* ============ GLOBAL ============ */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-  body {
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #fff;
-  }
+body{
+  font-family: Arial, sans-serif;
+  background:#111;
+  color:#fff;
+}
 
-  /* ============ NAVBAR ============ */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: #222;
-  }
+/* ============ NAVBAR ============ */
+.navbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 20px;
+  background:#222;
+}
 
-  /* ============ RESPONSIVE LOGO (FIXED) ============ */
+/* Logo wrapper */
+.navbar img{
+  display:block;
+}
+
+/* ============ RESPONSIVE LOGO ============ */
+.logo{
+  height:60px;
+  width:auto;
+  max-width:220px;
+  object-fit:contain;
+  background:transparent;
+  border-radius:0;
+  box-shadow:none;
+}
+
+/* Tablet */
+@media (max-width:768px){
   .logo{
-    height: 60px;
-    width: auto;
-    max-width: 200px;
-    object-fit: contain;
-    background: transparent;
-    border-radius: 0;       /* walang bilog */
-    box-shadow: none;      /* walang glow */
-    display: block;
+    height:45px;
+    max-width:170px;
   }
+}
 
-  /* Tablet */
-  @media (max-width: 768px){
-    .logo{
-      height: 45px;
-      max-width: 160px;
-    }
+/* Mobile */
+@media (max-width:480px){
+  .logo{
+    height:35px;
+    max-width:130px;
   }
+}
 
-  /* Mobile */
-  @media (max-width: 480px){
-    .logo{
-      height: 35px;
-      max-width: 130px;
-    }
-  }
+/* ============ NAV LINKS ============ */
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.nav-links a{
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+}
 
-  .nav-links a {
-    color: white;
-    text-decoration: none;
-  }
+.search-bar{
+  padding:6px 10px;
+  border-radius:5px;
+  border:none;
+  outline:none;
+}
 
-  .search-bar {
-    padding: 6px;
-    border-radius: 5px;
-    border: none;
-  }
+/* ============ BANNER ============ */
+.banner{
+  height:50vh;
+  background:#000;
+  display:flex;
+  align-items:center;
+  padding:20px;
+}
 
-  /* ============ BANNER ============ */
-  .banner {
-    height: 50vh;
-    background: #000;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-  }
+.banner h1{
+  background:rgba(0,0,0,0.7);
+  padding:12px 18px;
+  border-radius:6px;
+}
 
-  .banner h1 {
-    background: rgba(0,0,0,0.7);
-    padding: 10px;
-  }
+/* ============ ROWS ============ */
+.row{
+  margin:20px;
+}
 
-  /* ============ ROWS ============ */
-  .row {
-    margin: 20px;
-  }
+.list{
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+}
 
-  .list {
-    display: flex;
-    overflow-x: auto;
-  }
+.list img{
+  width:150px;
+  border-radius:6px;
+}
 
-  .list img {
-    width: 150px;
-    margin-right: 10px;
-    border-radius: 5px;
-  }
+/* ============ FOOTER ============ */
+.footer{
+  background:#222;
+  padding:20px;
+  text-align:center;
+  margin-top:40px;
+}
 
-  /* ============ FOOTER ============ */
-  .footer {
-    background: #222;
-    padding: 20px;
-    text-align: center;
-    margin-top: 40px;
-  }
-
-  .footer-links a {
-    color: red;
-    margin: 0 10px;
-    text-decoration: none;
-  }
-  </style>
+.footer-links a{
+  color:red;
+  margin:0 10px;
+  text-decoration:none;
+}
+</style>
 </head>
 
 <body>
@@ -123,7 +131,6 @@
 <!-- ============ NAVBAR ============ -->
 <div class="navbar">
   <img src="https://i.ibb.co/5h4Vx3vG/primedrama-logo.png" class="logo" alt="PrimeDrama Logo">
-
   <div class="nav-links">
     <a href="#">Home</a>
     <input type="text" class="search-bar" placeholder="Search...">
@@ -163,4 +170,5 @@
 
 </body>
 </html>
+
 
