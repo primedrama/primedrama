@@ -4,146 +4,163 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PrimeDrama</title>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/home.css">
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- Manifest -->
-  <link rel="manifest" href="manifest.json">
-
-  <!-- JS -->
-  <script defer src="js/home.js"></script>
-  <script src="https://hammerartist.com/80/db/87/80db87ca8966a01f222f0774bb4d71fe.js"></script>
-
-  <!-- LOGO FIX -->
   <style>
+  /* ============ GLOBAL ============ */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: #fff;
+  }
+
+  /* ============ NAVBAR ============ */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #222;
+  }
+
+  /* ============ RESPONSIVE LOGO (FIXED) ============ */
+  .logo{
+    height: 60px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    background: transparent;
+    border-radius: 0;       /* walang bilog */
+    box-shadow: none;      /* walang glow */
+    display: block;
+  }
+
+  /* Tablet */
+  @media (max-width: 768px){
     .logo{
-      height: 55px;
-      width: auto;
-      max-width: 180px;
-      object-fit: contain;
-      border-radius: 0 !important; /* remove circle */
-      background: transparent !important;
-      box-shadow: none !important;
+      height: 45px;
+      max-width: 160px;
     }
+  }
 
-    /* Tablet */
-    @media (max-width: 768px){
-      .logo{
-        height: 42px;
-        max-width: 140px;
-      }
+  /* Mobile */
+  @media (max-width: 480px){
+    .logo{
+      height: 35px;
+      max-width: 130px;
     }
+  }
 
-    /* Mobile */
-    @media (max-width: 480px){
-      .logo{
-        height: 34px;
-        max-width: 120px;
-      }
-    }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .search-bar {
+    padding: 6px;
+    border-radius: 5px;
+    border: none;
+  }
+
+  /* ============ BANNER ============ */
+  .banner {
+    height: 50vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .banner h1 {
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+  }
+
+  /* ============ ROWS ============ */
+  .row {
+    margin: 20px;
+  }
+
+  .list {
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .list img {
+    width: 150px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    background: #222;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .footer-links a {
+    color: red;
+    margin: 0 10px;
+    text-decoration: none;
+  }
   </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+<!-- ============ NAVBAR ============ -->
 <div class="navbar">
-  <img
-  src="https://i.ibb.co/5h4Vx3vG/primedrama-logo.png"
-  alt="PrimeDrama Logo"
-  class="logo"
-/>
+  <img src="https://i.ibb.co/5h4Vx3vG/primedrama-logo.png" class="logo" alt="PrimeDrama Logo">
 
   <div class="nav-links">
-    <a href="index.html">Home</a>
-    <input
-      type="text"
-      class="search-bar"
-      placeholder="Search..."
-      onfocus="openSearchModal()"
-    />
+    <a href="#">Home</a>
+    <input type="text" class="search-bar" placeholder="Search...">
   </div>
 </div>
 
-<!-- ================= HERO BANNER ================= -->
-<div class="banner" id="banner">
-  <h1 id="banner-title"></h1>
+<!-- ============ BANNER ============ -->
+<div class="banner">
+  <h1>Welcome to PrimeDrama</h1>
 </div>
 
-<!-- ================= CONTENT ROWS ================= -->
+<!-- ============ CONTENT ============ -->
 <div class="row">
   <h2>Trending Movies</h2>
-  <div class="list" id="movies-list"></div>
+  <div class="list"></div>
 </div>
 
 <div class="row">
   <h2>Trending TV Shows</h2>
-  <div class="list" id="tvshows-list"></div>
+  <div class="list"></div>
 </div>
 
 <div class="row">
   <h2>Trending Anime</h2>
-  <div class="list" id="anime-list"></div>
+  <div class="list"></div>
 </div>
 
-<!-- ================= MODAL PLAYER ================= -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()" style="color:red;">&times;</span>
-
-    <div class="modal-body">
-      <img id="modal-image" src="" alt="" />
-      <div class="modal-text">
-        <h2 id="modal-title"></h2>
-        <div class="stars" id="modal-rating"></div>
-        <p id="modal-description"></p>
-      </div>
-    </div>
-
-    <div class="server-selector">
-      <label for="server">Change Server:</label>
-      <select id="server" onchange="changeServer()">
-        <option value="zxc-player">ZXCStream Player</option>
-        <option value="zxc-embed">ZXCStream Embed</option>
-      </select>
-    </div>
-
-    <iframe id="modal-video" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-  </div>
-</div>
-
-<!-- ================= SEARCH MODAL ================= -->
-<div class="search-modal" id="search-modal">
-  <span class="close" onclick="closeSearchModal()" style="color:red;">&times;</span>
-  <input
-    type="text"
-    id="search-input"
-    placeholder="Search for a movie or show..."
-    oninput="searchTMDB()"
-  />
-  <div class="results" id="search-results"></div>
-</div>
-
-<!-- ================= FOOTER ================= -->
+<!-- ============ FOOTER ============ -->
 <footer class="footer">
-  <div class="footer-content">
-    <p>&copy; 2025 PrimeDrama. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="#">Disclaimer</a>
-      <a href="#">About Us</a>
-      <a href="#">Contact Us</a>
-    </div>
+  <p>&copy; 2025 PrimeDrama</p>
+  <div class="footer-links">
+    <a href="#">Disclaimer</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
   </div>
 </footer>
 
 </body>
 </html>
-
-
-
-
-
 
