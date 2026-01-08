@@ -1,4 +1,4 @@
-const API_KEY = 'e34316a6fe456fe22b50c4033980b236';
+const API_KEY = atob('ZTM0MzE2YTZmZTQ1NmZlMjJiNTBjNDAzMzk4MGIzMjY=');
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMG_URL = 'https://image.tmdb.org/t/p/original';
 let currentItem;
@@ -78,7 +78,6 @@ function changeServer() {
   const server = document.getElementById('server').value;
   const isMovie = currentItem.media_type === "movie";
 
-  // defaults
   const language = "en";
   const season = 1;
   const episode = 1;
@@ -86,19 +85,15 @@ function changeServer() {
   let embedURL = "";
 
   if (server === "zxc-player") {
-    if (isMovie) {
-      embedURL = `https://zxcstream.xyz/player/movie/${currentItem.id}/${language}`;
-    } else {
-      embedURL = `https://zxcstream.xyz/player/tv/${currentItem.id}/${season}/${episode}/${language}`;
-    }
+    embedURL = isMovie
+      ? `https://zxcstream.xyz/player/movie/${currentItem.id}/${language}`
+      : `https://zxcstream.xyz/player/tv/${currentItem.id}/${season}/${episode}/${language}`;
   }
 
   if (server === "zxc-embed") {
-    if (isMovie) {
-      embedURL = `https://zxcstream.xyz/embed/movie/${currentItem.id}`;
-    } else {
-      embedURL = `https://zxcstream.xyz/embed/tv/${currentItem.id}/${season}/${episode}`;
-    }
+    embedURL = isMovie
+      ? `https://zxcstream.xyz/embed/movie/${currentItem.id}`
+      : `https://zxcstream.xyz/embed/tv/${currentItem.id}/${season}/${episode}`;
   }
 
   document.getElementById('modal-video').src = embedURL;
