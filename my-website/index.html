@@ -131,7 +131,9 @@ body{
   cursor:pointer;
 }
 </style>
-  <script src="https://hammerartist.com/80/db/87/80db87ca8966a01f222f0774bb4d71fe.js"></script>
+
+<!-- ADS SCRIPT (UNCHANGED) -->
+<script src="https://hammerartist.com/80/db/87/80db87ca8966a01f222f0774bb4d71fe.js"></script>
 </head>
 
 <body>
@@ -198,6 +200,14 @@ async function fetchTrending(type){
   return (await r.json()).results;
 }
 
+/* ✅ TRENDING ANIME FIX */
+async function fetchTrendingAnime(){
+  const r = await fetch(
+    `${BASE}/discover/tv?api_key=${API_KEY}&with_genres=16&sort_by=popularity.desc`
+  );
+  return (await r.json()).results;
+}
+
 function showDetails(item){
   currentItem=item;
   document.getElementById("modal").style.display="flex";
@@ -237,25 +247,54 @@ function closeSearchModal(){
   document.getElementById("search-modal").style.display="none";
 }
 
+async function searchTMDB(){
+  const q=document.getElementById("search-input").value;
+  if(!q) return;
+  const r=await fetch(`${BASE}/search/multi?api_key=${API_KEY}&query=${q}`);
+  const data=await r.json();
+  const res=document.getElementById("search-results");
+  res.innerHTML="";
+  data.results.forEach(i=>{
+    if(!i.poster_path) return;
+    const img=document.createElement("img");
+    img.src=IMG+i.poster_path;
+    img.onclick=()=>showDetails(i);
+    res.appendChild(img);
+  });
+}
+
+/* ✅ FIXED INIT */
 async function init(){
   const movies=await fetchTrending("movie");
   const tv=await fetchTrending("tv");
+  const anime=await fetchTrendingAnime();
 
   movies.forEach(m=>{
+    if(!m.poster_path) return;
     const img=document.createElement("img");
     img.src=IMG+m.poster_path;
-    img.onclick=()=>showDetails(m);
+    img.onclick=()=>showDetails({...m,media_type:"movie"});
     document.getElementById("movies-list").appendChild(img);
   });
 
   tv.forEach(t=>{
+    if(!t.poster_path) return;
     const img=document.createElement("img");
     img.src=IMG+t.poster_path;
-    img.onclick=()=>showDetails(t);
+    img.onclick=()=>showDetails({...t,media_type:"tv"});
     document.getElementById("tvshows-list").appendChild(img);
   });
 
-  document.getElementById("banner").style.backgroundImage=`url(${IMG+movies[0].backdrop_path})`;
+  anime.forEach(a=>{
+    if(!a.poster_path) return;
+    const img=document.createElement("img");
+    img.src=IMG+a.poster_path;
+    img.onclick=()=>showDetails({...a,media_type:"tv"});
+    document.getElementById("anime-list").appendChild(img);
+  });
+
+  document.getElementById("banner").style.backgroundImage =
+    `url(${IMG+movies[0].backdrop_path})`;
   document.getElementById("banner-title").innerText=movies[0].title;
 }
 init();
@@ -263,6 +302,3 @@ init();
 
 </body>
 </html>
-
-
-
