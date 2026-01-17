@@ -1,7 +1,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  
+  <meta name="viewport" content="width=1200, initial-scale=0.9"/>
+
   <title>Prime Drama</title>
 
   <meta property="og:title" content="Watch Full Movie Now" />
@@ -20,15 +23,26 @@
 
 <body>
 
+
 <header class="navbar">
   <div class="nav-inner">
 
-    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Prime Drama">
+    <img
+      class="logo"
+      src="https://i.ibb.co/d4dXkX6V/logo.png"
+      alt="Prime Drama"
+    >
 
-    <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+
+    <button
+      class="hamburger"
+      onclick="toggleNav()"
+      aria-label="Menu"
+    >
       ☰
     </button>
 
+ 
     <div class="search-wrapper">
       <input
         id="search-input"
@@ -53,16 +67,19 @@
     <div class="grid" id="search-results"></div>
   </section>
 
+
   <section class="row box red-glow">
     <h2>🎬 Trending Movies</h2>
     <div class="list" id="movies-list"></div>
   </section>
+
 
   <section class="row box red-glow">
     <h2>📺 Trending TV Shows</h2>
     <div class="list" id="tvshows-list"></div>
   </section>
 
+  
   <section class="row box red-glow">
     <h2>🎌 Trending Anime</h2>
     <div class="list" id="anime-list"></div>
@@ -70,15 +87,19 @@
 
 </main>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
 
     <span class="close" onclick="closeModal()">✖</span>
-    
+
+  
     <div class="player-wrapper">
-      <iframe id="modal-video" allowfullscreen></iframe>
+      <iframe
+        id="modal-video"
+        allowfullscreen
+      ></iframe>
     </div>
+
     
     <div class="info-wrapper">
       <div class="info-text">
@@ -86,7 +107,11 @@
         <div id="modal-rating"></div>
         <p id="modal-description"></p>
 
-        <select id="server" hidden onchange="changeServer()">
+        <select
+          id="server"
+          hidden
+          onchange="changeServer()"
+        >
           <option value="embed" selected>HD 2</option>
           <option value="player">HD 1</option>
         </select>
@@ -96,8 +121,11 @@
   </div>
 </div>
 
+
 <footer class="site-footer">
-  <p>© <span id="year"></span> Prime Drama. All rights reserved.</p>
+  <p>
+    © <span id="year"></span> Prime Drama. All rights reserved.
+  </p>
   <p class="disclaimer">
     This site does not store any files on our server.
     We only link to the media which is hosted on 3rd party services.
@@ -105,11 +133,13 @@
 </footer>
 
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
 </script>
 
 </body>
 </html>
+
 
 
 
