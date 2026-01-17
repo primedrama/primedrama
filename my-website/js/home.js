@@ -14,13 +14,11 @@ async function safeFetch(url){
   }
 }
 
-// Trending movies/tv
 async function fetchTrending(type){
   const data = await safeFetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
   return data?.results || [];
 }
 
-// Trending Anime
 async function fetchTrendingAnime(){
   const pages = [1,2,3].map(p=>safeFetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${p}`));
   const results = (await Promise.all(pages))
@@ -29,7 +27,6 @@ async function fetchTrendingAnime(){
   return results;
 }
 
-// Display banner
 function displayBanner(item){
   if(!item) return;
   const banner = document.getElementById('banner');
@@ -38,14 +35,10 @@ function displayBanner(item){
   document.getElementById('banner-title').textContent = item.title||item.name||"No Title";
 }
 
-// Display list
 function displayList(items, containerId){
   const container = document.getElementById(containerId);
   container.innerHTML="";
-  if(!items || !items.length){
-    container.innerHTML="<p style='color:gray'>No content available.</p>";
-    return;
-  }
+  if(!items.length){ container.innerHTML="<p style='color:gray'>No content available.</p>"; return; }
   items.forEach(item=>{
     const img = document.createElement('img');
     img.src = item.poster_path ? IMG_URL+item.poster_path : "https://via.placeholder.com/160x240?text=No+Image";
@@ -55,7 +48,6 @@ function displayList(items, containerId){
   });
 }
 
-// Modal
 function showDetails(item){
   if(!item) return;
   currentItem = item;
@@ -120,12 +112,11 @@ async function init(){
   if(!tv.length) tv=[{name:"No TV Shows", poster_path:null, backdrop_path:null}];
   if(!anime.length) anime=[{name:"No Anime", poster_path:null, backdrop_path:null}];
 
-  const bannerItem = movies.find(m=>m.backdrop_path) || movies[0];
-  displayBanner(bannerItem);
-
+  displayBanner(movies.find(m=>m.backdrop_path) || movies[0]);
   displayList(movies,'movies-list');
   displayList(tv,'tvshows-list');
   displayList(anime,'anime-list');
 }
 
 init();
+
