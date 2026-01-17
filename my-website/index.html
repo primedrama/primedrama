@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prime Drama</title>
 
-  <meta property="og:title" content="Watch Full Movie" />
+  <meta property="og:title" content="Watch Full Movie Here" />
   <meta property="og:description" content="Watch trending movies, TV shows, and anime on PrimeDrama." />
   <meta property="og:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
   <meta property="og:url" content="https://primedrama-19t.pages.dev/" />
@@ -60,47 +61,11 @@
     <div class="grid" id="search-results"></div>
   </section>
 
-  <!-- RECOMMENDED FOR YOU (Visible) -->
+  <!-- RECOMMENDED FOR YOU (1 row, poster-only, randomized) -->
   <section class="row box red-glow" id="recommended-section">
     <h2>Recommended For You</h2>
-    <div class="list two-rows" id="recommended-list">
-
-      <!-- Fall -->
-      <div class="list-item">
-        <img src="URL_TO_FALL_IMAGE" alt="Fall">
-        <p>Fall</p>
-      </div>
-
-      <!-- Prey -->
-      <div class="list-item">
-        <img src="URL_TO_PREY_IMAGE" alt="Prey">
-        <p>Prey</p>
-      </div>
-
-      <!-- Litsoneras -->
-      <div class="list-item">
-        <img src="URL_TO_LITSONERAS_IMAGE" alt="Litsoneras">
-        <p>Litsoneras</p>
-      </div>
-
-      <!-- The Gorge -->
-      <div class="list-item">
-        <img src="URL_TO_THE_GORGE_IMAGE" alt="The Gorge">
-        <p>The Gorge</p>
-      </div>
-
-      <!-- Pamasahe -->
-      <div class="list-item">
-        <img src="URL_TO_PAMASAHE_IMAGE" alt="Pamasahe">
-        <p>Pamasahe</p>
-      </div>
-
-      <!-- Alita -->
-      <div class="list-item">
-        <img src="URL_TO_ALITA_IMAGE" alt="Alita">
-        <p>Alita</p>
-      </div>
-
+    <div class="list" id="recommended-list" style="display:flex; gap:10px; overflow-x:auto; padding:10px 0;">
+      <!-- Posters will be injected via JS -->
     </div>
   </section>
 
@@ -149,7 +114,7 @@
 <footer class="site-footer" style="background:#111; color:#fff; padding:20px; text-align:center;">
   <p>© <span id="year"></span> PrimeDrama. All rights reserved.</p>
 
-  <!-- Short Version 3 DMCA / Disclaimer -->
+  <!-- DMCA / Disclaimer Version 3 -->
   <p style="font-size:12px; color:#ccc; max-width:600px; margin:10px auto; line-height:1.5;">
     PrimeDrama aggregates externally hosted content only. We do not host or distribute media files. All content belongs to its rightful owners. We respect copyright law and respond promptly to takedown requests.
   </p>
@@ -170,9 +135,43 @@
   const emailLink = document.getElementById("email-link");
   emailLink.href = "mailto:" + user + "@" + domain;
   emailLink.textContent = "Email Us";
+
+  // Recommended For You - Randomized posters
+  const recommendedList = document.getElementById('recommended-list');
+  const posterImages = [
+    'URL_TO_IMAGE_1',
+    'URL_TO_IMAGE_2',
+    'URL_TO_IMAGE_3',
+    'URL_TO_IMAGE_4',
+    'URL_TO_IMAGE_5',
+    'URL_TO_IMAGE_6'
+  ];
+
+  function shuffle(array) {
+    for (let i = array.length -1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i+1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function displayRecommended() {
+    recommendedList.innerHTML = '';
+    const shuffled = shuffle([...posterImages]);
+    shuffled.forEach(url => {
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.style.minWidth = '120px'; // small poster
+      div.innerHTML = `<img src="${url}" alt="Movie Poster" style="width:100%; height:auto; border-radius:5px;">`;
+      recommendedList.appendChild(div);
+    });
+  }
+
+  displayRecommended();
 </script>
 
 </body>
 </html>
+
 
 
