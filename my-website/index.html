@@ -2,12 +2,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prime Drama</title>
+  <title>Drama Box</title>
 
   <meta property="og:title" content="Watch Full Movie" />
   <meta property="og:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
   <meta property="og:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
-  <meta property="og:url" content="https://primedrama-19t.pages.dev/" />
+  <meta property="og:url" content="https://dramabox-85g.pages.dev/" />
   <meta property="og:type" content="website" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -18,7 +18,7 @@
 </head>
 <body>
 
-
+<!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-inner">
     <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box">
@@ -31,32 +31,30 @@
     <button class="hamburger" onclick="toggleNav()">☰</button>
   </div>
 
-
   <div class="mobile-menu" id="mobile-menu">
     <a href="#">Home</a>
     <a href="#movies-list">Movies</a>
     <a href="#tvshows-list">TV Shows</a>
     <a href="#anime-list">Anime</a>
 
-    
     <div class="social-icons">
-      <a href="https://facebook.com" target="_blank">
-        <img src="https://i.ibb.co/HfZ99tHz/facebook.png" alt="Facebook">
+      <a href="#" onclick="shareFacebook()" title="Share on Facebook">
+        <img src="https://i.ibb.co/HfZ99tHz/facebook.png" alt="facebook">
       </a>
-      <a href="https://twitter.com" target="_blank">
-        <img src="https://i.ibb.co/SYFV9hq/twitter.png" alt="Twitter">
+      <a href="#" onclick="shareTwitter()" title="Share on Twitter">
+        <img src="https://i.ibb.co/SYFV9hq/twitter.png" alt="twitter">
       </a>
-      <a href="https://instagram.com" target="_blank">
-        <img src="https://i.ibb.co/3Y16D9Xh/instagram.png" alt="Instagram">
+      <a href="#" onclick="shareInstagram()" title="Share on Instagram">
+        <img src="https://i.ibb.co/3Y16D9Xh/instagram.png" alt="instagram">
       </a>
-      <a href="https://tiktok.com" target="_blank">
-        <img src="https://i.ibb.co/Q7GqrG4j/tiktok.png" alt="TikTok">
+      <a href="#" onclick="shareTikTok()" title="Share on TikTok">
+        <img src="https://i.ibb.co/Q7GqrG4j/tiktok.png" alt="tiktok">
       </a>
     </div>
   </div>
 </header>
 
-
+<!-- HERO / BANNER -->
 <section class="banner" id="banner">
   <div class="banner-content">
     <h1 id="banner-title"></h1>
@@ -65,42 +63,42 @@
 </section>
 
 <main>
-
-
+  <!-- SEARCH RESULTS -->
   <section class="row box red-glow" id="search-section" hidden>
     <h2>Search Results</h2>
     <div class="grid" id="search-results"></div>
   </section>
 
+  <!-- TRENDING MOVIES -->
   <section class="row box red-glow">
     <h2>Trending Movies</h2>
     <div class="list two-rows" id="movies-list"></div>
   </section>
 
- 
+  <!-- TRENDING TV SHOWS -->
   <section class="row box red-glow">
     <h2>Trending TV Shows</h2>
     <div class="list two-rows" id="tvshows-list"></div>
   </section>
 
-  
+  <!-- TRENDING ANIME -->
   <section class="row box red-glow">
     <h2>Trending Anime</h2>
     <div class="list two-rows" id="anime-list"></div>
   </section>
 </main>
 
-
+<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
 
- 
+    <!-- PLAYER -->
     <div class="player-wrapper">
       <iframe id="modal-video" allowfullscreen></iframe>
     </div>
 
-   
+    <!-- INFO -->
     <div class="info-wrapper" id="info-wrapper">
       <div class="info-text">
         <h2 id="modal-title"></h2>
@@ -116,7 +114,7 @@
   </div>
 </div>
 
-
+<!-- FOOTER -->
 <footer class="site-footer">
   <p>© <span id="year"></span> Drama Box. All rights reserved.</p>
   <p class="disclaimer">
