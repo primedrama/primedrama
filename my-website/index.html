@@ -5,143 +5,15 @@
 <title>Prime Drama</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-body{
-  background:#111;
-  color:#fff;
-  font-family:Arial, sans-serif;
-}
-
-/* NAVBAR */
-.navbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 20px;
-  background:#000;
-}
-
-/* LOGO */
-.logo{
-  height:80px;
-  width:auto;
-}
-@media(max-width:768px){
-  .logo{height:60px;}
-}
-@media(max-width:480px){
-  .logo{height:50px;}
-}
-
-.nav-links{
-  display:flex;
-  gap:15px;
-  align-items:center;
-}
-.nav-links a{
-  color:white;
-  text-decoration:none;
-}
-.search-bar{
-  padding:6px;
-  border-radius:5px;
-  border:none;
-}
-
-/* BANNER */
-.banner{
-  height:50vh;
-  background-size:cover;
-  background-position:center;
-  display:flex;
-  align-items:flex-end;
-  padding:30px;
-}
-.banner h1{
-  background:rgba(0,0,0,.7);
-  padding:10px;
-}
-
-/* LIST */
-.row{
-  margin:20px;
-}
-.list{
-  display:flex;
-  overflow-x:auto;
-}
-.list img{
-  width:150px;
-  margin-right:10px;
-  border-radius:5px;
-  cursor:pointer;
-}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.9);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-.modal-content{
-  width:90%;
-  max-width:900px;
-  background:#000;
-  padding:15px;
-}
-.modal-body{
-  display:flex;
-  gap:15px;
-}
-.modal-body img{
-  width:200px;
-}
-.close{
-  font-size:28px;
-  cursor:pointer;
-  float:right;
-  color:red;
-}
-
-/* SEARCH */
-.search-modal{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:none;
-  flex-direction:column;
-  padding:20px;
-}
-.results{
-  display:flex;
-  flex-wrap:wrap;
-}
-.results img{
-  width:120px;
-  margin:5px;
-  cursor:pointer;
-}
-</style>
-
-<!-- ADS SCRIPT (UNCHANGED) -->
+<link rel="stylesheet" href="style.css">
 
 </head>
-
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
   <a href="index.html">
-    <img src="https://i.ibb.co/Z12J4RQq/logo.png" class="logo" alt="PrimeDrama">
+    <img src="https://i.ibb.co/Z12J4RQq/logo.png" class="logo logo-animate" alt="PrimeDrama">
   </a>
 
   <div class="nav-links">
@@ -162,23 +34,14 @@ body{
 
 <!-- MODAL -->
 <div class="modal" id="modal">
-  <div class="modal-content">
+  <div class="modal-content poster-bg">
     <span class="close" onclick="closeModal()">×</span>
     <div class="modal-body">
-      <img id="modal-image">
-      <div>
-        <h2 id="modal-title"></h2>
-        <div id="modal-rating"></div>
-        <p id="modal-description"></p>
-      </div>
+      <h2 id="modal-title"></h2>
+      <div id="modal-rating"></div>
+      <p id="modal-description"></p>
+      <iframe id="modal-video" width="100%" height="350" allowfullscreen></iframe>
     </div>
-
-    <select id="server" onchange="changeServer()">
-      <option value="zxc-player">ZXC Player</option>
-      <option value="zxc-embed">ZXC Embed</option>
-    </select>
-
-    <iframe id="modal-video" width="100%" height="350" allowfullscreen></iframe>
   </div>
 </div>
 
@@ -189,119 +52,18 @@ body{
   <div class="results" id="search-results"></div>
 </div>
 
-<script>
-const API_KEY="e34316a6fe456fe22b50c4033980b236";
-const BASE="https://api.themoviedb.org/3";
-const IMG="https://image.tmdb.org/t/p/original";
-let currentItem;
+<!-- FOOTER -->
+<div class="footer">
+  <p>
+    All rights reserved. This site does not store any files on our server, we only link to the media which is hosted on 3rd party services.
+  </p>
+</div>
 
-async function fetchTrending(type){
-  const r=await fetch(`${BASE}/trending/${type}/week?api_key=${API_KEY}`);
-  return (await r.json()).results;
-}
-
-/* ✅ TRENDING ANIME FIX */
-async function fetchTrendingAnime(){
-  const r = await fetch(
-    `${BASE}/discover/tv?api_key=${API_KEY}&with_genres=16&sort_by=popularity.desc`
-  );
-  return (await r.json()).results;
-}
-
-function showDetails(item){
-  currentItem=item;
-  document.getElementById("modal").style.display="flex";
-  document.getElementById("modal-title").innerText=item.title||item.name;
-  document.getElementById("modal-description").innerText=item.overview;
-  document.getElementById("modal-image").src=IMG+item.poster_path;
-  changeServer();
-}
-
-function changeServer(){
-  const s=document.getElementById("server").value;
-  const type=currentItem.media_type=="movie"?"movie":"tv";
-  const season=1,episode=1,lang="en";
-
-  let url="";
-  if(type=="movie"){
-    url=s=="zxc-player"
-      ?`https://zxcstream.xyz/player/movie/${currentItem.id}/${lang}`
-      :`https://zxcstream.xyz/embed/movie/${currentItem.id}`;
-  }else{
-    url=s=="zxc-player"
-      ?`https://zxcstream.xyz/player/tv/${currentItem.id}/${season}/${episode}/${lang}`
-      :`https://zxcstream.xyz/embed/tv/${currentItem.id}/${season}/${episode}`;
-  }
-  document.getElementById("modal-video").src=url;
-}
-
-function closeModal(){
-  document.getElementById("modal").style.display="none";
-  document.getElementById("modal-video").src="";
-}
-
-function openSearchModal(){
-  document.getElementById("search-modal").style.display="flex";
-}
-function closeSearchModal(){
-  document.getElementById("search-modal").style.display="none";
-}
-
-async function searchTMDB(){
-  const q=document.getElementById("search-input").value;
-  if(!q) return;
-  const r=await fetch(`${BASE}/search/multi?api_key=${API_KEY}&query=${q}`);
-  const data=await r.json();
-  const res=document.getElementById("search-results");
-  res.innerHTML="";
-  data.results.forEach(i=>{
-    if(!i.poster_path) return;
-    const img=document.createElement("img");
-    img.src=IMG+i.poster_path;
-    img.onclick=()=>showDetails(i);
-    res.appendChild(img);
-  });
-}
-
-/* ✅ FIXED INIT */
-async function init(){
-  const movies=await fetchTrending("movie");
-  const tv=await fetchTrending("tv");
-  const anime=await fetchTrendingAnime();
-
-  movies.forEach(m=>{
-    if(!m.poster_path) return;
-    const img=document.createElement("img");
-    img.src=IMG+m.poster_path;
-    img.onclick=()=>showDetails({...m,media_type:"movie"});
-    document.getElementById("movies-list").appendChild(img);
-  });
-
-  tv.forEach(t=>{
-    if(!t.poster_path) return;
-    const img=document.createElement("img");
-    img.src=IMG+t.poster_path;
-    img.onclick=()=>showDetails({...t,media_type:"tv"});
-    document.getElementById("tvshows-list").appendChild(img);
-  });
-
-  anime.forEach(a=>{
-    if(!a.poster_path) return;
-    const img=document.createElement("img");
-    img.src=IMG+a.poster_path;
-    img.onclick=()=>showDetails({...a,media_type:"tv"});
-    document.getElementById("anime-list").appendChild(img);
-  });
-
-  document.getElementById("banner").style.backgroundImage =
-    `url(${IMG+movies[0].backdrop_path})`;
-  document.getElementById("banner-title").innerText=movies[0].title;
-}
-init();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
+
+
 
 
 
