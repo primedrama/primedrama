@@ -12,7 +12,24 @@ const API_KEY = window.__APP_CFG;
 
 let currentItem = null;
 
-/* FETCH */
+/* =========================
+   NAVBAR INTERACTIONS
+========================= */
+window.addEventListener("scroll", () => {
+  const nav = document.querySelector(".navbar");
+  if (!nav) return;
+  nav.classList.toggle("scrolled", window.scrollY > 20);
+});
+
+function toggleNav() {
+  const nav = document.querySelector(".navbar");
+  if (!nav) return;
+  nav.classList.toggle("open");
+}
+
+/* =========================
+   FETCH
+========================= */
 async function fetchJSON(url) {
   const res = await fetch(url);
   return res.ok ? res.json() : null;
@@ -36,7 +53,9 @@ async function fetchTrendingAnime() {
   );
 }
 
-/* UI */
+/* =========================
+   UI
+========================= */
 function displayBanner(item) {
   document.getElementById("banner").style.backgroundImage =
     `url(${IMG}${item.backdrop_path})`;
@@ -58,7 +77,9 @@ function displayList(items, id) {
   });
 }
 
-/* MODAL */
+/* =========================
+   MODAL
+========================= */
 function showDetails(item) {
   currentItem = item;
 
@@ -87,7 +108,9 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-/* PLAYER */
+/* =========================
+   PLAYER
+========================= */
 function changeServer() {
   if (!currentItem) return;
 
@@ -101,7 +124,9 @@ function changeServer() {
   document.getElementById("modal-video").src = url;
 }
 
-/* SEARCH */
+/* =========================
+   SEARCH
+========================= */
 async function searchTMDB(q) {
   const section = document.getElementById("search-section");
   const el = document.getElementById("search-results");
@@ -128,7 +153,9 @@ async function searchTMDB(q) {
   });
 }
 
-/* INIT */
+/* =========================
+   INIT
+========================= */
 async function init() {
   const movies = await fetchTrending("movie");
   const tv = await fetchTrending("tv");
@@ -142,6 +169,5 @@ async function init() {
 }
 
 init();
-
 
 
