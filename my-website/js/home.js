@@ -57,15 +57,27 @@ async function fetchTrendingAnime() {
    UI
 ========================= */
 function displayBanner(item) {
-  document.getElementById("banner").style.backgroundImage =
+  const banner = document.getElementById("banner");
+  const titleEl = document.getElementById("banner-title");
+  const overviewEl = document.getElementById("banner-overview");
+
+  if (!banner || !item) return;
+
+  banner.style.backgroundImage =
     `url(${IMG}${item.backdrop_path})`;
 
-  document.getElementById("banner-title").textContent =
-    item.title || item.name;
+  titleEl.textContent = item.title || item.name || "";
+
+  if (overviewEl) {
+    overviewEl.textContent =
+      item.overview || "No description available.";
+  }
 }
 
 function displayList(items, id) {
   const el = document.getElementById(id);
+  if (!el) return;
+
   el.innerHTML = "";
 
   items.forEach(item => {
@@ -87,13 +99,15 @@ function showDetails(item) {
   document.body.style.overflow = "hidden";
 
   document.getElementById("modal-title").textContent =
-    item.title || item.name;
+    item.title || item.name || "";
 
   document.getElementById("modal-description").textContent =
     item.overview || "No description available.";
 
   document.getElementById("modal-rating").textContent =
-    "★".repeat(Math.round(item.vote_average / 2));
+    item.vote_average
+      ? "★".repeat(Math.round(item.vote_average / 2))
+      : "";
 
   document.querySelector(".info-wrapper").style.backgroundImage =
     `url(${IMG}${item.poster_path})`;
@@ -161,7 +175,9 @@ async function init() {
   const tv = await fetchTrending("tv");
   const anime = await fetchTrendingAnime();
 
-  if (movies.length) displayBanner(movies[0]);
+  if (movies.length) {
+    displayBanner(movies[0]);
+  }
 
   displayList(movies, "movies-list");
   displayList(tv, "tvshows-list");
@@ -169,5 +185,4 @@ async function init() {
 }
 
 init();
-
 
