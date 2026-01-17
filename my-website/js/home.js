@@ -14,18 +14,15 @@ window.addEventListener("scroll", () => {
   if (!nav) return;
   nav.classList.toggle("scrolled", window.scrollY > 20);
 });
-function toggleNav() { document.querySelector(".navbar").classList.toggle("open"); }
+function toggleNav() {
+  const menu = document.getElementById("mobile-menu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
 
 /* FETCH */
 async function fetchJSON(url) { const res = await fetch(url); return res.ok ? res.json() : null; }
-async function fetchTrending(type) { 
-  const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`); 
-  return data?.results || []; 
-}
-async function fetchTrendingAnime() { 
-  const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`);
-  return data?.results.filter(i=>i.original_language==="ja" && i.genre_ids.includes(16)) || [];
-}
+async function fetchTrending(type) { const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`); return data?.results || []; }
+async function fetchTrendingAnime() { const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`); return data?.results.filter(i=>i.original_language==="ja" && i.genre_ids.includes(16)) || []; }
 
 /* UI */
 function displayBanner(item){
@@ -50,9 +47,8 @@ function createCard(item){
 
   const title = document.createElement("div");
   title.className="card-title";
-  title.textContent=item.title || item.name || "";
+  title.textContent=item.title||item.name||"";
   card.appendChild(title);
-
   return card;
 }
 
@@ -115,8 +111,8 @@ async function init(){
   displayList(movies,"movies-list");
   displayList(tv,"tvshows-list");
   displayList(anime,"anime-list");
-  document.getElementById("year").textContent=new Date().getFullYear();
-}
-init();
+  document.getElementById("year").textContent=new Date().
+
+
 
 
