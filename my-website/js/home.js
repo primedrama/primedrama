@@ -14,13 +14,13 @@ async function safeFetch(url){
   }
 }
 
-// Fetch trending movies/tv
+// Trending movies/tv
 async function fetchTrending(type){
   const data = await safeFetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
   return data?.results || [];
 }
 
-// Fetch trending anime (genre 16, Japanese)
+// Trending Anime
 async function fetchTrendingAnime(){
   const pages = [1,2,3].map(p=>safeFetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${p}`));
   const results = (await Promise.all(pages))
@@ -38,7 +38,7 @@ function displayBanner(item){
   document.getElementById('banner-title').textContent = item.title||item.name||"No Title";
 }
 
-// Display list with poster placeholders
+// Display list
 function displayList(items, containerId){
   const container = document.getElementById(containerId);
   container.innerHTML="";
@@ -129,4 +129,3 @@ async function init(){
 }
 
 init();
-
