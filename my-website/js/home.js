@@ -50,8 +50,9 @@ function createCard(item){
 
   const title = document.createElement("div");
   title.className="card-title";
-  title.textContent=item.title||item.name||"";
+  title.textContent=item.title || item.name || "";
   card.appendChild(title);
+
   return card;
 }
 
@@ -117,4 +118,5 @@ async function init(){
   document.getElementById("year").textContent=new Date().getFullYear();
 }
 init();
+
 
