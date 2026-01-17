@@ -14,6 +14,7 @@ window.addEventListener("scroll", () => {
   if (!nav) return;
   nav.classList.toggle("scrolled", window.scrollY > 20);
 });
+
 function toggleNav() {
   const menu = document.getElementById("mobile-menu");
   menu.style.display = menu.style.display === "flex" ? "none" : "flex";
@@ -21,8 +22,14 @@ function toggleNav() {
 
 /* FETCH */
 async function fetchJSON(url) { const res = await fetch(url); return res.ok ? res.json() : null; }
-async function fetchTrending(type) { const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`); return data?.results || []; }
-async function fetchTrendingAnime() { const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`); return data?.results.filter(i=>i.original_language==="ja" && i.genre_ids.includes(16)) || []; }
+async function fetchTrending(type) { 
+  const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`); 
+  return data?.results || []; 
+}
+async function fetchTrendingAnime() { 
+  const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`);
+  return data?.results.filter(i=>i.original_language==="ja" && i.genre_ids.includes(16)) || [];
+}
 
 /* UI */
 function displayBanner(item){
@@ -102,19 +109,25 @@ async function searchTMDB(q){
   data?.results.forEach(item=>{ const card=createCard(item); if(card) el.appendChild(card); });
 }
 
+/* SOCIAL SHARE */
+const siteURL = encodeURIComponent("https://dramabox-85g.pages.dev/");
+const siteTitle = encodeURIComponent("Check out Drama Box - Watch trending movies, TV shows, and anime!");
+
+function shareFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${siteURL}`, '_blank'); }
+function shareTwitter() { window.open(`https://twitter.com/intent/tweet?url=${siteURL}&text=${siteTitle}`, '_blank'); }
+function shareInstagram() { alert("Instagram does not support direct website sharing. Copy the link instead."); }
+function shareTikTok() { alert("TikTok does not support direct website sharing. Copy the link instead."); }
+
 /* INIT */
 async function init(){
   const [movies,tvAll,anime]=await Promise.all([fetchTrending("movie"),fetchTrending("tv"),fetchTrendingAnime()]);
-  const tv=tvAll.filter(item=>!(item.original_language==="ja" && item.genre_ids.includes(16)));
-
-  if(movies.length) displayBanner(movies[0]);
+  displayBanner(movies[0]);
   displayList(movies,"movies-list");
-  displayList(tv,"tvshows-list");
+  displayList(tvAll,"tvshows-list");
   displayList(anime,"anime-list");
-  document.getElementById("year").textContent=new Date().getFullYear();
 }
-init();
 
+init();
 
 
 
