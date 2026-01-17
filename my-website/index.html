@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -22,12 +23,6 @@
 <header class="navbar">
   <div class="nav-inner">
     <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box">
-
-    <div class="search-wrapper">
-      <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)" />
-      <button class="search-btn">🔍</button>
-    </div>
-
     <button class="hamburger" onclick="toggleNav()">☰</button>
   </div>
 
@@ -38,17 +33,17 @@
     <a href="#anime-list">Anime</a>
 
     <div class="social-icons">
-      <a href="#" onclick="shareFacebook()" title="Share on Facebook">
-        <img src="https://i.ibb.co/HfZ99tHz/facebook.png" alt="facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://dramabox-85g.pages.dev" target="_blank">
+        <img src="https://i.ibb.co/HfZ99tHz/facebook.png" alt="facebook" />
       </a>
-      <a href="#" onclick="shareTwitter()" title="Share on Twitter">
-        <img src="https://i.ibb.co/SYFV9hq/twitter.png" alt="twitter">
+      <a href="https://twitter.com/intent/tweet?text=Check+out+Drama+Box!&url=https://dramabox-85g.pages.dev" target="_blank">
+        <img src="https://i.ibb.co/SYFV9hq/twitter.png" alt="twitter" />
       </a>
-      <a href="#" onclick="shareInstagram()" title="Share on Instagram">
-        <img src="https://i.ibb.co/3Y16D9Xh/instagram.png" alt="instagram">
+      <a href="https://www.instagram.com/" target="_blank">
+        <img src="https://i.ibb.co/3Y16D9Xh/instagram.png" alt="instagram" />
       </a>
-      <a href="#" onclick="shareTikTok()" title="Share on TikTok">
-        <img src="https://i.ibb.co/Q7GqrG4j/tiktok.png" alt="tiktok">
+      <a href="https://www.tiktok.com/" target="_blank">
+        <img src="https://i.ibb.co/Q7GqrG4j/tiktok.png" alt="tiktok" />
       </a>
     </div>
   </div>
@@ -63,10 +58,17 @@
 </section>
 
 <main>
+
   <!-- SEARCH RESULTS -->
   <section class="row box red-glow" id="search-section" hidden>
     <h2>Search Results</h2>
     <div class="grid" id="search-results"></div>
+  </section>
+
+  <!-- LATEST SEARCHES -->
+  <section class="row box red-glow" id="latest-searches-section" hidden>
+    <h2>Recommended for You</h2>
+    <div class="list two-rows" id="latest-searches-list"></div>
   </section>
 
   <!-- TRENDING MOVIES -->
@@ -86,6 +88,7 @@
     <h2>Trending Anime</h2>
     <div class="list two-rows" id="anime-list"></div>
   </section>
+
 </main>
 
 <!-- MODAL -->
@@ -93,12 +96,10 @@
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
 
-    <!-- PLAYER -->
     <div class="player-wrapper">
       <iframe id="modal-video" allowfullscreen></iframe>
     </div>
 
-    <!-- INFO -->
     <div class="info-wrapper" id="info-wrapper">
       <div class="info-text">
         <h2 id="modal-title"></h2>
@@ -128,6 +129,7 @@
 
 </body>
 </html>
+
 
 
 
