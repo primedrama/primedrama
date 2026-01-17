@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-
-  <!-- RESPONSIVE VIEWPORT -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drama Box</title>
 
-  <title>Prime Drama</title>
-
+  <!-- Open Graph / Facebook -->
   <meta property="og:title" content="Watch Full Movie Now" />
   <meta property="og:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
   <meta property="og:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
@@ -16,328 +14,93 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Watch Full Movie" />
+  <meta name="twitter:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
+  <meta name="twitter:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
 
-  <link rel="stylesheet" href="css/home.css">
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
+  <link rel="apple-touch-icon" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
 
-  <!-- Elegant font from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* ==========================
-       Base Styles
-    ========================== */
-    body { margin: 0; font-family: 'Playfair Display', serif; background: #0d0d0d; color: #fff; }
-    h2 { font-weight: 700; margin-bottom: 1rem; font-size: 1.5rem; }
-    main { padding: 6rem 1rem 2rem; }
-
-    /* ==========================
-       Navbar
-    ========================== */
-    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 1rem; background: #111; position: fixed; width: 100%; top: 0; z-index: 100; transition: 0.3s; }
-    .navbar.scrolled { background: #000; }
-    .nav-inner { display: flex; align-items: center; flex-wrap: wrap; width: 100%; }
-    .logo { height: 40px; margin-right: 1rem; }
-    .hamburger { font-size: 1.5rem; background: none; border: none; color: #fff; cursor: pointer; display: none; }
-    .search-wrapper { display: flex; align-items: center; }
-    .search-wrapper input { padding: 0.3rem; flex: 1; border-radius: 4px; border: none; }
-    .search-wrapper button { margin-left: 0.3rem; padding: 0.3rem 0.5rem; cursor: pointer; border-radius: 4px; border: none; background: #444; color: #fff; }
-
-    @media (max-width: 768px) {
-      .hamburger { display: block; }
-      .search-wrapper { width: 100%; margin-top: 0.5rem; }
-      .nav-inner.open .search-wrapper { display: flex; flex-direction: column; }
-    }
-
-    /* ==========================
-       Banner
-    ========================== */
-    .banner { height: 50vh; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 1rem; color: #fff; }
-    .banner-content { background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; }
-    .banner-content h1 { font-size: 2rem; margin: 0 0 0.5rem 0; }
-    .banner-content p { margin: 0; font-size: 1rem; }
-
-    /* ==========================
-       Lists as cards
-    ========================== */
-    .list { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; }
-    .card { position: relative; min-width: 150px; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s; flex-shrink: 0; background: #222; }
-    .card:hover { transform: scale(1.05); }
-    .card img { width: 100%; height: 220px; object-fit: cover; display: block; }
-    .card-title { position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5rem; background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0)); color: #fff; font-weight: 700; text-align: center; font-size: 1rem; }
-
-    @media (max-width: 480px) {
-      .card { min-width: 120px; }
-      .card img { height: 160px; }
-    }
-
-    /* ==========================
-       Modal
-    ========================== */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 200; }
-    .modal-content { background: #111; padding: 1rem; max-width: 900px; width: 95%; border-radius: 10px; overflow: auto; max-height: 90vh; }
-    .close { float: right; cursor: pointer; font-size: 1.2rem; color: #fff; }
-    .player-wrapper iframe { width: 100%; height: 50vh; max-height: 60vh; border: none; border-radius: 5px; }
-    .info-wrapper { margin-top: 1rem; color: #fff; }
-    .info-wrapper h2 { margin-bottom: 0.5rem; }
-
-    /* ==========================
-       Footer
-    ========================== */
-    footer { text-align: center; padding: 2rem 1rem; background: #111; color: #fff; font-size: 0.9rem; }
-  </style>
+  <!-- Styles & Scripts -->
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 
 <body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Prime Drama">
+      <button class="hamburger" onclick="toggleNav()">☰</button>
+      <div class="search-wrapper">
+        <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)">
+        <button class="search-btn">🔍</button>
+      </div>
+    </div>
+  </header>
 
-<!-- NAVBAR -->
-<header class="navbar">
-  <div class="nav-inner">
-    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Prime Drama">
-    <button class="hamburger" onclick="toggleNav()">☰</button>
-    <div class="search-wrapper">
-      <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)" />
-      <button class="search-btn">🔍</button>
+  <!-- HERO BANNER -->
+  <section class="banner" id="banner">
+    <div class="banner-content">
+      <h1 id="banner-title"></h1>
+      <p id="banner-overview"></p>
+    </div>
+  </section>
+
+  <main>
+    <!-- SEARCH RESULTS -->
+    <section class="row box red-glow" id="search-section" hidden>
+      <h2>🔍 Search Results</h2>
+      <div class="list" id="search-results"></div>
+    </section>
+
+    <!-- TRENDING MOVIES -->
+    <section class="row box red-glow">
+      <h2>Trending Movies</h2>
+      <div class="list two-rows" id="movies-list"></div>
+    </section>
+
+    <!-- TRENDING TV SHOWS -->
+    <section class="row box red-glow">
+      <h2>Trending TV Shows</h2>
+      <div class="list two-rows" id="tvshows-list"></div>
+    </section>
+
+    <!-- TRENDING ANIME -->
+    <section class="row box red-glow">
+      <h2>Trending Anime</h2>
+      <div class="list two-rows" id="anime-list"></div>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">✖</span>
+      <div class="player-wrapper">
+        <iframe id="modal-video" allowfullscreen></iframe>
+      </div>
+      <div class="info-wrapper" id="info-wrapper">
+        <div class="info-text">
+          <h2 id="modal-title"></h2>
+          <div id="modal-rating"></div>
+          <p id="modal-description"></p>
+          <select id="server" hidden onchange="changeServer()">
+            <option value="embed" selected>HD 2</option>
+            <option value="player">HD 1</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
-</header>
 
-<!-- BANNER -->
-<section class="banner" id="banner">
-  <div class="banner-content">
-    <h1 id="banner-title"></h1>
-    <p id="banner-overview"></p>
-  </div>
-</section>
-
-<main>
-  <section class="row" id="search-section" hidden>
-    <h2>🔍 Search Results</h2>
-    <div class="list" id="search-results"></div>
-  </section>
-
-  <section class="row">
-    <h2>Trending Movies</h2>
-    <div class="list" id="movies-list"></div>
-  </section>
-
-  <section class="row">
-    <h2>Trending TV Shows</h2>
-    <div class="list" id="tvshows-list"></div>
-  </section>
-
-  <section class="row">
-    <h2>Trending Anime</h2>
-    <div class="list" id="anime-list"></div>
-  </section>
-</main>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">✖</span>
-    <div class="player-wrapper">
-      <iframe id="modal-video" allowfullscreen></iframe>
-    </div>
-    <div class="info-wrapper">
-      <h2 id="modal-title"></h2>
-      <div id="modal-rating"></div>
-      <p id="modal-description"></p>
-      <select id="server" hidden onchange="changeServer()">
-        <option value="embed" selected>HD 2</option>
-        <option value="player">HD 1</option>
-      </select>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <p>© <span id="year"></span> Prime Drama. All rights reserved.</p>
-  <p>This site does not store any files on our server. We only link to media hosted on 3rd party services.</p>
-</footer>
-
-<script>
-/* ==========================
-   CONFIG
-========================== */
-(function () {
-  const __x = ["e343","16a6","fe45","6fe2","2b50","c403","3980","b236"];
-  window.__APP_CFG = __x.join("");
-})();
-
-const BASE = "https://api.themoviedb.org/3";
-const IMG = "https://image.tmdb.org/t/p/original";
-const API_KEY = window.__APP_CFG;
-let currentItem = null;
-
-/* ==========================
-   NAVBAR
-========================== */
-window.addEventListener("scroll", () => {
-  const nav = document.querySelector(".navbar");
-  if (!nav) return;
-  nav.classList.toggle("scrolled", window.scrollY > 20);
-});
-
-function toggleNav() {
-  const nav = document.querySelector(".navbar");
-  if (!nav) return;
-  nav.classList.toggle("open");
-}
-
-/* ==========================
-   FETCH
-========================== */
-async function fetchJSON(url) {
-  const res = await fetch(url);
-  return res.ok ? res.json() : null;
-}
-
-async function fetchTrending(type) {
-  const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`);
-  return data?.results || [];
-}
-
-async function fetchTrendingAnime() {
-  const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`);
-  return (
-    data?.results.filter(i => i.original_language === "ja" && i.genre_ids.includes(16)) || []
-  );
-}
-
-/* ==========================
-   UI
-========================== */
-function displayBanner(item) {
-  const banner = document.getElementById("banner");
-  const titleEl = document.getElementById("banner-title");
-  const overviewEl = document.getElementById("banner-overview");
-  if (!banner || !item) return;
-
-  banner.style.backgroundImage = `url(${IMG}${item.backdrop_path})`;
-  titleEl.textContent = item.title || item.name || "";
-  overviewEl.textContent = item.overview || "No description available.";
-}
-
-function displayList(items, id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.innerHTML = "";
-
-  items.forEach(item => {
-    if (!item.poster_path) return;
-
-    const card = document.createElement("div");
-    card.className = "card";
-    card.onclick = () => showDetails(item);
-
-    const img = document.createElement("img");
-    img.src = IMG + item.poster_path;
-    card.appendChild(img);
-
-    const title = document.createElement("div");
-    title.className = "card-title";
-    title.textContent = item.title || item.name || "";
-    card.appendChild(title);
-
-    el.appendChild(card);
-  });
-}
-
-/* ==========================
-   MODAL
-========================== */
-function showDetails(item) {
-  currentItem = item;
-  document.getElementById("modal").style.display = "flex";
-  document.body.style.overflow = "hidden";
-
-  document.getElementById("modal-title").textContent = item.title || item.name || "";
-  document.getElementById("modal-description").textContent = item.overview || "No description available.";
-  document.getElementById("modal-rating").textContent =
-    item.vote_average ? "★".repeat(Math.round(item.vote_average / 2)) : "";
-
-  document.getElementById("server").value = "embed";
-  changeServer();
-}
-
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-  document.getElementById("modal-video").src = "";
-  document.body.style.overflow = "";
-}
-
-/* ==========================
-   PLAYER
-========================== */
-function changeServer() {
-  if (!currentItem) return;
-  const id = currentItem.id;
-  const isMovie = !!currentItem.title;
-  const url = isMovie
-    ? `https://zxcstream.xyz/embed/movie/${id}`
-    : `https://zxcstream.xyz/embed/tv/${id}/1/1`;
-  document.getElementById("modal-video").src = url;
-}
-
-/* ==========================
-   SEARCH
-========================== */
-async function searchTMDB(q) {
-  const section = document.getElementById("search-section");
-  const el = document.getElementById("search-results");
-  if (!q) {
-    section.hidden = true;
-    return;
-  }
-
-  const data = await fetchJSON(`${BASE}/search/multi?api_key=${API_KEY}&query=${q}`);
-  el.innerHTML = "";
-  section.hidden = false;
-  section.scrollIntoView({ behavior: "smooth" });
-
-  data?.results.forEach(item => {
-    if (!item.poster_path) return;
-
-    const card = document.createElement("div");
-    card.className = "card";
-    card.onclick = () => showDetails(item);
-
-    const img = document.createElement("img");
-    img.src = IMG + item.poster_path;
-    card.appendChild(img);
-
-    const title = document.createElement("div");
-    title.className = "card-title";
-    title.textContent = item.title || item.name || "";
-    card.appendChild(title);
-
-    el.appendChild(card);
-  });
-}
-
-/* ==========================
-   INIT
-========================== */
-async function init() {
-  const movies = await fetchTrending("movie");
-  const tvAll = await fetchTrending("tv");
-  const anime = await fetchTrendingAnime();
-
-  // Remove anime from TV list
-  const tv = tvAll.filter(item => !(item.original_language === "ja" && item.genre_ids.includes(16)));
-
-  if (movies.length) displayBanner(movies[0]);
-  displayList(movies, "movies-list");
-  displayList(tv, "tvshows-list");
-  displayList(anime, "anime-list");
-
-  document.getElementById("year").textContent = new Date().getFullYear();
-}
-
-init();
-</script>
-
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Drama Box. All rights reserved.</p>
+    <p>This site does not store files on our server. Only links to third-party media.</p>
+  </footer>
 </body>
 </html>
 
