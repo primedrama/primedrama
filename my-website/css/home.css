@@ -290,7 +290,7 @@ body {
 }
 
 /* ======================
-   MOBILE (OPTIMIZED HERO)
+   MOBILE (SUPER SMALL HERO)
 ====================== */
 @media (max-width: 768px) {
 
@@ -308,27 +308,27 @@ body {
     margin-top: 10px;
   }
 
-  /* HERO – MOBILE OPTIMIZED */
+  /* HERO – SUPER SMALL HEIGHT (1/4 IMAGE POSTER) */
   .banner {
-    height: 25vh; /* medyo mas mataas sa 1/4 pero hindi sobrang taas */
-    min-height: 150px;
-    max-height: 220px;
-    padding: 16px;
+    height: 12vh;       /* maliit na height */
+    min-height: 100px;  /* hindi masyadong maliit */
+    max-height: 140px;  /* limit para hindi lumabis */
+    padding: 12px;
     background-position: center top;
     display: flex;
     align-items: flex-end;
   }
 
   #banner-title {
-    font-size: clamp(18px, 4vw, 24px);
-    margin-bottom: 8px;
+    font-size: clamp(14px, 3.5vw, 18px);
+    margin-bottom: 4px;
   }
 
   #banner-overview {
-    font-size: clamp(12px, 3.5vw, 14px);
-    max-height: 3em;
+    font-size: clamp(10px, 2.8vw, 12px);
+    max-height: 2em;
     overflow: hidden;
-    line-height: 1.4;
+    line-height: 1.2;
   }
 
   .list img {
@@ -336,4 +336,6 @@ body {
     min-width: 110px;
   }
 }
+
+
 
