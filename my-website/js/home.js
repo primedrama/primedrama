@@ -1,11 +1,14 @@
 (function () {
-  const k = "e34316a6fe456fe22b50c4033980b236 ="
-    .split("").reverse().join("");
-  window.API_KEY = atob(k.split("").reverse().join(""));
+  const __x = [
+    "e343", "16a6", "fe45", "6fe2",
+    "2b50", "c403", "3980", "b236"
+  ];
+  window.__APP_CFG = __x.join("");
 })();
 
 const BASE = "https://api.themoviedb.org/3";
 const IMG = "https://image.tmdb.org/t/p/original";
+const API_KEY = window.__APP_CFG;
 
 let currentItem = null;
 
@@ -16,21 +19,28 @@ async function fetchJSON(url) {
 }
 
 async function fetchTrending(type) {
-  const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`);
+  const data = await fetchJSON(
+    `${BASE}/trending/${type}/week?api_key=${API_KEY}`
+  );
   return data?.results || [];
 }
 
 async function fetchTrendingAnime() {
-  const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`);
-  return data?.results.filter(
-    i => i.original_language === "ja" && i.genre_ids.includes(16)
-  ) || [];
+  const data = await fetchJSON(
+    `${BASE}/trending/tv/week?api_key=${API_KEY}`
+  );
+  return (
+    data?.results.filter(
+      i => i.original_language === "ja" && i.genre_ids.includes(16)
+    ) || []
+  );
 }
 
 /* UI */
 function displayBanner(item) {
   document.getElementById("banner").style.backgroundImage =
     `url(${IMG}${item.backdrop_path})`;
+
   document.getElementById("banner-title").textContent =
     item.title || item.name;
 }
@@ -64,7 +74,6 @@ function showDetails(item) {
   document.getElementById("modal-rating").textContent =
     "★".repeat(Math.round(item.vote_average / 2));
 
-  // BACKGROUND POSTER
   document.querySelector(".info-wrapper").style.backgroundImage =
     `url(${IMG}${item.poster_path})`;
 
@@ -85,7 +94,7 @@ function changeServer() {
   const id = currentItem.id;
   const isMovie = !!currentItem.title;
 
-  let url = isMovie
+  const url = isMovie
     ? `https://zxcstream.xyz/embed/movie/${id}`
     : `https://zxcstream.xyz/embed/tv/${id}/1/1`;
 
@@ -133,5 +142,6 @@ async function init() {
 }
 
 init();
+
 
 
