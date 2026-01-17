@@ -5,35 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Prime Drama</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
   <a href="index.html">
     <img src="https://i.ibb.co/Z12J4RQq/logo.png" class="logo logo-animate" alt="PrimeDrama">
   </a>
-
   <div class="nav-links">
     <a href="#">Home</a>
     <input class="search-bar" placeholder="Search..." onfocus="openSearchModal()">
   </div>
 </div>
 
-<!-- BANNER -->
 <div class="banner" id="banner">
   <h1 id="banner-title">Loading...</h1>
 </div>
 
-<!-- ROWS -->
 <div class="row"><h2>Trending Movies</h2><div class="list" id="movies-list"></div></div>
 <div class="row"><h2>Trending TV Shows</h2><div class="list" id="tvshows-list"></div></div>
 <div class="row"><h2>Trending Anime</h2><div class="list" id="anime-list"></div></div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content poster-bg">
     <span class="close" onclick="closeModal()">×</span>
@@ -46,23 +39,21 @@
   </div>
 </div>
 
-<!-- SEARCH -->
 <div class="search-modal" id="search-modal">
   <span class="close" onclick="closeSearchModal()">×</span>
   <input id="search-input" placeholder="Search..." oninput="searchTMDB()">
   <div class="results" id="search-results"></div>
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
-  <p>
-    All rights reserved. This site does not store any files on our server, we only link to the media which is hosted on 3rd party services.
-  </p>
+  <p>All rights reserved. This site does not store any files on our server, we only link to the media which is hosted on 3rd party services.</p>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
+
+
 
 
 
