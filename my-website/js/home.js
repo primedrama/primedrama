@@ -11,26 +11,26 @@ async function safeFetch(url){
     return await res.json();
   } catch(e){
     console.error(e);
-    alert("Something went wrong. Please refresh.");
     return null;
   }
 }
 
 async function fetchTrending(type){
   const data = await safeFetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
-  return data ? data.results : [];
+  return data?.results || [];
 }
 
 async function fetchTrendingAnime(){
   const pages = [1,2,3].map(p => safeFetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${p}`));
   const results = (await Promise.all(pages))
-    .flatMap(d => d?.results||[])
+    .flatMap(d => d?.results || [])
     .filter(i => i.original_language==='ja' && i.genre_ids.includes(16));
   return results;
 }
 
 // ================= DISPLAY FUNCTIONS =================
 function displayBanner(item){
+  if(!item) return;
   document.getElementById('banner').style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
   document.getElementById('banner-title').textContent = item.title||item.name;
 }
@@ -38,6 +38,11 @@ function displayBanner(item){
 function displayList(items, containerId){
   const container = document.getElementById(containerId);
   container.innerHTML="";
+  if(!items || !items.length) {
+    container.innerHTML = "<p style='color:var(--gray-muted)'>No content available.</p>";
+    return;
+  }
+
   items.forEach(item=>{
     if(!item.poster_path) return;
     const img = document.createElement('img');
@@ -50,6 +55,7 @@ function displayList(items, containerId){
 
 // ================= MODAL =================
 function showDetails(item){
+  if(!item) return;
   currentItem=item;
   document.body.style.overflow="hidden";
 
@@ -57,8 +63,8 @@ function showDetails(item){
   document.querySelector('.poster-bg').style.backgroundImage = `url(${posterURL})`;
 
   document.getElementById('modal-title').textContent=item.title||item.name;
-  document.getElementById('modal-description').textContent=item.overview;
-  document.getElementById('modal-rating').textContent='★'.repeat(Math.round(item.vote_average/2));
+  document.getElementById('modal-description').textContent=item.overview || "No description available.";
+  document.getElementById('modal-rating').textContent=item.vote_average ? '★'.repeat(Math.round(item.vote_average/2)) : "N/A";
 
   document.getElementById('modal').style.display='flex';
   changeServer();
@@ -72,6 +78,7 @@ function closeModal(){
 
 // ================= PLAYER (Server 2 forced) =================
 function changeServer(){
+  if(!currentItem) return;
   const isMovie = currentItem.media_type==="movie";
   const season=1, episode=1;
   const embedURL = isMovie
@@ -93,7 +100,7 @@ async function searchTMDB(){
   const query=document.getElementById('search-input').value.trim();
   if(!query) return;
   const data = await safeFetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
-  if(!data) return;
+  if(!data || !data.results) return;
   const container=document.getElementById('search-results');
   container.innerHTML="";
   data.results.forEach(item=>{
@@ -111,13 +118,14 @@ async function searchTMDB(){
 
 // ================= INIT =================
 async function init(){
-  const movies=await fetchTrending('movie');
-  const tv=await fetchTrending('tv');
-  const anime=await fetchTrendingAnime();
+  const movies = await fetchTrending('movie');
+  const tv = await fetchTrending('tv');
+  const anime = await fetchTrendingAnime();
 
-  displayBanner(movies[Math.floor(Math.random()*movies.length)]);
+  if(movies.length) displayBanner(movies[Math.floor(Math.random()*movies.length)]);
   displayList(movies,'movies-list');
   displayList(tv,'tvshows-list');
   displayList(anime,'anime-list');
 }
 init();
+
