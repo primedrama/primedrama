@@ -133,23 +133,30 @@ function shareTwitter(){ window.open(`https://twitter.com/intent/tweet?url=${sit
 function shareInstagram(){ alert("Instagram does not support direct website sharing. Copy the link instead."); }
 function shareTikTok(){ alert("TikTok does not support direct website sharing. Copy the link instead."); }
 
-/* RECOMMENDED FOR YOU RANDOM */
+/* RECOMMENDED FOR YOU RANDOM WITH CLICK PLAY */
 async function displayRecommended(){
   const data = await fetchTrending("movie");
   if(!data.length) return;
   const container = document.getElementById("recommended-list");
   container.innerHTML = "";
+
   // Pick 6 random unique items
   const picked = [];
   while(picked.length < 6 && picked.length < data.length){
     const rand = data[Math.floor(Math.random() * data.length)];
     if(!picked.includes(rand)) picked.push(rand);
   }
+
   picked.forEach(item => {
     const div = document.createElement("div");
     div.className = "list-item";
+
     const img = document.createElement("img");
     img.src = IMG + item.poster_path;
+
+    // Add click to play
+    div.onclick = () => showDetails(item);
+
     div.appendChild(img);
     container.appendChild(div);
   });
@@ -170,4 +177,5 @@ async function init(){
   displayRecommended();
 }
 init();
+
 
