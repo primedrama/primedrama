@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -5,7 +6,7 @@
   <title>Prime Drama</title>
 
   <meta property="og:title" content="Watch Full Movie" />
-  <meta property="og:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
+  <meta property="og:description" content="Watch trending movies, TV shows, and anime on PrimeDrama." />
   <meta property="og:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
   <meta property="og:url" content="https://primedrama-19t.pages.dev/" />
   <meta property="og:type" content="website" />
@@ -21,7 +22,7 @@
 <!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-inner">
-    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box">
+    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="PrimeDrama">
 
     <div class="search-wrapper">
       <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)" />
@@ -60,8 +61,8 @@
     <div class="grid" id="search-results"></div>
   </section>
 
-  <!-- RECOMMENDED FOR YOU -->
-  <section class="row box red-glow" id="recommended-section" hidden>
+  <!-- RECOMMENDED FOR YOU (Visible) -->
+  <section class="row box red-glow" id="recommended-section">
     <h2>Recommended For You</h2>
     <div class="list two-rows" id="recommended-list"></div>
   </section>
@@ -108,21 +109,33 @@
 </div>
 
 <!-- FOOTER -->
-<footer class="site-footer">
-  <p>© <span id="year"></span> Drama Box. All rights reserved.</p>
-  <p class="disclaimer">
-    This site does not store any files on our server. We only link to the media hosted on 3rd party services.
+<footer class="site-footer" style="background:#111; color:#fff; padding:20px; text-align:center;">
+  <p>© <span id="year"></span> PrimeDrama. All rights reserved.</p>
+
+  <!-- Short Version 3 DMCA / Disclaimer -->
+  <p style="font-size:12px; color:#ccc; max-width:600px; margin:10px auto; line-height:1.5;">
+    PrimeDrama aggregates externally hosted content only. We do not host or distribute media files. All content belongs to its rightful owners. We respect copyright law and respond promptly to takedown requests.
+  </p>
+
+  <!-- Hidden Email Link -->
+  <p style="font-size:12px; color:#FFD700; margin:5px auto;">
+    <a href="#" id="email-link" style="color:#FFD700;">Email Us</a>
   </p>
 </footer>
 
 <script>
+  // Dynamic year
   document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Obfuscate email to prevent spam bots
+  const user = "definite.dragon.liur";
+  const domain = "protectsmail.net";
+  const emailLink = document.getElementById("email-link");
+  emailLink.href = "mailto:" + user + "@" + domain;
+  emailLink.textContent = "Email Us";
 </script>
 
 </body>
 </html>
-
-
-
 
 
