@@ -5,26 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Drama Box</title>
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="Watch Full Movie Now" />
+  <!-- Open Graph / Twitter / Thumbnail -->
+  <meta property="og:title" content="Watch Full Movie" />
   <meta property="og:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
   <meta property="og:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
-  <meta property="og:url" content="https://primedrama-19t.pages.dev/" />
+  <meta property="og:url" content="https://dramabox-85g.pages.dev/" />
   <meta property="og:type" content="website" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Watch Full Movie" />
   <meta name="twitter:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
   <meta name="twitter:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
-
-  <!-- Favicon & Icons -->
-  <link rel="icon" type="image/png" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
+  <link rel="icon" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
   <link rel="apple-touch-icon" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
 
-  <!-- Styles & Scripts -->
   <link rel="stylesheet" href="style.css">
   <script defer src="script.js"></script>
 </head>
@@ -33,7 +28,7 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-inner">
-      <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Prime Drama">
+      <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box">
       <button class="hamburger" onclick="toggleNav()">☰</button>
       <div class="search-wrapper">
         <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)">
@@ -59,19 +54,19 @@
 
     <!-- TRENDING MOVIES -->
     <section class="row box red-glow">
-      <h2>Trending Movies</h2>
+      <h2>🎬 Trending Movies</h2>
       <div class="list two-rows" id="movies-list"></div>
     </section>
 
     <!-- TRENDING TV SHOWS -->
     <section class="row box red-glow">
-      <h2>Trending TV Shows</h2>
+      <h2>📺 Trending TV Shows</h2>
       <div class="list two-rows" id="tvshows-list"></div>
     </section>
 
     <!-- TRENDING ANIME -->
     <section class="row box red-glow">
-      <h2>Trending Anime</h2>
+      <h2>🎌 Trending Anime</h2>
       <div class="list two-rows" id="anime-list"></div>
     </section>
   </main>
@@ -103,9 +98,6 @@
   </footer>
 </body>
 </html>
-
-
-
 
 
 
