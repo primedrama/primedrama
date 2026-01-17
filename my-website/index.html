@@ -12,20 +12,22 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
-  <!-- OPTIONAL -->
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="stylesheet" href="css/home.css">
   <script defer src="js/home.js"></script>
-  
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-inner">
-    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box">
+
+    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Prime Drama">
+
+    <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+      ☰
+    </button>
 
     <div class="search-wrapper">
       <input
@@ -36,35 +38,31 @@
       />
       <button class="search-btn">🔍</button>
     </div>
+
   </div>
 </header>
 
-<!-- HERO / BANNER -->
 <section class="banner" id="banner">
   <h1 id="banner-title"></h1>
 </section>
 
 <main>
 
-  <!-- SEARCH RESULTS (NASA TAAS) -->
   <section class="row box red-glow" id="search-section" hidden>
     <h2>🔍 Search Results</h2>
     <div class="grid" id="search-results"></div>
   </section>
 
-  <!-- TRENDING MOVIES -->
   <section class="row box red-glow">
     <h2>🎬 Trending Movies</h2>
     <div class="list" id="movies-list"></div>
   </section>
 
-  <!-- TRENDING TV -->
   <section class="row box red-glow">
     <h2>📺 Trending TV Shows</h2>
     <div class="list" id="tvshows-list"></div>
   </section>
 
-  <!-- TRENDING ANIME -->
   <section class="row box red-glow">
     <h2>🎌 Trending Anime</h2>
     <div class="list" id="anime-list"></div>
@@ -77,20 +75,17 @@
   <div class="modal-content">
 
     <span class="close" onclick="closeModal()">✖</span>
-
-    <!-- PLAYER -->
+    
     <div class="player-wrapper">
       <iframe id="modal-video" allowfullscreen></iframe>
     </div>
-
-    <!-- INFO -->
+    
     <div class="info-wrapper">
       <div class="info-text">
         <h2 id="modal-title"></h2>
         <div id="modal-rating"></div>
         <p id="modal-description"></p>
 
-        <!-- HIDDEN SERVER -->
         <select id="server" hidden onchange="changeServer()">
           <option value="embed" selected>HD 2</option>
           <option value="player">HD 1</option>
@@ -101,7 +96,6 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="site-footer">
   <p>© <span id="year"></span> Prime Drama. All rights reserved.</p>
   <p class="disclaimer">
@@ -116,7 +110,6 @@
 
 </body>
 </html>
-
 
 
 
