@@ -290,7 +290,7 @@ body {
 }
 
 /* ======================
-   MOBILE (SUPER SMALL HERO)
+   MOBILE (CROPPED HERO)
 ====================== */
 @media (max-width: 768px) {
 
@@ -308,34 +308,38 @@ body {
     margin-top: 10px;
   }
 
-  /* HERO – SUPER SMALL HEIGHT (1/4 IMAGE POSTER) */
+  /* HERO – CROPPED EFFECT, 1/4 OF IMAGE POSTER */
   .banner {
-    height: 12vh;       /* maliit na height */
-    min-height: 100px;  /* hindi masyadong maliit */
-    max-height: 140px;  /* limit para hindi lumabis */
-    padding: 12px;
-    background-position: center top;
+    height: 9vh;          /* talagang maliit */
+    min-height: 80px;
+    max-height: 110px;
+    padding: 10px;
     display: flex;
     align-items: flex-end;
+    background-size: cover;           /* panatilihin ang cover */
+    background-position: center top;  /* crop sa top */
+    overflow: hidden;                 /* siguraduhing hindi lalabas ang image */
   }
 
   #banner-title {
-    font-size: clamp(14px, 3.5vw, 18px);
-    margin-bottom: 4px;
+    font-size: clamp(12px, 3vw, 16px);
+    margin-bottom: 3px;
   }
 
   #banner-overview {
-    font-size: clamp(10px, 2.8vw, 12px);
-    max-height: 2em;
+    font-size: clamp(9px, 2.5vw, 11px);
+    max-height: 1.8em;
     overflow: hidden;
-    line-height: 1.2;
+    line-height: 1.1;
   }
 
   .list img {
-    width: 110px;
-    min-width: 110px;
+    width: 100px;
+    min-width: 100px;
   }
 }
+
+
 
 
 
