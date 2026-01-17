@@ -17,9 +17,12 @@ window.addEventListener("scroll", () => {
 function toggleNav() { document.querySelector(".navbar").classList.toggle("open"); }
 
 /* FETCH */
-async function fetchJSON(url){ const res = await fetch(url); return res.ok ? res.json() : null; }
-async function fetchTrending(type){ const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`); return data?.results || []; }
-async function fetchTrendingAnime(){ 
+async function fetchJSON(url) { const res = await fetch(url); return res.ok ? res.json() : null; }
+async function fetchTrending(type) { 
+  const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`); 
+  return data?.results || []; 
+}
+async function fetchTrendingAnime() { 
   const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`);
   return data?.results.filter(i=>i.original_language==="ja" && i.genre_ids.includes(16)) || [];
 }
@@ -31,8 +34,8 @@ function displayBanner(item){
   const overviewEl = document.getElementById("banner-overview");
   if(!banner || !item) return;
   banner.style.backgroundImage=`url(${IMG}${item.backdrop_path})`;
-  titleEl.textContent=item.title||item.name||"";
-  overviewEl.textContent=item.overview||"No description available.";
+  titleEl.textContent = item.title || item.name || "";
+  overviewEl.textContent = item.overview || "No description available.";
 }
 
 function createCard(item){
@@ -41,11 +44,11 @@ function createCard(item){
   card.className="card";
   card.onclick=()=>showDetails(item);
 
-  const img=document.createElement("img");
+  const img = document.createElement("img");
   img.src=IMG+item.poster_path;
   card.appendChild(img);
 
-  const title=document.createElement("div");
+  const title = document.createElement("div");
   title.className="card-title";
   title.textContent=item.title||item.name||"";
   card.appendChild(title);
@@ -75,10 +78,15 @@ function showDetails(item){
   document.getElementById("server").value="embed";
   changeServer();
 }
-function closeModal(){document.getElementById("modal").style.display="none";document.getElementById("modal-video").src="";document.body.style.overflow="";}
+
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+  document.getElementById("modal-video").src="";
+  document.body.style.overflow="";
+}
 
 /* PLAYER */
-function changeServer(){ 
+function changeServer(){
   if(!currentItem) return;
   const id=currentItem.id;
   const isMovie=!!currentItem.title;
@@ -90,9 +98,10 @@ function changeServer(){
 async function searchTMDB(q){
   const section=document.getElementById("search-section");
   const el=document.getElementById("search-results");
-  if(!q){section.hidden=true;return;}
+  if(!q){ section.hidden=true; return; }
+
   const data=await fetchJSON(`${BASE}/search/multi?api_key=${API_KEY}&query=${q}`);
-  el.innerHTML="";section.hidden=false;section.scrollIntoView({behavior:"smooth"});
+  el.innerHTML=""; section.hidden=false; section.scrollIntoView({behavior:"smooth"});
   data?.results.forEach(item=>{ const card=createCard(item); if(card) el.appendChild(card); });
 }
 
@@ -100,6 +109,7 @@ async function searchTMDB(q){
 async function init(){
   const [movies,tvAll,anime]=await Promise.all([fetchTrending("movie"),fetchTrending("tv"),fetchTrendingAnime()]);
   const tv=tvAll.filter(item=>!(item.original_language==="ja" && item.genre_ids.includes(16)));
+
   if(movies.length) displayBanner(movies[0]);
   displayList(movies,"movies-list");
   displayList(tv,"tvshows-list");
@@ -107,7 +117,4 @@ async function init(){
   document.getElementById("year").textContent=new Date().getFullYear();
 }
 init();
-
-
-
 
