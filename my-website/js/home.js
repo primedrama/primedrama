@@ -29,18 +29,12 @@ async function fetchJSON(url){
 async function fetchTrending(type){ 
   const data = await fetchJSON(`${BASE}/trending/${type}/week?api_key=${API_KEY}`); 
   if(!data?.results) return [];
-
-  if(type === "tv") {
-    // Remove anime from TV Shows
-    return data.results.filter(tv => !tv.genre_ids.includes(16));
-  }
-
+  if(type === "tv") return data.results.filter(tv => !tv.genre_ids.includes(16));
   return data.results;
 }
 
 async function fetchTrendingAnime(){ 
   const data = await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`);
-  // Only anime (Japanese + genre 16)
   return data?.results.filter(tv => tv.original_language === "ja" && tv.genre_ids.includes(16)) || [];
 }
 
@@ -131,13 +125,35 @@ async function searchTMDB(q){
 }
 
 /* SOCIAL SHARE */
-const siteURL = encodeURIComponent("https://dramabox-85g.pages.dev/");
-const siteTitle = encodeURIComponent("Check out Drama Box - Watch trending movies, TV shows, and anime!");
+const siteURL = encodeURIComponent("https://primedrama-19t.pages.dev/");
+const siteTitle = encodeURIComponent("Check out PrimeDrama - Watch trending movies, TV shows, and anime!");
 
 function shareFacebook(){ window.open(`https://www.facebook.com/sharer/sharer.php?u=${siteURL}`, '_blank'); }
 function shareTwitter(){ window.open(`https://twitter.com/intent/tweet?url=${siteURL}&text=${siteTitle}`, '_blank'); }
 function shareInstagram(){ alert("Instagram does not support direct website sharing. Copy the link instead."); }
 function shareTikTok(){ alert("TikTok does not support direct website sharing. Copy the link instead."); }
+
+/* RECOMMENDED FOR YOU RANDOM */
+async function displayRecommended(){
+  const data = await fetchTrending("movie");
+  if(!data.length) return;
+  const container = document.getElementById("recommended-list");
+  container.innerHTML = "";
+  // Pick 6 random unique items
+  const picked = [];
+  while(picked.length < 6 && picked.length < data.length){
+    const rand = data[Math.floor(Math.random() * data.length)];
+    if(!picked.includes(rand)) picked.push(rand);
+  }
+  picked.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "list-item";
+    const img = document.createElement("img");
+    img.src = IMG + item.poster_path;
+    div.appendChild(img);
+    container.appendChild(div);
+  });
+}
 
 /* INIT */
 async function init(){
@@ -151,7 +167,7 @@ async function init(){
   displayList(movies, "movies-list");
   displayList(tvAll, "tvshows-list");
   displayList(anime, "anime-list");
+  displayRecommended();
 }
 init();
-
 
