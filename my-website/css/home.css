@@ -172,7 +172,7 @@ body {
 }
 
 /* ======================
-   LISTS (POSTER FIX)
+   LISTS
 ====================== */
 .list {
   display: flex;
@@ -308,29 +308,28 @@ body {
     margin-top: 10px;
   }
 
-  /* HERO – PC-LIKE CROPPED BANNER */
   .banner {
-    height: 38vh;                 /* same as desktop */
-    min-height: 280px;            /* fixed min-height */
-    max-height: 280px;            /* fix so poster not full vertical */
+    height: 240px;
+    min-height: 240px;
+    max-height: 240px;
     padding: 16px;
+    background-size: cover;
+    background-position: center top;
     display: flex;
     align-items: flex-end;
-    background-size: cover;        /* full width */
-    background-position: center top; /* crop top portion */
     overflow: hidden;
   }
 
   #banner-title {
-    font-size: clamp(18px, 4vw, 34px);
+    font-size: clamp(18px, 4vw, 26px);
     margin-bottom: 6px;
   }
 
   #banner-overview {
-    font-size: clamp(12px, 3vw, 15px);
-    max-height: 3em;
-    overflow: hidden;
+    font-size: 12px;
     line-height: 1.3;
+    max-height: 2.6em;
+    overflow: hidden;
   }
 
   .list img {
@@ -338,7 +337,6 @@ body {
     min-width: 110px;
   }
 }
-
 
 
 
