@@ -111,7 +111,9 @@ async function init(){
   displayList(movies,"movies-list");
   displayList(tv,"tvshows-list");
   displayList(anime,"anime-list");
-  document.getElementById("year").textContent=new Date().
+  document.getElementById("year").textContent=new Date().getFullYear();
+}
+init();
 
 
 
