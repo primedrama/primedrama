@@ -96,11 +96,12 @@ body {
 }
 
 /* ======================
-   HERO BANNER (DESKTOP)
+   HERO BANNER (GLOBAL FIXED)
 ====================== */
 .banner {
-  height: 38vh;
+  height: 280px;
   min-height: 280px;
+  max-height: 280px;
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -290,7 +291,18 @@ body {
 }
 
 /* ======================
-   MOBILE (PC-LIKE HERO)
+   LARGE DESKTOP ENHANCE
+====================== */
+@media (min-width: 1024px) {
+  .banner {
+    height: 38vh;
+    min-height: 320px;
+    max-height: none;
+  }
+}
+
+/* ======================
+   MOBILE TWEAKS
 ====================== */
 @media (max-width: 768px) {
 
@@ -306,18 +318,6 @@ body {
     display: flex;
     width: 100%;
     margin-top: 10px;
-  }
-
-  .banner {
-    height: 240px;
-    min-height: 240px;
-    max-height: 240px;
-    padding: 16px;
-    background-size: cover;
-    background-position: center top;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
   }
 
   #banner-title {
@@ -337,6 +337,3 @@ body {
     min-width: 110px;
   }
 }
-
-
-
