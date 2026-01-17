@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Drama Box</title>
 
-  <!-- Open Graph / Twitter / Thumbnail -->
+  <!-- Open Graph / Social Preview -->
   <meta property="og:title" content="Watch Full Movie" />
   <meta property="og:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
   <meta property="og:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
@@ -17,90 +17,97 @@
   <meta name="twitter:title" content="Watch Full Movie" />
   <meta name="twitter:description" content="Watch trending movies, TV shows, and anime on Drama Box." />
   <meta name="twitter:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
-  <link rel="icon" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
   <link rel="apple-touch-icon" href="https://i.ibb.co/n8jRPsgr/dramabox.png" />
 
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="css/home.css">
+  <script defer src="js/home.js"></script>
 </head>
-
 <body>
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="nav-inner">
-      <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box">
-      <button class="hamburger" onclick="toggleNav()">☰</button>
-      <div class="search-wrapper">
-        <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)">
-        <button class="search-btn">🔍</button>
-      </div>
-    </div>
-  </header>
 
-  <!-- HERO BANNER -->
-  <section class="banner" id="banner">
-    <div class="banner-content">
-      <h1 id="banner-title"></h1>
-      <p id="banner-overview"></p>
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-inner">
+    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box" />
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <div class="search-wrapper">
+      <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)" />
+      <button class="search-btn">🔍</button>
     </div>
+  </div>
+</header>
+
+<!-- HERO / BANNER -->
+<section class="banner" id="banner">
+  <div class="banner-content">
+    <h1 id="banner-title"></h1>
+    <p id="banner-overview"></p>
+  </div>
+</section>
+
+<main>
+  <!-- SEARCH RESULTS -->
+  <section class="row box red-glow" id="search-section" hidden>
+    <h2>🔍 Search Results</h2>
+    <div class="grid" id="search-results"></div>
   </section>
 
-  <main>
-    <!-- SEARCH RESULTS -->
-    <section class="row box red-glow" id="search-section" hidden>
-      <h2>🔍 Search Results</h2>
-      <div class="list" id="search-results"></div>
-    </section>
+  <!-- TRENDING MOVIES -->
+  <section class="row box red-glow">
+    <h2>🎬 Trending Movies</h2>
+    <div class="list two-rows" id="movies-list"></div>
+  </section>
 
-    <!-- TRENDING MOVIES -->
-    <section class="row box red-glow">
-      <h2>🎬 Trending Movies</h2>
-      <div class="list two-rows" id="movies-list"></div>
-    </section>
+  <!-- TRENDING TV SHOWS -->
+  <section class="row box red-glow">
+    <h2>📺 Trending TV Shows</h2>
+    <div class="list two-rows" id="tvshows-list"></div>
+  </section>
 
-    <!-- TRENDING TV SHOWS -->
-    <section class="row box red-glow">
-      <h2>📺 Trending TV Shows</h2>
-      <div class="list two-rows" id="tvshows-list"></div>
-    </section>
+  <!-- TRENDING ANIME -->
+  <section class="row box red-glow">
+    <h2>🎌 Trending Anime</h2>
+    <div class="list two-rows" id="anime-list"></div>
+  </section>
+</main>
 
-    <!-- TRENDING ANIME -->
-    <section class="row box red-glow">
-      <h2>🎌 Trending Anime</h2>
-      <div class="list two-rows" id="anime-list"></div>
-    </section>
-  </main>
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">✖</span>
 
-  <!-- MODAL -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">✖</span>
-      <div class="player-wrapper">
-        <iframe id="modal-video" allowfullscreen></iframe>
-      </div>
-      <div class="info-wrapper" id="info-wrapper">
-        <div class="info-text">
-          <h2 id="modal-title"></h2>
-          <div id="modal-rating"></div>
-          <p id="modal-description"></p>
-          <select id="server" hidden onchange="changeServer()">
-            <option value="embed" selected>HD 2</option>
-            <option value="player">HD 1</option>
-          </select>
-        </div>
+    <div class="player-wrapper">
+      <iframe id="modal-video" allowfullscreen></iframe>
+    </div>
+
+    <div class="info-wrapper" id="info-wrapper">
+      <div class="info-text">
+        <h2 id="modal-title"></h2>
+        <div id="modal-rating"></div>
+        <p id="modal-description"></p>
+        <select id="server" hidden onchange="changeServer()">
+          <option value="embed" selected>HD 2</option>
+          <option value="player">HD 1</option>
+        </select>
       </div>
     </div>
   </div>
+</div>
 
-  <footer class="site-footer">
-    <p>© <span id="year"></span> Drama Box. All rights reserved.</p>
-    <p>This site does not store files on our server. Only links to third-party media.</p>
-  </footer>
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>© <span id="year"></span> Drama Box. All rights reserved.</p>
+  <p class="disclaimer">This site does not store any files on our server. We only link to the media which is hosted on 3rd party services.</p>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
-
-
-
 
 
 
