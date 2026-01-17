@@ -1,4 +1,4 @@
-const API_KEY = atob('ZTM0MzE2YTZmZTQ1NmZlMjJiNTBjNDAzMzk4MGIzMjY=');
+const API_KEY = 'e34316a6fe456fe22b50c4033980b236';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMG_URL = 'https://image.tmdb.org/t/p/original';
 let currentItem;
@@ -14,11 +14,13 @@ async function safeFetch(url){
   }
 }
 
+// Fetch trending movies/tv
 async function fetchTrending(type){
   const data = await safeFetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
   return data?.results || [];
 }
 
+// Fetch trending anime (genre 16, Japanese)
 async function fetchTrendingAnime(){
   const pages = [1,2,3].map(p=>safeFetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${p}`));
   const results = (await Promise.all(pages))
@@ -27,36 +29,39 @@ async function fetchTrendingAnime(){
   return results;
 }
 
+// Display banner
 function displayBanner(item){
   if(!item) return;
   const banner = document.getElementById('banner');
-  const path = item.backdrop_path || "https://via.placeholder.com/1280x720?text=No+Banner";
-  banner.style.backgroundImage = `url(${IMG_URL}${path})`;
+  const path = item.backdrop_path ? IMG_URL+item.backdrop_path : "https://via.placeholder.com/1280x720?text=No+Banner";
+  banner.style.backgroundImage = `url(${path})`;
   document.getElementById('banner-title').textContent = item.title||item.name||"No Title";
 }
 
+// Display list with poster placeholders
 function displayList(items, containerId){
   const container = document.getElementById(containerId);
   container.innerHTML="";
   if(!items || !items.length){
-    container.innerHTML="<p style='color:var(--gray-muted)'>No content available.</p>";
+    container.innerHTML="<p style='color:gray'>No content available.</p>";
     return;
   }
   items.forEach(item=>{
     const img = document.createElement('img');
-    img.src = item.poster_path ? `${IMG_URL}${item.poster_path}` : "https://via.placeholder.com/160x240?text=No+Image";
+    img.src = item.poster_path ? IMG_URL+item.poster_path : "https://via.placeholder.com/160x240?text=No+Image";
     img.alt = item.title||item.name||"No Title";
     img.onclick = ()=>showDetails({...item, media_type: containerId==='movies-list'?'movie':'tv'});
     container.appendChild(img);
   });
 }
 
+// Modal
 function showDetails(item){
   if(!item) return;
   currentItem = item;
   document.body.style.overflow="hidden";
 
-  const posterURL = item.poster_path ? `${IMG_URL}${item.poster_path}` : "https://via.placeholder.com/1280x720?text=No+Poster";
+  const posterURL = item.poster_path ? IMG_URL+item.poster_path : "https://via.placeholder.com/1280x720?text=No+Poster";
   document.querySelector('.poster-bg').style.backgroundImage = `url(${posterURL})`;
 
   document.getElementById('modal-title').textContent = item.title||item.name||"No Title";
@@ -85,29 +90,22 @@ function changeServer(){
 }
 
 // Search
-function openSearchModal(){
-  document.getElementById('search-modal').style.display='flex';
-  document.getElementById('search-input').focus();
-}
-function closeSearchModal(){
-  document.getElementById('search-modal').style.display='none';
-  document.getElementById('search-results').innerHTML='';
-}
+function openSearchModal(){ document.getElementById('search-modal').style.display='flex'; document.getElementById('search-input').focus(); }
+function closeSearchModal(){ document.getElementById('search-modal').style.display='none'; document.getElementById('search-results').innerHTML=''; }
+
 async function searchTMDB(){
-  const query=document.getElementById('search-input').value.trim();
+  const query = document.getElementById('search-input').value.trim();
   if(!query) return;
   const data = await safeFetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
   if(!data || !data.results) return;
-  const container=document.getElementById('search-results');
+
+  const container = document.getElementById('search-results');
   container.innerHTML="";
   data.results.forEach(item=>{
-    const img=document.createElement('img');
-    img.src = item.poster_path ? `${IMG_URL}${item.poster_path}` : "https://via.placeholder.com/120x180?text=No+Image";
+    const img = document.createElement('img');
+    img.src = item.poster_path ? IMG_URL+item.poster_path : "https://via.placeholder.com/120x180?text=No+Image";
     img.alt = item.title||item.name||"No Title";
-    img.onclick = ()=>{
-      closeSearchModal();
-      showDetails(item);
-    };
+    img.onclick = ()=>{ closeSearchModal(); showDetails(item); };
     container.appendChild(img);
   });
 }
@@ -118,10 +116,9 @@ async function init(){
   let tv = await fetchTrending('tv');
   let anime = await fetchTrendingAnime();
 
-  // Fallback placeholders if empty
-  if(!movies.length) movies = [{ title:"No Movies", backdrop_path:null, poster_path:null }];
-  if(!tv.length) tv = [{ name:"No TV Shows", backdrop_path:null, poster_path:null }];
-  if(!anime.length) anime = [{ name:"No Anime", backdrop_path:null, poster_path:null }];
+  if(!movies.length) movies=[{title:"No Movies", poster_path:null, backdrop_path:null}];
+  if(!tv.length) tv=[{name:"No TV Shows", poster_path:null, backdrop_path:null}];
+  if(!anime.length) anime=[{name:"No Anime", poster_path:null, backdrop_path:null}];
 
   const bannerItem = movies.find(m=>m.backdrop_path) || movies[0];
   displayBanner(bannerItem);
@@ -130,6 +127,6 @@ async function init(){
   displayList(tv,'tvshows-list');
   displayList(anime,'anime-list');
 }
-init();
 
+init();
 
