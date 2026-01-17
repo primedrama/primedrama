@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- FORCE PC VIEW, PLAYER RESPONSIVE -->
-  <meta name="viewport" content="width=1200, initial-scale=0.9"/>
+  <!-- RESPONSIVE VIEWPORT -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <title>Prime Drama</title>
 
@@ -19,6 +19,47 @@
 
   <link rel="stylesheet" href="css/home.css">
   <script defer src="js/home.js"></script>
+
+  <style>
+    /* Ensure the modal and player scale on mobile */
+    .player-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      max-height: 80vh;
+    }
+
+    .modal-content {
+      max-width: 95%;
+      margin: auto;
+      overflow-x: hidden;
+    }
+
+    .info-wrapper {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Optional: make lists wrap nicely on small screens */
+    .list {
+      flex-wrap: wrap;
+    }
+
+    /* Make banner content fit smaller screens */
+    .banner-content {
+      padding: 1rem;
+    }
+
+    /* Adjust navbar search on small screens */
+    @media (max-width: 768px) {
+      .search-wrapper {
+        flex: 1 1 100%;
+        margin-top: 0.5rem;
+      }
+      .nav-inner {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -139,13 +180,11 @@
 </footer>
 
 <script>
-  document.getElementById("year").textContent =
-    new Date().getFullYear();
+  document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 
 </body>
 </html>
-
 
 
 
