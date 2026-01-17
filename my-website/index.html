@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
+
 <header class="navbar">
   <div class="nav-inner">
     <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="Drama Box">
@@ -30,9 +30,27 @@
 
     <button class="hamburger" onclick="toggleNav()">☰</button>
   </div>
+
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#">Home</a>
+    <a href="#movies-list">Movies</a>
+    <a href="#tvshows-list">TV Shows</a>
+    <a href="#anime-list">Anime</a>
+    <input type="text" placeholder="Search..." oninput="searchTMDB(this.value)">
+
+   
+    <div class="social-icons">
+      <a href="https://facebook.com" target="_blank">📘</a>
+      <a href="https://twitter.com" target="_blank">🐦</a>
+      <a href="https://instagram.com" target="_blank">📸</a>
+      <a href="https://youtube.com" target="_blank">▶️</a>
+      <a href="https://tiktok.com" target="_blank">🎵</a>
+    </div>
+  </div>
 </header>
 
-<!-- HERO / BANNER -->
+
 <section class="banner" id="banner">
   <div class="banner-content">
     <h1 id="banner-title"></h1>
@@ -41,42 +59,41 @@
 </section>
 
 <main>
-  <!-- SEARCH RESULTS -->
+
   <section class="row box red-glow" id="search-section" hidden>
     <h2>Search Results</h2>
-    <div class="list two-rows" id="search-results"></div>
+    <div class="grid" id="search-results"></div>
   </section>
 
-  <!-- TRENDING MOVIES -->
+
   <section class="row box red-glow">
     <h2>Trending Movies</h2>
     <div class="list two-rows" id="movies-list"></div>
   </section>
 
-  <!-- TRENDING TV SHOWS -->
   <section class="row box red-glow">
     <h2>Trending TV Shows</h2>
     <div class="list two-rows" id="tvshows-list"></div>
   </section>
 
-  <!-- TRENDING ANIME -->
+
   <section class="row box red-glow">
     <h2>Trending Anime</h2>
     <div class="list two-rows" id="anime-list"></div>
   </section>
 </main>
 
-<!-- MODAL -->
+
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
 
-    <!-- PLAYER -->
+
     <div class="player-wrapper">
       <iframe id="modal-video" allowfullscreen></iframe>
     </div>
 
-    <!-- INFO -->
+ 
     <div class="info-wrapper" id="info-wrapper">
       <div class="info-text">
         <h2 id="modal-title"></h2>
@@ -92,7 +109,7 @@
   </div>
 </div>
 
-<!-- FOOTER -->
+
 <footer class="site-footer">
   <p>© <span id="year"></span> Drama Box. All rights reserved.</p>
   <p class="disclaimer">
@@ -103,9 +120,9 @@
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
 </body>
 </html>
-
 
 
 
