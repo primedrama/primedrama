@@ -4,160 +4,120 @@ const IMG_URL = 'https://image.tmdb.org/t/p/original';
 let currentItem;
 
 // ================= FETCH FUNCTIONS =================
-
-async function fetchTrending(type) {
-  const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
-  const data = await res.json();
-  return data.results;
+async function safeFetch(url){
+  try {
+    const res = await fetch(url);
+    if(!res.ok) throw new Error("API error");
+    return await res.json();
+  } catch(e){
+    console.error(e);
+    alert("Something went wrong. Please refresh.");
+    return null;
+  }
 }
 
-async function fetchTrendingAnime() {
-  let allResults = [];
+async function fetchTrending(type){
+  const data = await safeFetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+  return data ? data.results : [];
+}
 
-  for (let page = 1; page <= 3; page++) {
-    const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
-    const data = await res.json();
-
-    const filtered = data.results.filter(item =>
-      item.original_language === 'ja' && item.genre_ids.includes(16)
-    );
-
-    allResults = allResults.concat(filtered);
-  }
-
-  return allResults;
+async function fetchTrendingAnime(){
+  const pages = [1,2,3].map(p => safeFetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${p}`));
+  const results = (await Promise.all(pages))
+    .flatMap(d => d?.results||[])
+    .filter(i => i.original_language==='ja' && i.genre_ids.includes(16));
+  return results;
 }
 
 // ================= DISPLAY FUNCTIONS =================
-
-function displayBanner(item) {
-  document.getElementById('banner').style.backgroundImage =
-    `url(${IMG_URL}${item.backdrop_path})`;
-  document.getElementById('banner-title').textContent =
-    item.title || item.name;
+function displayBanner(item){
+  document.getElementById('banner').style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
+  document.getElementById('banner-title').textContent = item.title||item.name;
 }
 
-function displayList(items, containerId) {
+function displayList(items, containerId){
   const container = document.getElementById(containerId);
-  container.innerHTML = '';
-
-  items.forEach(item => {
-    if (!item.poster_path) return;
-
+  container.innerHTML="";
+  items.forEach(item=>{
+    if(!item.poster_path) return;
     const img = document.createElement('img');
     img.src = `${IMG_URL}${item.poster_path}`;
-    img.alt = item.title || item.name;
-    img.onclick = () => showDetails(item);
-
+    img.alt = item.title||item.name;
+    img.onclick = ()=>showDetails({...item, media_type: containerId==='movies-list'?'movie':'tv'});
     container.appendChild(img);
   });
 }
 
-function showDetails(item) {
-  currentItem = item;
+// ================= MODAL =================
+function showDetails(item){
+  currentItem=item;
+  document.body.style.overflow="hidden";
 
-  document.getElementById('modal-title').textContent =
-    item.title || item.name;
+  const posterURL = `${IMG_URL}${item.poster_path}`;
+  document.querySelector('.poster-bg').style.backgroundImage = `url(${posterURL})`;
 
-  document.getElementById('modal-description').textContent =
-    item.overview;
+  document.getElementById('modal-title').textContent=item.title||item.name;
+  document.getElementById('modal-description').textContent=item.overview;
+  document.getElementById('modal-rating').textContent='★'.repeat(Math.round(item.vote_average/2));
 
-  document.getElementById('modal-image').src =
-    `${IMG_URL}${item.poster_path}`;
-
-  document.getElementById('modal-rating').innerHTML =
-    '★'.repeat(Math.round(item.vote_average / 2));
-
+  document.getElementById('modal').style.display='flex';
   changeServer();
-  document.getElementById('modal').style.display = 'flex';
 }
 
-// ================= ZXCSTREAM EMBED HANDLER =================
-
-function changeServer() {
-  const server = document.getElementById('server').value;
-  const isMovie = currentItem.media_type === "movie";
-
-  const language = "en";
-  const season = 1;
-  const episode = 1;
-
-  let embedURL = "";
-
-  if (server === "zxc-player") {
-    embedURL = isMovie
-      ? `https://zxcstream.xyz/player/movie/${currentItem.id}/${language}`
-      : `https://zxcstream.xyz/player/tv/${currentItem.id}/${season}/${episode}/${language}`;
-  }
-
-  if (server === "zxc-embed") {
-    embedURL = isMovie
-      ? `https://zxcstream.xyz/embed/movie/${currentItem.id}`
-      : `https://zxcstream.xyz/embed/tv/${currentItem.id}/${season}/${episode}`;
-  }
-
-  document.getElementById('modal-video').src = embedURL;
+function closeModal(){
+  document.body.style.overflow="";
+  document.getElementById('modal').style.display='none';
+  document.getElementById('modal-video').src='';
 }
 
-// ================= MODAL CONTROLS =================
-
-function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-  document.getElementById('modal-video').src = '';
+// ================= PLAYER (Server 2 forced) =================
+function changeServer(){
+  const isMovie = currentItem.media_type==="movie";
+  const season=1, episode=1;
+  const embedURL = isMovie
+    ? `https://zxcstream.xyz/embed/movie/${currentItem.id}`
+    : `https://zxcstream.xyz/embed/tv/${currentItem.id}/${season}/${episode}`;
+  document.getElementById('modal-video').src=embedURL;
 }
 
 // ================= SEARCH =================
-
-function openSearchModal() {
-  document.getElementById('search-modal').style.display = 'flex';
+function openSearchModal(){
+  document.getElementById('search-modal').style.display='flex';
   document.getElementById('search-input').focus();
 }
-
-function closeSearchModal() {
-  document.getElementById('search-modal').style.display = 'none';
-  document.getElementById('search-results').innerHTML = '';
+function closeSearchModal(){
+  document.getElementById('search-modal').style.display='none';
+  document.getElementById('search-results').innerHTML='';
 }
-
-async function searchTMDB() {
-  const query = document.getElementById('search-input').value.trim();
-  if (!query) return;
-
-  const res = await fetch(
-    `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`
-  );
-  const data = await res.json();
-
-  const container = document.getElementById('search-results');
-  container.innerHTML = '';
-
-  data.results.forEach(item => {
-    if (!item.poster_path) return;
-
-    const img = document.createElement('img');
-    img.src = `${IMG_URL}${item.poster_path}`;
-    img.alt = item.title || item.name;
-    img.onclick = () => {
+async function searchTMDB(){
+  const query=document.getElementById('search-input').value.trim();
+  if(!query) return;
+  const data = await safeFetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
+  if(!data) return;
+  const container=document.getElementById('search-results');
+  container.innerHTML="";
+  data.results.forEach(item=>{
+    if(!item.poster_path) return;
+    const img=document.createElement('img');
+    img.src=`${IMG_URL}${item.poster_path}`;
+    img.alt=item.title||item.name;
+    img.onclick=()=>{
       closeSearchModal();
       showDetails(item);
     };
-
     container.appendChild(img);
   });
 }
 
 // ================= INIT =================
+async function init(){
+  const movies=await fetchTrending('movie');
+  const tv=await fetchTrending('tv');
+  const anime=await fetchTrendingAnime();
 
-async function init() {
-  const movies = await fetchTrending('movie');
-  const tvShows = await fetchTrending('tv');
-  const anime = await fetchTrendingAnime();
-
-  displayBanner(movies[Math.floor(Math.random() * movies.length)]);
-  displayList(movies, 'movies-list');
-  displayList(tvShows, 'tvshows-list');
-  displayList(anime, 'anime-list');
+  displayBanner(movies[Math.floor(Math.random()*movies.length)]);
+  displayList(movies,'movies-list');
+  displayList(tv,'tvshows-list');
+  displayList(anime,'anime-list');
 }
-
 init();
-
-
