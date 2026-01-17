@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8" />
 
-  
+  <!-- FORCE PC VIEW, PLAYER RESPONSIVE -->
   <meta name="viewport" content="width=1200, initial-scale=0.9"/>
 
   <title>Prime Drama</title>
@@ -23,7 +23,7 @@
 
 <body>
 
-
+<!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-inner">
 
@@ -33,7 +33,7 @@
       alt="Prime Drama"
     >
 
-
+    <!-- HAMBURGER -->
     <button
       class="hamburger"
       onclick="toggleNav()"
@@ -42,7 +42,7 @@
       ☰
     </button>
 
- 
+    <!-- SEARCH -->
     <div class="search-wrapper">
       <input
         id="search-input"
@@ -56,30 +56,35 @@
   </div>
 </header>
 
+<!-- HERO / BANNER WITH INFO -->
 <section class="banner" id="banner">
-  <h1 id="banner-title"></h1>
+  <div class="banner-content">
+    <h1 id="banner-title"></h1>
+    <p id="banner-overview"></p>
+  </div>
 </section>
 
 <main>
 
+  <!-- SEARCH RESULTS -->
   <section class="row box red-glow" id="search-section" hidden>
     <h2>🔍 Search Results</h2>
     <div class="grid" id="search-results"></div>
   </section>
 
-
+  <!-- TRENDING MOVIES -->
   <section class="row box red-glow">
     <h2>🎬 Trending Movies</h2>
     <div class="list" id="movies-list"></div>
   </section>
 
-
+  <!-- TRENDING TV -->
   <section class="row box red-glow">
     <h2>📺 Trending TV Shows</h2>
     <div class="list" id="tvshows-list"></div>
   </section>
 
-  
+  <!-- TRENDING ANIME -->
   <section class="row box red-glow">
     <h2>🎌 Trending Anime</h2>
     <div class="list" id="anime-list"></div>
@@ -87,12 +92,13 @@
 
 </main>
 
+<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
 
     <span class="close" onclick="closeModal()">✖</span>
 
-  
+    <!-- PLAYER -->
     <div class="player-wrapper">
       <iframe
         id="modal-video"
@@ -100,7 +106,7 @@
       ></iframe>
     </div>
 
-    
+    <!-- INFO -->
     <div class="info-wrapper">
       <div class="info-text">
         <h2 id="modal-title"></h2>
@@ -121,7 +127,7 @@
   </div>
 </div>
 
-
+<!-- FOOTER -->
 <footer class="site-footer">
   <p>
     © <span id="year"></span> Prime Drama. All rights reserved.
@@ -139,6 +145,7 @@
 
 </body>
 </html>
+
 
 
 
