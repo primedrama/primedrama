@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -20,7 +19,6 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-inner">
     <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="PrimeDrama">
@@ -47,7 +45,7 @@
   </div>
 </header>
 
-<!-- HERO / BANNER -->
+
 <section class="banner" id="banner">
   <div class="banner-content">
     <h1 id="banner-title"></h1>
@@ -56,40 +54,39 @@
 </section>
 
 <main>
-  <!-- SEARCH RESULTS -->
+
   <section class="row box red-glow" id="search-section" hidden>
     <h2>Search Results</h2>
     <div class="grid" id="search-results"></div>
   </section>
 
-  <!-- RECOMMENDED FOR YOU (1 row, poster-only, randomized) -->
   <section class="row box red-glow" id="recommended-section">
     <h2>Recommended For You</h2>
     <div class="list" id="recommended-list" style="display:flex; gap:10px; overflow-x:auto; padding:10px 0;">
-      <!-- Posters will be injected via JS -->
+   
     </div>
   </section>
 
-  <!-- TRENDING MOVIES -->
+
   <section class="row box red-glow">
     <h2>Trending Movies</h2>
     <div class="list two-rows" id="movies-list"></div>
   </section>
 
-  <!-- TRENDING TV SHOWS -->
+ 
   <section class="row box red-glow">
     <h2>Trending TV Shows</h2>
     <div class="list two-rows" id="tvshows-list"></div>
   </section>
 
-  <!-- TRENDING ANIME -->
+
   <section class="row box red-glow">
     <h2>Trending Anime</h2>
     <div class="list two-rows" id="anime-list"></div>
   </section>
 </main>
 
-<!-- MODAL PLAYER -->
+
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
@@ -111,33 +108,33 @@
   </div>
 </div>
 
-<!-- FOOTER -->
+
 <footer class="site-footer" style="background:#111; color:#fff; padding:20px; text-align:center;">
   <p>© <span id="year"></span> PrimeDrama. All rights reserved.</p>
 
-  <!-- DMCA / Disclaimer Version 3 -->
+
   <p style="font-size:12px; color:#ccc; max-width:600px; margin:10px auto; line-height:1.5;">
     PrimeDrama aggregates externally hosted content only. We do not host or distribute media files. All content belongs to its rightful owners. We respect copyright law and respond promptly to takedown requests.
   </p>
 
-  <!-- Hidden Email Link -->
+
   <p style="font-size:12px; color:#FFD700; margin:5px auto;">
     <a href="#" id="email-link" style="color:#FFD700;">Email Us</a>
   </p>
 </footer>
 
 <script>
-  // Dynamic year
+
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Obfuscate email to prevent spam bots
+ 
   const user = "definite.dragon.liur";
   const domain = "protectsmail.net";
   const emailLink = document.getElementById("email-link");
   emailLink.href = "mailto:" + user + "@" + domain;
   emailLink.textContent = "Email Us";
 
-  // Recommended For You - Randomized posters
+
   const recommendedList = document.getElementById('recommended-list');
   const posterImages = [
     'URL_TO_IMAGE_1',
@@ -173,6 +170,7 @@
 
 </body>
 </html>
+
 
 
 
