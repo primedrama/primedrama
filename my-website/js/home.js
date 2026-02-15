@@ -76,7 +76,11 @@ if(c)container.appendChild(c);
 function showDetails(item){
 currentItem=item;
 document.getElementById("modal").classList.add("show");
+
 document.documentElement.style.overflow="hidden";
+
+/* HIDE HERO */
+document.getElementById("banner").style.visibility="hidden";
 
 document.getElementById("modal-title").textContent=item.title||item.name;
 document.getElementById("modal-description").textContent=item.overview||"";
@@ -90,6 +94,10 @@ changeServer();
 function closeModal(){
 document.getElementById("modal").classList.remove("show");
 document.getElementById("modal-video").src="";
+
+/* SHOW HERO */
+document.getElementById("banner").style.visibility="visible";
+
 document.documentElement.style.overflow="";
 }
 
@@ -148,6 +156,7 @@ displayRecommended();
 }
 init();
 
+/* CLICK HERO TO PLAY */
 function playHero(){
 if(!heroItem)return;
 showDetails(heroItem);
