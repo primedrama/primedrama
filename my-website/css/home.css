@@ -180,6 +180,7 @@ body{
   align-items:center;
   opacity:0;
   transition:.3s;
+  z-index:9999; /* ensure modal is always on top */
 }
 
 .modal.show{
@@ -235,7 +236,7 @@ body{
   padding:20px;
 }
 
-/* 👉 JUSTIFIED MOVIE INFO */
+/* JUSTIFIED MOVIE INFO */
 #modal-description{
   text-align:justify;
   text-justify:inter-word;
@@ -265,4 +266,5 @@ body{
 @media(max-width:768px){
   .hamburger{display:block}
 }
+
 
