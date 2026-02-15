@@ -64,7 +64,7 @@ body{
   margin:4px 0;
 }
 
-/* HERO FIXED */
+/* HERO */
 .banner{
   height:28vh;
   min-height:220px;
@@ -233,6 +233,14 @@ body{
 .info-text{
   position:relative;
   padding:20px;
+}
+
+/* 👉 JUSTIFIED MOVIE INFO */
+#modal-description{
+  text-align:justify;
+  text-justify:inter-word;
+  line-height:1.55;
+  margin-top:8px;
 }
 
 /* HIDE SERVER */
