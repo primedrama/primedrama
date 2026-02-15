@@ -7,6 +7,7 @@ const BASE="https://api.themoviedb.org/3";
 const IMG="https://image.tmdb.org/t/p/original";
 const API_KEY=window.__APP_CFG;
 let currentItem=null;
+let heroItem=null;
 
 /* NAV */
 function toggleNav(){
@@ -33,6 +34,7 @@ return data?.results.filter(tv=>tv.original_language==="ja"&&tv.genre_ids.includ
 /* UI */
 function displayBanner(item){
 if(!item)return;
+heroItem=item;
 document.getElementById("banner").style.backgroundImage=`url(${IMG}${item.backdrop_path})`;
 document.getElementById("banner-title").textContent=item.title||item.name;
 document.getElementById("banner-overview").textContent=item.overview||"";
@@ -139,4 +141,9 @@ displayList(anime,"anime-list");
 displayRecommended();
 }
 init();
+
+function playHero(){
+if(!heroItem)return;
+showDetails(heroItem);
+}
 
