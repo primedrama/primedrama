@@ -28,7 +28,10 @@ return data?.results||[];
 
 async function fetchTrendingAnime(){
 const data=await fetchJSON(`${BASE}/trending/tv/week?api_key=${API_KEY}`);
-return data?.results.filter(tv=>tv.original_language==="ja"&&tv.genre_ids.includes(16))||[];
+return data?.results.filter(tv =>
+  tv.original_language==="ja" &&
+  tv.genre_ids.includes(16)
+) || [];
 }
 
 /* UI */
@@ -73,7 +76,7 @@ if(c)container.appendChild(c);
 function showDetails(item){
 currentItem=item;
 document.getElementById("modal").classList.add("show");
-document.body.style.overflow="hidden";
+document.documentElement.style.overflow="hidden";
 
 document.getElementById("modal-title").textContent=item.title||item.name;
 document.getElementById("modal-description").textContent=item.overview||"";
@@ -87,7 +90,7 @@ changeServer();
 function closeModal(){
 document.getElementById("modal").classList.remove("show");
 document.getElementById("modal-video").src="";
-document.body.style.overflow="";
+document.documentElement.style.overflow="";
 }
 
 function changeServer(){
@@ -129,11 +132,14 @@ if(c)container.appendChild(c);
 
 /* INIT */
 async function init(){
-const [movies,tv,anime]=await Promise.all([
-fetchTrending("movie"),
-fetchTrending("tv"),
-fetchTrendingAnime()
-]);
+let movies=await fetchTrending("movie");
+let tv=await fetchTrending("tv");
+let anime=await fetchTrendingAnime();
+
+/* alisin anime sa tv */
+const animeIds=new Set(anime.map(a=>a.id));
+tv=tv.filter(t=>!animeIds.has(t.id));
+
 displayBanner(movies[0]);
 displayList(movies,"movies-list");
 displayList(tv,"tvshows-list");
@@ -146,4 +152,3 @@ function playHero(){
 if(!heroItem)return;
 showDetails(heroItem);
 }
-
