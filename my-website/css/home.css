@@ -59,9 +59,9 @@ body{background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
   margin:4px 0;
 }
 
-/* HERO — PINALIIT */
+/* HERO */
 .banner{
-  height:28vh;   /* 👈 dati 40vh */
+  height:28vh;
   min-height:220px;
   background-size:cover;
   background-position:center;
@@ -69,6 +69,7 @@ body{background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
   align-items:flex-end;
   padding:20px;
   position:relative;
+  cursor:pointer;
 }
 
 .banner::before{
@@ -229,4 +230,5 @@ body{background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
 @media(max-width:768px){
   .hamburger{display:block}
 }
+
 
