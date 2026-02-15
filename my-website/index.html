@@ -1,21 +1,11 @@
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prime Drama</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Prime Drama</title>
 
-  <meta property="og:title" content="Watch Full Movie Here" />
-  <meta property="og:description" content="Watch trending movies, TV shows, and anime on PrimeDrama." />
-  <meta property="og:image" content="https://i.ibb.co/n8jRPsgr/dramabox.png" />
-  <meta property="og:url" content="https://primedrama-19t.pages.dev/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <link rel="stylesheet" href="css/home.css">
-  <script defer src="js/home.js"></script>
-  <script src="https://rightyrely.com/80/db/87/80db87ca8966a01f222f0774bb4d71fe.js"></script>
+<link rel="stylesheet" href="css/home.css">
+<script defer src="js/home.js"></script>
 </head>
 <body>
 
@@ -24,7 +14,9 @@
     <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="PrimeDrama">
 
     <div class="search-wrapper">
-      <input id="search-input" type="text" placeholder="Search movies, TV shows..." oninput="searchTMDB(this.value)" />
+      <input id="search-input" type="text"
+        placeholder="Search movies, TV shows..."
+        oninput="searchTMDB(this.value)" />
     </div>
 
     <button class="hamburger" onclick="toggleNav()">☰</button>
@@ -37,14 +29,13 @@
     <a href="#anime-list">Anime</a>
 
     <div class="social-icons">
-      <a href="#" onclick="shareFacebook()"><img src="https://i.ibb.co/HfZ99tHz/facebook.png" alt="Facebook"></a>
-      <a href="#" onclick="shareTwitter()"><img src="https://i.ibb.co/SYFV9hq/twitter.png" alt="Twitter"></a>
-      <a href="#" onclick="shareInstagram()"><img src="https://i.ibb.co/3Y16D9Xh/instagram.png" alt="Instagram"></a>
-      <a href="#" onclick="shareTikTok()"><img src="https://i.ibb.co/Q7GqrG4j/tiktok.png" alt="TikTok"></a>
+      <a href="#" onclick="shareFacebook()">FB</a>
+      <a href="#" onclick="shareTwitter()">TW</a>
+      <a href="#" onclick="shareInstagram()">IG</a>
+      <a href="#" onclick="shareTikTok()">TT</a>
     </div>
   </div>
 </header>
-
 
 <section class="banner" id="banner">
   <div class="banner-content">
@@ -55,121 +46,76 @@
 
 <main>
 
-  <section class="row box red-glow" id="search-section" hidden>
-    <h2>Search Results</h2>
-    <div class="grid" id="search-results"></div>
-  </section>
+<section class="row box red-glow" id="search-section" hidden>
+  <h2>Search Results</h2>
+  <div class="grid" id="search-results"></div>
+</section>
 
-  <section class="row box red-glow" id="recommended-section">
-    <h2>Recommended For You</h2>
-    <div class="list" id="recommended-list" style="display:flex; gap:10px; overflow-x:auto; padding:10px 0;">
-   
-    </div>
-  </section>
+<section class="row box red-glow" id="recommended-section">
+  <h2>Recommended For You</h2>
+  <div class="list" id="recommended-list"></div>
+</section>
 
+<section class="row box red-glow">
+  <h2>Trending Movies</h2>
+  <div class="list two-rows" id="movies-list"></div>
+</section>
 
-  <section class="row box red-glow">
-    <h2>Trending Movies</h2>
-    <div class="list two-rows" id="movies-list"></div>
-  </section>
+<section class="row box red-glow">
+  <h2>Trending TV Shows</h2>
+  <div class="list two-rows" id="tvshows-list"></div>
+</section>
 
- 
-  <section class="row box red-glow">
-    <h2>Trending TV Shows</h2>
-    <div class="list two-rows" id="tvshows-list"></div>
-  </section>
+<section class="row box red-glow">
+  <h2>Trending Anime</h2>
+  <div class="list two-rows" id="anime-list"></div>
+</section>
 
-
-  <section class="row box red-glow">
-    <h2>Trending Anime</h2>
-    <div class="list two-rows" id="anime-list"></div>
-  </section>
 </main>
 
-
+<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
+
     <div class="player-wrapper">
       <iframe id="modal-video" allowfullscreen></iframe>
     </div>
+
     <div class="info-wrapper" id="info-wrapper">
       <div class="info-text">
         <h2 id="modal-title"></h2>
         <div id="modal-rating"></div>
         <p id="modal-description"></p>
 
-        <select id="server" hidden onchange="changeServer()">
+        <select id="server" onchange="changeServer()">
           <option value="embed" selected>HD 2</option>
           <option value="player">HD 1</option>
         </select>
       </div>
     </div>
+
   </div>
 </div>
 
-
-<footer class="site-footer" style="background:#111; color:#fff; padding:20px; text-align:center;">
+<footer class="site-footer">
   <p>© <span id="year"></span> PrimeDrama. All rights reserved.</p>
-
-
-  <p style="font-size:12px; color:#ccc; max-width:600px; margin:10px auto; line-height:1.5;">
-    PrimeDrama aggregates externally hosted content only. We do not host or distribute media files. All content belongs to its rightful owners. We respect copyright law and respond promptly to takedown requests.
+  <p class="footer-desc">
+    PrimeDrama aggregates externally hosted content only.
   </p>
-
-
-  <p style="font-size:12px; color:#FFD700; margin:5px auto;">
-    <a href="#" id="email-link" style="color:#FFD700;">Email Us</a>
-  </p>
+  <a href="#" id="email-link">Email Us</a>
 </footer>
 
 <script>
-
-  document.getElementById("year").textContent = new Date().getFullYear();
-
- 
-  const user = "definite.dragon.liur";
-  const domain = "protectsmail.net";
-  const emailLink = document.getElementById("email-link");
-  emailLink.href = "mailto:" + user + "@" + domain;
-  emailLink.textContent = "Email Us";
-
-
-  const recommendedList = document.getElementById('recommended-list');
-  const posterImages = [
-    'URL_TO_IMAGE_1',
-    'URL_TO_IMAGE_2',
-    'URL_TO_IMAGE_3',
-    'URL_TO_IMAGE_4',
-    'URL_TO_IMAGE_5',
-    'URL_TO_IMAGE_6'
-  ];
-
-  function shuffle(array) {
-    for (let i = array.length -1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i+1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  function displayRecommended() {
-    recommendedList.innerHTML = '';
-    const shuffled = shuffle([...posterImages]);
-    shuffled.forEach(url => {
-      const div = document.createElement('div');
-      div.className = 'list-item';
-      div.style.minWidth = '120px'; // small poster
-      div.innerHTML = `<img src="${url}" alt="Movie Poster" style="width:100%; height:auto; border-radius:5px;">`;
-      recommendedList.appendChild(div);
-    });
-  }
-
-  displayRecommended();
+document.getElementById("year").textContent = new Date().getFullYear();
+const user="definite.dragon.liur";
+const domain="protectsmail.net";
+document.getElementById("email-link").href="mailto:"+user+"@"+domain;
 </script>
-<script src="https://rightyrely.com/3f/88/84/3f8884d994ca4992dd6d2c79deacea28.js"></script>
+
 </body>
 </html>
+
 
 
 
