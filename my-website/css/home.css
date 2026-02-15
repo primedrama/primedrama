@@ -84,6 +84,17 @@ body{background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
   max-width:600px;
 }
 
+.banner-content h1{
+  font-size:22px;
+  line-height:1.1;
+}
+
+.banner-content p{
+  font-size:13px;
+  max-height:2.8em;
+  overflow:hidden;
+}
+
 /* ROW */
 .row{margin:25px}
 
@@ -180,7 +191,7 @@ body{background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
   border:none;
 }
 
-/* INFO WRAPPER */
+/* INFO */
 .info-wrapper{
   margin-top:16px;
   position:relative;
@@ -208,10 +219,8 @@ body{background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
   padding:20px;
 }
 
-/* HIDE SERVER SELECT */
-#server{
-  display:none;
-}
+/* HIDE SERVER */
+#server{display:none}
 
 /* FOOTER */
 .site-footer{
@@ -219,6 +228,8 @@ body{background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
   padding:20px;
   background:#111;
   color:#aaa;
+  position:relative;
+  z-index:1;
 }
 
 .site-footer a{
