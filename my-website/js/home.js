@@ -40,13 +40,21 @@ document.getElementById("banner-overview").textContent=item.overview||"";
 
 function createCard(item){
 if(!item.poster_path)return null;
+
 const card=document.createElement("div");
 card.className="card";
 card.onclick=()=>showDetails(item);
 
 const img=document.createElement("img");
 img.src=IMG+item.poster_path;
+
+const title=document.createElement("div");
+title.className="card-title";
+title.textContent=item.title||item.name||"";
+
 card.appendChild(img);
+card.appendChild(title);
+
 return card;
 }
 
@@ -70,6 +78,7 @@ document.getElementById("modal-description").textContent=item.overview||"";
 document.getElementById("modal-rating").textContent=item.vote_average?"★".repeat(Math.round(item.vote_average/2)):"";
 
 document.getElementById("info-wrapper").style.backgroundImage=`url(${IMG}${item.poster_path})`;
+
 changeServer();
 }
 
@@ -98,6 +107,7 @@ if(!q){section.hidden=true;return;}
 const data=await fetchJSON(`${BASE}/search/multi?api_key=${API_KEY}&query=${q}`);
 el.innerHTML="";
 section.hidden=false;
+
 data?.results.forEach(i=>{
 const c=createCard(i);
 if(c)el.appendChild(c);
@@ -110,14 +120,8 @@ const data=await fetchTrending("movie");
 const container=document.getElementById("recommended-list");
 container.innerHTML="";
 data.slice(0,6).forEach(i=>{
-const div=document.createElement("div");
-div.onclick=()=>showDetails(i);
-const img=document.createElement("img");
-img.src=IMG+i.poster_path;
-img.style.width="100px";
-img.style.borderRadius="8px";
-div.appendChild(img);
-container.appendChild(div);
+const c=createCard(i);
+if(c)container.appendChild(c);
 });
 }
 
