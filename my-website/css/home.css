@@ -1,6 +1,5 @@
 
-
-/* =========================================
+ /* =========================================
    PRIMEDRAMA — PREMIUM RED EDITION
    Responsive Desktop, Tablet & Mobile
 ========================================= */
@@ -97,6 +96,43 @@ a {
   align-items: center;
   flex-shrink: 0;
   text-decoration: none;
+}
+
+/* PREMIUM TEXT LOGO: PRIME DRAMA */
+.brand-title {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 5px;
+  color: #ffffff;
+  font-size: 27px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -1.2px;
+  white-space: nowrap;
+  text-decoration: none;
+  background: linear-gradient(
+    120deg,
+    #ffffff 0%,
+    #ffb5bb 35%,
+    #ff2538 65%,
+    #b90012 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: filter 0.25s ease;
+}
+
+.brand-title span {
+  background: linear-gradient(120deg, #ff4655, #ed1020, #a90010);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-title:hover {
+  filter: drop-shadow(0 0 8px rgba(237, 16, 32, 0.55));
 }
 
 .logo {
@@ -799,6 +835,11 @@ main {
     max-width: 165px;
   }
 
+  .brand-title {
+    font-size: 24px;
+    letter-spacing: -1px;
+  }
+
   .banner {
     height: 350px;
     min-height: 300px;
@@ -859,6 +900,12 @@ main {
     width: auto;
     height: 33px;
     max-width: 112px;
+  }
+
+  .brand-title {
+    gap: 3px;
+    font-size: 19px;
+    letter-spacing: -0.8px;
   }
 
   .search-wrapper {
@@ -1147,6 +1194,12 @@ main {
   .logo {
     height: 29px;
     max-width: 94px;
+  }
+
+  .brand-title {
+    gap: 2px;
+    font-size: 15px;
+    letter-spacing: -0.5px;
   }
 
   #search-input {
