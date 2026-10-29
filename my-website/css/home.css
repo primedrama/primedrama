@@ -1594,3 +1594,44 @@ main {
   z-index: 4;
   background: transparent;
 }
+
+.player-wrapper {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #09090b;
+}
+
+.player-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  z-index: 1;
+  background-image: var(--movie-poster, none);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(12px) brightness(0.5);
+  transform: scale(1.06);
+  pointer-events: none;
+}
+
+.player-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.player-wrapper .prime-play-overlay {
+  background: transparent !important;
+  z-index: 10;
+}
+
+.player-wrapper .prime-play-overlay button {
+  position: relative;
+  z-index: 11;
+  filter: none !important;
+}
