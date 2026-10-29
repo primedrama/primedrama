@@ -1659,3 +1659,119 @@ main {
     font-size: 22px;
   }
 }
+/* =========================================
+   PRIMEDRAMA — WATCH NOW UPDATE
+========================================= */
+
+/* Permanently blur movie description */
+#modal-description {
+  filter: blur(5px) !important;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Prevent hover or click from removing the blur */
+#modal-description:hover,
+#modal-description:focus,
+#modal-description:active {
+  filter: blur(5px) !important;
+}
+
+/* WATCH NOW overlay */
+.prime-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #09090b !important;
+  border: 1px solid rgba(237, 16, 32, 0.35);
+  border-radius: 12px;
+  z-index: 10;
+}
+
+/* WATCH NOW button */
+.prime-play-overlay button {
+  display: inline-block !important;
+  min-width: 150px;
+  min-height: 46px;
+  padding: 13px 25px !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  background: linear-gradient(135deg, #ff2638, #b90012) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 7px !important;
+  box-shadow: 0 6px 22px rgba(237, 16, 32, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.prime-play-overlay button:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+
+.prime-play-overlay button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Hide the old instruction message */
+.prime-play-overlay > div {
+  display: none !important;
+}
+
+/* Hide the empty player message */
+#player-message:empty {
+  display: none !important;
+}
+
+/* Keep the close button visible */
+.modal-content > .close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 800;
+  background: #e50914;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  visibility: visible;
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Phone adjustments */
+@media (max-width: 600px) {
+  .prime-play-overlay {
+    padding: 12px !important;
+  }
+
+  .prime-play-overlay button {
+    min-width: 135px;
+    min-height: 42px;
+    padding: 11px 18px !important;
+    font-size: 14px !important;
+  }
+
+  .modal-content > .close {
+    top: 5px;
+    right: 5px;
+    width: 36px;
+    height: 36px;
+    font-size: 23px;
+  }
+}
