@@ -14,7 +14,7 @@
   const PLAYER_BASE = "https://vidsrc.sh/embed";
 
   // ILAGAY DITO ANG IYONG DIRECT ADS URL
-  const DIRECT_AD_LINK = "https://www.youtube.com/";
+  const DIRECT_AD_LINK = "https://directyp.org/4/aaa4649f8b7c3dfb008b8bfb6e3e05d2";
 
   // Existing TMDB key configuration.
   const keyParts = [
