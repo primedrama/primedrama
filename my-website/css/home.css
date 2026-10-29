@@ -1565,3 +1565,97 @@ main {
     font-size: 12px !important;
   }
 }
+/* =========================================
+   PRIMEDRAMA — WATCH NOW PLAYER
+========================================= */
+
+/* Permanently blur movie description */
+#modal-description {
+  filter: blur(4px) !important;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Hide the extra player instructions */
+.prime-play-overlay > div {
+  display: none !important;
+}
+
+/* Player overlay */
+.prime-play-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #09090b !important;
+  border: 1px solid rgba(237, 16, 32, 0.35);
+  border-radius: 12px;
+}
+
+/* WATCH NOW button */
+.prime-play-overlay button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 155px;
+  min-height: 48px;
+  padding: 13px 25px !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff2638, #b90012) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 7px !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(237, 16, 32, 0.25);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.prime-play-overlay button:hover {
+  filter: brightness(1.12);
+  transform: translateY(-2px);
+}
+
+/* Player message */
+#player-message {
+  color: #fff;
+  font-size: 12px;
+}
+
+/* Close button remains visible */
+.modal-content {
+  position: relative;
+}
+
+.modal-content > .close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  font-size: 24px;
+  background: #e50914;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .prime-play-overlay button {
+    min-width: 140px;
+    min-height: 44px;
+    font-size: 14px !important;
+  }
+
+  .modal-content > .close {
+    top: 5px;
+    right: 5px;
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+}
