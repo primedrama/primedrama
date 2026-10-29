@@ -1,6 +1,3 @@
-
-
-
 (() => {
   "use strict";
 
@@ -285,7 +282,6 @@
         return;
       }
 
-      // Browsers may block new tabs if pop-ups are disabled.
       const adWindow = window.open(
         url.href,
         "_blank",
@@ -303,7 +299,7 @@
   }
 
   // ------------------------------
-  // Play overlay buttons
+  // WATCH NOW overlay
   // ------------------------------
 
   function createPlayOverlay(video, movieURL) {
@@ -311,7 +307,6 @@
     if (!wrapper) return;
 
     wrapper.querySelector(".prime-play-overlay")?.remove();
-
     wrapper.style.position = "relative";
     video.src = "";
 
@@ -322,90 +317,43 @@
       position: "absolute",
       inset: "0",
       display: "flex",
-      flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      gap: "18px",
       padding: "20px",
       boxSizing: "border-box",
-      background: "#111",
-      zIndex: "10",
-      textAlign: "center"
+      background: "#09090b",
+      zIndex: "10"
     });
 
-    const message = document.createElement("div");
-    message.textContent = "Press Play to Start Watching";
+    const watchButton = document.createElement("button");
+    watchButton.type = "button";
+    watchButton.textContent = "WATCH NOW";
+    watchButton.setAttribute("aria-label", "Watch now");
 
-    Object.assign(message.style, {
-      background: "#e50914",
-      color: "#fff",
-      padding: "10px 16px",
-      borderRadius: "5px",
-      fontSize: "14px",
-      fontWeight: "bold",
-      maxWidth: "100%"
-    });
-
-    // First button: PLAY
-    const playButton = document.createElement("button");
-    playButton.type = "button";
-    playButton.textContent = "▶ PLAY";
-    playButton.setAttribute("aria-label", "Play");
-
-    Object.assign(playButton.style, {
-      padding: "14px 28px",
+    Object.assign(watchButton.style, {
+      padding: "13px 25px",
       background: "#e50914",
       color: "#fff",
       border: "0",
-      borderRadius: "6px",
-      fontSize: "17px",
-      fontWeight: "bold",
+      borderRadius: "7px",
+      fontSize: "15px",
+      fontWeight: "800",
       cursor: "pointer"
     });
 
-    // Second button: PLAY MOVIE
-    const movieButton = document.createElement("button");
-    movieButton.type = "button";
-    movieButton.textContent = "▶ PLAY MOVIE";
-    movieButton.setAttribute("aria-label", "Play movie");
-
-    Object.assign(movieButton.style, {
-      display: "none",
-      padding: "14px 28px",
-      background: "#e50914",
-      color: "#fff",
-      border: "0",
-      borderRadius: "6px",
-      fontSize: "17px",
-      fontWeight: "bold",
-      cursor: "pointer"
-    });
-
-    // Clicking PLAY opens the ad and reveals PLAY MOVIE.
-    playButton.addEventListener("click", () => {
-      openDirectAd();
-
-      playButton.style.display = "none";
-      movieButton.style.display = "inline-block";
-
-      message.textContent = "Ready? Click PLAY MOVIE";
-    });
-
-    // Clicking PLAY MOVIE opens the ad again and loads the video.
-    movieButton.addEventListener("click", () => {
+    watchButton.addEventListener("click", () => {
       openDirectAd();
 
       video.src = movieURL;
       overlay.remove();
 
       const playerMessage = $("player-message");
-
       if (playerMessage) {
         playerMessage.textContent = "Loading video...";
       }
     });
 
-    overlay.append(message, playButton, movieButton);
+    overlay.appendChild(watchButton);
     wrapper.appendChild(overlay);
   }
 
@@ -436,7 +384,6 @@
 
     let playerBase = PLAYER_BASE;
 
-    // Add more server options here if you have their valid URLs.
     if (server === "vidsrc") {
       playerBase = "https://vidsrc.sh/embed";
     }
@@ -448,9 +395,8 @@
     createPlayOverlay(video, movieURL);
 
     const message = $("player-message");
-
     if (message) {
-      message.textContent = "Press Play to Start Watching.";
+      message.textContent = "";
     }
   }
 
