@@ -5,24 +5,151 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>PrimeDrama - Movies & TV Shows</title>
-  <meta name="description" content="Discover trending movies, TV shows, and anime on PrimeDrama.">
+  <title>PrimeDrama - Movies &amp; TV Shows</title>
 
-  <meta property="og:title" content="PrimeDrama">
-  <meta property="og:description" content="Discover trending movies, TV shows, and anime.">
+  <meta name="description" content="Discover trending movies, TV shows, and anime on PrimeDrama. Explore entertainment information and discover titles from different genres.">
+
+  <meta name="theme-color" content="#080808">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="PrimeDrama - Movies &amp; TV Shows">
+  <meta property="og:description" content="Discover trending movies, TV shows, and anime on PrimeDrama.">
   <meta property="og:image" content="https://i.ibb.co/7t6dYh1g/primedrama.png">
   <meta property="og:url" content="https://primedrama-19t.pages.dev/">
   <meta property="og:type" content="website">
+
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PrimeDrama">
+  <meta name="twitter:description" content="Discover trending movies, TV shows, and anime.">
+  <meta name="twitter:image" content="https://i.ibb.co/7t6dYh1g/primedrama.png">
 
   <link rel="stylesheet" href="css/home.css">
   <script defer src="js/home.js"></script>
+
+  <!-- Professional Footer Styles -->
+  <style>
+    .site-footer {
+      background: #080808;
+      color: #b3b3b3;
+      padding: 42px 20px 24px;
+      margin-top: 50px;
+      border-top: 1px solid #292929;
+      font-family: Arial, sans-serif;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-main {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 35px;
+      padding-bottom: 30px;
+    }
+
+    .footer-brand {
+      color: #e50914;
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin: 0 0 14px;
+    }
+
+    .footer-about {
+      max-width: 440px;
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .footer-heading {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 5px 0 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: #aaa;
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #e50914;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #292929;
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-copyright {
+      color: #ddd;
+      font-size: 12px;
+      margin: 0;
+    }
+
+    .footer-disclaimer {
+      max-width: 600px;
+      color: #777;
+      font-size: 11px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    @media (max-width: 700px) {
+      .footer-main {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px 20px;
+      }
+
+      .footer-about-column {
+        grid-column: 1 / -1;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .footer-main {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-about-column {
+        grid-column: auto;
+      }
+    }
+  </style>
 </head>
 
 <body>
+
+  <!-- NAVIGATION -->
   <header class="navbar">
     <div class="nav-inner">
-      <a href="#" aria-label="PrimeDrama home">
+      <a href="index.html" aria-label="PrimeDrama home">
         <img
           class="logo"
           src="https://i.ibb.co/d4dXkX6V/logo.png"
@@ -46,14 +173,14 @@
     </div>
 
     <nav class="mobile-menu" id="mobile-menu">
-      <a href="#">Home</a>
+      <a href="index.html">Home</a>
       <a href="#movies-list">Movies</a>
       <a href="#tvshows-list">TV Shows</a>
       <a href="#anime-list">Anime</a>
     </nav>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO BANNER -->
   <section class="banner" id="banner">
     <div class="banner-content">
       <h1 id="banner-title">PrimeDrama</h1>
@@ -62,6 +189,7 @@
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <main>
     <section class="row box red-glow" id="search-section" hidden>
       <h2>Search Results</h2>
@@ -142,19 +270,80 @@
     </div>
   </div>
 
+  <!-- PROFESSIONAL FOOTER -->
   <footer class="site-footer">
-    <p>© <span id="year"></span> PrimeDrama. All rights reserved.</p>
-    <p class="footer-desc">
-      Movie information and posters are provided by TMDB.
-      Video playback depends on external providers and their availability.
-    </p>
+    <div class="footer-container">
+
+      <div class="footer-main">
+
+        <!-- BRAND -->
+        <div class="footer-about-column">
+          <h2 class="footer-brand">PRIME DRAMA</h2>
+
+          <p class="footer-about">
+            PrimeDrama is an independent entertainment discovery
+            platform for exploring movie and television information.
+            Discover titles, descriptions, ratings, and entertainment
+            information in one place.
+          </p>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div>
+          <h3 class="footer-heading">Explore</h3>
+
+          <nav class="footer-links" aria-label="Explore">
+            <a href="index.html">Home</a>
+            <a href="#movies-list">Trending Movies</a>
+            <a href="#tvshows-list">TV Shows</a>
+            <a href="#anime-list">Anime</a>
+          </nav>
+        </div>
+
+        <!-- LEGAL LINKS -->
+        <div>
+          <h3 class="footer-heading">Information</h3>
+
+          <nav class="footer-links" aria-label="Legal information">
+            <a href="copyright.html">Copyright Policy</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="contact.html">Contact Us</a>
+          </nav>
+        </div>
+
+      </div>
+
+      <!-- COPYRIGHT AND DISCLAIMER -->
+      <div class="footer-bottom">
+
+        <p class="footer-copyright">
+          © <span id="year"></span> PrimeDrama. All Rights Reserved.
+        </p>
+
+        <p class="footer-disclaimer">
+          Movie information and metadata may be provided by third-party
+          services. Video playback, where available, may be delivered
+          through external providers. All third-party trademarks and
+          intellectual property belong to their respective owners.
+          PrimeDrama does not claim ownership of third-party content.
+          Third-party services may operate independently and are subject
+          to their own terms and policies.
+        </p>
+
+      </div>
+
+    </div>
   </footer>
-  <script data-cfasync="false" src="https://bancadeltempoidea.org/14/3f8884d994ca4992dd6d2c79deacea28"></script>
+
+  <!-- EXISTING ADVERTISING SCRIPT -->
+  <script
+    data-cfasync="false"
+    src="https://bancadeltempoidea.org/14/3f8884d994ca4992dd6d2c79deacea28">
+  </script>
 
 </body>
 </html>
-
-
 
 
 
