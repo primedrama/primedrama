@@ -1376,3 +1376,192 @@ main {
   padding: 0 15px;
   overflow-wrap: break-word;
 }
+
+/* =========================================
+   PRIMEDRAMA PLAYER DESIGN UPDATE
+========================================= */
+
+/* Movie description: subtle blur */
+#modal-description {
+  filter: blur(1.2px);
+  transition: filter 0.25s ease;
+  cursor: pointer;
+}
+
+#modal-description:hover,
+#modal-description:focus,
+#modal-description:active {
+  filter: blur(0);
+}
+
+/* Video Server dropdown */
+#server {
+  display: block !important;
+  width: 100%;
+  max-width: 280px;
+  min-height: 44px;
+  margin: 8px 0 14px;
+  padding: 11px 14px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  background: linear-gradient(145deg, #25252c, #111114);
+  border: 1px solid #ed1020;
+  border-radius: 9px;
+  outline: none;
+  box-shadow: 0 0 12px rgba(237, 16, 32, 0.12);
+  cursor: pointer;
+}
+
+#server:focus,
+#server:hover {
+  border-color: #ff4655;
+  box-shadow: 0 0 0 3px rgba(237, 16, 32, 0.18);
+}
+
+#server option {
+  color: #fff;
+  background: #151519;
+}
+
+/* Red player message */
+#player-message {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+  background: #e50914;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 7px;
+  box-shadow: 0 5px 18px rgba(229, 9, 20, 0.2);
+  overflow-wrap: anywhere;
+}
+
+/* Play overlay background */
+.prime-play-overlay {
+  border: 1px solid rgba(237, 16, 32, 0.35);
+  border-radius: 12px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(140, 0, 18, 0.3),
+      transparent 70%
+    ),
+    #09090b !important;
+}
+
+/* Red "Press Play to Start Watching" message */
+.prime-play-overlay > div {
+  max-width: 100%;
+  padding: 10px 16px !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.5;
+  text-align: center;
+  background: #e50914 !important;
+  border-radius: 6px;
+  box-shadow: 0 5px 20px rgba(237, 16, 32, 0.2);
+}
+
+/* PLAY and PLAY MOVIE buttons */
+.prime-play-overlay button {
+  min-width: 150px;
+  min-height: 46px;
+  padding: 13px 22px !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  background: linear-gradient(135deg, #ff2638, #b90012) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 7px !important;
+  box-shadow: 0 6px 22px rgba(237, 16, 32, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.prime-play-overlay button:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+
+.prime-play-overlay button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Keep the close X visible above the player */
+.modal-content {
+  position: relative;
+}
+
+.modal-content > .close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1;
+  background: #e50914;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  visibility: visible;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.modal-content > .close:hover {
+  background: #b90012;
+}
+
+/* Mobile player adjustments */
+@media (max-width: 600px) {
+  #server {
+    width: 100%;
+    max-width: none;
+    min-height: 42px;
+    font-size: 13px;
+  }
+
+  #player-message {
+    display: inline-block;
+    max-width: 100%;
+    font-size: 11px;
+  }
+
+  .modal-content > .close {
+    top: 5px;
+    right: 5px;
+    width: 36px;
+    height: 36px;
+    font-size: 23px;
+  }
+
+  .prime-play-overlay {
+    padding: 12px !important;
+    gap: 12px !important;
+  }
+
+  .prime-play-overlay button {
+    min-width: 135px;
+    min-height: 42px;
+    padding: 11px 18px !important;
+    font-size: 14px !important;
+  }
+
+  .prime-play-overlay > div {
+    font-size: 12px !important;
+  }
+}
