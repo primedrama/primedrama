@@ -1,127 +1,156 @@
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Prime Drama</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta property="og:title" content="Watch Now" />
-  <meta property="og:description" content="Watch trending movies, TV shows, and anime on PrimeDrama." />
-  <meta property="og:image" content="https://i.ibb.co/7t6dYh1g/primedrama.png" />
-  <meta property="og:url" content="https://primedrama-19t.pages.dev/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <title>PrimeDrama - Movies & TV Shows</title>
+  <meta name="description" content="Discover trending movies, TV shows, and anime on PrimeDrama.">
 
+  <meta property="og:title" content="PrimeDrama">
+  <meta property="og:description" content="Discover trending movies, TV shows, and anime.">
+  <meta property="og:image" content="https://i.ibb.co/7t6dYh1g/primedrama.png">
+  <meta property="og:url" content="https://primedrama-19t.pages.dev/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
 
-<link rel="stylesheet" href="css/home.css">
-<script defer src="js/home.js"></script>
-  
+  <link rel="stylesheet" href="css/home.css">
+  <script defer src="js/home.js"></script>
 </head>
+
 <body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="#" aria-label="PrimeDrama home">
+        <img
+          class="logo"
+          src="https://i.ibb.co/d4dXkX6V/logo.png"
+          alt="PrimeDrama">
+      </a>
 
-<header class="navbar">
-  <div class="nav-inner">
-    <img class="logo" src="https://i.ibb.co/d4dXkX6V/logo.png" alt="PrimeDrama">
+      <div class="search-wrapper">
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search movies, TV shows..."
+          autocomplete="off"
+          aria-label="Search movies and TV shows">
+      </div>
 
-    <div class="search-wrapper">
-      <input id="search-input" type="text"
-        placeholder="Search movies, TV shows..."
-        oninput="searchTMDB(this.value)" />
+      <button
+        class="hamburger"
+        id="hamburger"
+        type="button"
+        aria-label="Toggle navigation">☰</button>
     </div>
 
-    <button class="hamburger" onclick="toggleNav()">☰</button>
-  </div>
+    <nav class="mobile-menu" id="mobile-menu">
+      <a href="#">Home</a>
+      <a href="#movies-list">Movies</a>
+      <a href="#tvshows-list">TV Shows</a>
+      <a href="#anime-list">Anime</a>
+    </nav>
+  </header>
 
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="#">Home</a>
-    <a href="#movies-list">Movies</a>
-    <a href="#tvshows-list">TV Shows</a>
-    <a href="#anime-list">Anime</a>
-  </div>
-  <script src="https://rightyrely.com/80/db/87/80db87ca8966a01f222f0774bb4d71fe.js"></script>
-</header>
-
-<!-- HERO -->
-<section class="banner" id="banner" onclick="playHero()">
-  <div class="banner-content">
-    <h1 id="banner-title"></h1>
-    <p id="banner-overview"></p>
-  </div>
-</section>
-
-<main>
-
-<section class="row box red-glow" id="search-section" hidden>
-  <h2>Search Results</h2>
-  <div class="grid" id="search-results"></div>
-</section>
-
-<section class="row box red-glow" id="recommended-section">
-  <h2>Recommended For You</h2>
-  <div class="list" id="recommended-list"></div>
-</section>
-
-<section class="row box red-glow">
-  <h2>Trending Movies</h2>
-  <div class="list two-rows" id="movies-list"></div>
-</section>
-
-<section class="row box red-glow">
-  <h2>Trending TV Shows</h2>
-  <div class="list two-rows" id="tvshows-list"></div>
-</section>
-
-<section class="row box red-glow">
-  <h2>Trending Anime</h2>
-  <div class="list two-rows" id="anime-list"></div>
-</section>
-
-</main>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">✖</span>
-
-    <div class="player-wrapper">
-      <iframe id="modal-video" allowfullscreen></iframe>
+  <!-- HERO -->
+  <section class="banner" id="banner">
+    <div class="banner-content">
+      <h1 id="banner-title">PrimeDrama</h1>
+      <p id="banner-overview">Discover trending entertainment.</p>
+      <button type="button" id="hero-play">Watch Now</button>
     </div>
+  </section>
 
-    <div class="info-wrapper" id="info-wrapper">
-      <div class="info-text">
-        <h2 id="modal-title"></h2>
-        <div id="modal-rating"></div>
-        <p id="modal-description"></p>
+  <main>
+    <section class="row box red-glow" id="search-section" hidden>
+      <h2>Search Results</h2>
+      <div class="grid" id="search-results"></div>
+    </section>
 
-        <select id="server" onchange="changeServer()">
-          <option value="embed" selected>HD 2</option>
-          <option value="player">HD 1</option>
-        </select>
+    <section class="row box red-glow" id="recommended-section">
+      <h2>Recommended For You</h2>
+      <div class="list" id="recommended-list"></div>
+    </section>
+
+    <section class="row box red-glow">
+      <h2>Trending Movies</h2>
+      <div class="list two-rows" id="movies-list"></div>
+    </section>
+
+    <section class="row box red-glow">
+      <h2>Trending TV Shows</h2>
+      <div class="list two-rows" id="tvshows-list"></div>
+    </section>
+
+    <section class="row box red-glow">
+      <h2>Trending Anime</h2>
+      <div class="list two-rows" id="anime-list"></div>
+    </section>
+  </main>
+
+  <!-- PLAYER MODAL -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div
+      class="modal-content"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title">
+
+      <button
+        class="close"
+        id="close-modal"
+        type="button"
+        aria-label="Close player">✖</button>
+
+      <div class="player-wrapper">
+        <iframe
+          id="modal-video"
+          title="Movie player"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+
+      <div class="info-wrapper" id="info-wrapper">
+        <div class="info-text">
+          <h2 id="modal-title"></h2>
+          <div id="modal-rating"></div>
+          <p id="modal-description"></p>
+
+          <label for="server">Video Server</label>
+          <select id="server">
+            <option value="vidsrc">VidSrc</option>
+          </select>
+
+          <div id="episode-controls" hidden>
+            <label for="season">Season</label>
+            <input id="season" type="number" min="1" value="1">
+
+            <label for="episode">Episode</label>
+            <input id="episode" type="number" min="1" value="1">
+
+            <button id="play-episode" type="button">
+              Play Episode
+            </button>
+          </div>
+
+          <p id="player-message" role="status"></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<footer class="site-footer">
-  <p>© <span id="year"></span> PrimeDrama. All rights reserved.</p>
-  <p class="footer-desc">
-    PrimeDrama aggregates externally hosted content only. We do not host or distribute media files. All content belongs to its rightful owners. We respect copyright law and respond promptly to takedown requests.
-  </p>
-  <a href="#" id="email-link">Email Us</a>
-</footer>
-
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-const user="definite.dragon.liur";
-const domain="protectsmail.net";
-document.getElementById("email-link").href="mailto:"+user+"@"+domain;
-</script>
-<script src="https://rightyrely.com/3f/88/84/3f8884d994ca4992dd6d2c79deacea28.js"></script>
-
+  <footer class="site-footer">
+    <p>© <span id="year"></span> PrimeDrama. All rights reserved.</p>
+    <p class="footer-desc">
+      Movie information and posters are provided by TMDB.
+      Video playback depends on external providers and their availability.
+    </p>
+  </footer>
 </body>
 </html>
-
 
 
 
