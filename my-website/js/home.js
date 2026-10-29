@@ -1,22 +1,18 @@
 
 
+
 (() => {
   "use strict";
-
-  /* =========================
-     PRIME DRAMA CONFIGURATION
-  ========================= */
 
   const BASE = "https://api.themoviedb.org/3";
   const IMG = "https://image.tmdb.org/t/p/original";
   const POSTER = "https://image.tmdb.org/t/p/w500";
-
   const PLAYER_BASE = "https://vidsrc.sh/embed";
 
-  // ILAGAY DITO ANG IYONG DIRECT ADS URL
-  const DIRECT_AD_LINK = "https://directyp.org/4/aaa4649f8b7c3dfb008b8bfb6e3e05d2";
+  // Direct ads URL
+  const DIRECT_AD_LINK =
+    "https://directyp.org/4/aaa4649f8b7c3dfb008b8bfb6e3e05d2";
 
-  // Existing TMDB key configuration.
   const keyParts = [
     "e343", "16a6", "fe45", "6fe2",
     "2b50", "c403", "3980", "b236"
@@ -33,9 +29,9 @@
 
   const $ = id => document.getElementById(id);
 
-  /* =========================
-     TMDB API
-  ========================= */
+  // ------------------------------
+  // TMDB API
+  // ------------------------------
 
   function apiURL(path, params = {}) {
     const url = new URL(`${BASE}${path}`);
@@ -83,9 +79,9 @@
     );
   }
 
-  /* =========================
-     NAVIGATION
-  ========================= */
+  // ------------------------------
+  // Navigation
+  // ------------------------------
 
   function toggleNav() {
     const menu = $("mobile-menu");
@@ -95,9 +91,9 @@
       menu.style.display === "flex" ? "none" : "flex";
   }
 
-  /* =========================
-     HERO BANNER
-  ========================= */
+  // ------------------------------
+  // Homepage banner
+  // ------------------------------
 
   function displayBanner(item) {
     if (!item) return;
@@ -111,16 +107,23 @@
       ? `url("${IMG}${item.backdrop_path}")`
       : "";
 
-    $("banner-title").textContent =
-      item.title || item.name || "PrimeDrama";
+    const bannerTitle = $("banner-title");
+    const bannerOverview = $("banner-overview");
 
-    $("banner-overview").textContent =
-      item.overview || "Discover trending entertainment.";
+    if (bannerTitle) {
+      bannerTitle.textContent =
+        item.title || item.name || "PrimeDrama";
+    }
+
+    if (bannerOverview) {
+      bannerOverview.textContent =
+        item.overview || "Discover trending entertainment.";
+    }
   }
 
-  /* =========================
-     MOVIE CARDS
-  ========================= */
+  // ------------------------------
+  // Movie and TV cards
+  // ------------------------------
 
   function createCard(item) {
     if (!item.poster_path) return null;
@@ -130,7 +133,9 @@
     card.tabIndex = 0;
     card.setAttribute("role", "button");
 
-    const titleText = item.title || item.name || "Untitled";
+    const titleText =
+      item.title || item.name || "Untitled";
+
     card.setAttribute("aria-label", `Open ${titleText}`);
 
     const img = document.createElement("img");
@@ -168,9 +173,9 @@
     });
   }
 
-  /* =========================
-     MOVIE DETAILS MODAL
-  ========================= */
+  // ------------------------------
+  // Open movie or TV details
+  // ------------------------------
 
   function showDetails(item) {
     if (!item) return;
@@ -178,59 +183,85 @@
     currentItem = item;
     lastFocusedElement = document.activeElement;
 
-    $("modal").classList.add("show");
-    $("modal").setAttribute("aria-hidden", "false");
+    const modal = $("modal");
+    if (!modal) return;
 
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
     document.documentElement.style.overflow = "hidden";
-    $("banner").style.visibility = "hidden";
 
-    $("modal-title").textContent =
-      item.title || item.name || "Untitled";
+    const banner = $("banner");
+    if (banner) banner.style.visibility = "hidden";
 
-    $("modal-description").textContent =
-      item.overview || "No description available.";
+    const title = $("modal-title");
+    const description = $("modal-description");
+    const rating = $("modal-rating");
+    const info = $("info-wrapper");
+
+    if (title) {
+      title.textContent = item.title || item.name || "Untitled";
+    }
+
+    if (description) {
+      description.textContent =
+        item.overview || "No description available.";
+    }
 
     const score = Number(item.vote_average) || 0;
 
-    $("modal-rating").textContent = score
-      ? `★ ${score.toFixed(1)} / 10`
-      : "";
+    if (rating) {
+      rating.textContent = score
+        ? `★ ${score.toFixed(1)} / 10`
+        : "";
+    }
 
-    $("info-wrapper").style.backgroundImage =
-      item.poster_path
+    if (info) {
+      info.style.backgroundImage = item.poster_path
         ? `url("${POSTER}${item.poster_path}")`
         : "";
+    }
 
     const isMovie = Boolean(item.title);
+    const episodeControls = $("episode-controls");
 
-    $("episode-controls").hidden = isMovie;
-    $("season").value = 1;
-    $("episode").value = 1;
-    $("server").value = "vidsrc";
+    if (episodeControls) {
+      episodeControls.hidden = isMovie;
+    }
 
-    changeServer();
+    if ($("season")) $("season").value = 1;
+    if ($("episode")) $("episode").value = 1;
+    if ($("server")) $("server").value = "vidsrc";
 
-    $("close-modal").focus();
+    changeServer(1, 1);
+
+    $("close-modal")?.focus();
   }
+
+  // ------------------------------
+  // Close player modal
+  // ------------------------------
 
   function closeModal() {
     const video = $("modal-video");
 
-    if (video) {
-      video.src = "";
-    }
+    if (video) video.src = "";
 
-    // Remove the custom Play overlay.
     if (video?.parentElement) {
       video.parentElement
         .querySelector(".prime-play-overlay")
         ?.remove();
     }
 
-    $("modal").classList.remove("show");
-    $("modal").setAttribute("aria-hidden", "true");
+    const modal = $("modal");
 
-    $("banner").style.visibility = "visible";
+    if (modal) {
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    const banner = $("banner");
+    if (banner) banner.style.visibility = "visible";
+
     document.documentElement.style.overflow = "";
 
     currentItem = null;
@@ -241,50 +272,47 @@
     }
   }
 
-  /* =========================
-     DIRECT ADS VALIDATION
-  ========================= */
+  // ------------------------------
+  // Open direct ad
+  // ------------------------------
 
-  function getValidAdURL() {
+  function openDirectAd() {
     try {
-      const value = DIRECT_AD_LINK.trim();
+      const url = new URL(DIRECT_AD_LINK);
 
-      if (
-        !value ||
-        value === "PASTE_YOUR_DIRECT_AD_LINK_HERE"
-      ) {
-        return null;
-      }
-
-      const url = new URL(value);
-
-      // Accept HTTPS ad destinations only.
       if (url.protocol !== "https:") {
-        return null;
+        console.warn("Invalid ads URL.");
+        return;
       }
 
-      return url.href;
-    } catch {
-      return null;
+      // Browsers may block new tabs if pop-ups are disabled.
+      const adWindow = window.open(
+        url.href,
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+      if (!adWindow) {
+        console.warn(
+          "The ad tab may have been blocked by the browser."
+        );
+      }
+    } catch (error) {
+      console.error("Invalid ads URL:", error);
     }
   }
 
-  /* =========================
-     CUSTOM PLAY OVERLAY
-  ========================= */
+  // ------------------------------
+  // Play overlay buttons
+  // ------------------------------
 
   function createPlayOverlay(video, movieURL) {
     const wrapper = video.parentElement;
     if (!wrapper) return;
 
-    // Remove an existing overlay before creating another.
-    wrapper
-      .querySelector(".prime-play-overlay")
-      ?.remove();
+    wrapper.querySelector(".prime-play-overlay")?.remove();
 
-    // Prepare the player area.
     wrapper.style.position = "relative";
-
     video.src = "";
 
     const overlay = document.createElement("div");
@@ -294,19 +322,38 @@
       position: "absolute",
       inset: "0",
       display: "flex",
+      flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
+      gap: "18px",
+      padding: "20px",
+      boxSizing: "border-box",
       background: "#111",
-      zIndex: "10"
+      zIndex: "10",
+      textAlign: "center"
     });
 
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = "▶ PLAY MOVIE";
-    button.setAttribute("aria-label", "Play movie");
+    const message = document.createElement("div");
+    message.textContent = "Press Play to Start Watching";
 
-    Object.assign(button.style, {
-      padding: "15px 25px",
+    Object.assign(message.style, {
+      background: "#e50914",
+      color: "#fff",
+      padding: "10px 16px",
+      borderRadius: "5px",
+      fontSize: "14px",
+      fontWeight: "bold",
+      maxWidth: "100%"
+    });
+
+    // First button: PLAY
+    const playButton = document.createElement("button");
+    playButton.type = "button";
+    playButton.textContent = "▶ PLAY";
+    playButton.setAttribute("aria-label", "Play");
+
+    Object.assign(playButton.style, {
+      padding: "14px 28px",
       background: "#e50914",
       color: "#fff",
       border: "0",
@@ -316,46 +363,55 @@
       cursor: "pointer"
     });
 
-    button.addEventListener("click", () => {
-      // Prevent repeated clicks while the player loads.
-      if (button.disabled) return;
-      button.disabled = true;
+    // Second button: PLAY MOVIE
+    const movieButton = document.createElement("button");
+    movieButton.type = "button";
+    movieButton.textContent = "▶ PLAY MOVIE";
+    movieButton.setAttribute("aria-label", "Play movie");
 
-      const adURL = getValidAdURL();
+    Object.assign(movieButton.style, {
+      display: "none",
+      padding: "14px 28px",
+      background: "#e50914",
+      color: "#fff",
+      border: "0",
+      borderRadius: "6px",
+      fontSize: "17px",
+      fontWeight: "bold",
+      cursor: "pointer"
+    });
 
-      if (adURL) {
-        // Open the ad directly in response to the user's click.
-        // Browser popup settings may still block the new tab.
-        window.open(
-          adURL,
-          "_blank",
-          "noopener,noreferrer"
-        );
-      } else {
-        console.warn(
-          "Direct ads URL is missing or invalid. " +
-          "Update DIRECT_AD_LINK in home.js."
-        );
-      }
+    // Clicking PLAY opens the ad and reveals PLAY MOVIE.
+    playButton.addEventListener("click", () => {
+      openDirectAd();
 
-      // Load the selected movie or TV episode.
+      playButton.style.display = "none";
+      movieButton.style.display = "inline-block";
+
+      message.textContent = "Ready? Click PLAY MOVIE";
+    });
+
+    // Clicking PLAY MOVIE opens the ad again and loads the video.
+    movieButton.addEventListener("click", () => {
+      openDirectAd();
+
       video.src = movieURL;
-
       overlay.remove();
 
-      const message = $("player-message");
-      if (message) {
-        message.textContent = "Loading video...";
+      const playerMessage = $("player-message");
+
+      if (playerMessage) {
+        playerMessage.textContent = "Loading video...";
       }
     });
 
-    overlay.appendChild(button);
+    overlay.append(message, playButton, movieButton);
     wrapper.appendChild(overlay);
   }
 
-  /* =========================
-     VIDSRC PLAYER
-  ========================= */
+  // ------------------------------
+  // CHANGE SERVER
+  // ------------------------------
 
   function changeServer(season = 1, episode = 1) {
     if (!currentItem) return;
@@ -367,30 +423,40 @@
     if (!id || !video) return;
 
     const safeSeason = Math.max(
-      1, parseInt(season, 10) || 1
+      1,
+      parseInt(season, 10) || 1
     );
 
     const safeEpisode = Math.max(
-      1, parseInt(episode, 10) || 1
+      1,
+      parseInt(episode, 10) || 1
     );
 
-    const url = isMovie
-      ? `${PLAYER_BASE}/movie/${id}`
-      : `${PLAYER_BASE}/tv/${id}/${safeSeason}/${safeEpisode}`;
+    const server = $("server")?.value || "vidsrc";
 
-    // Display our Play button before loading the embed.
-    createPlayOverlay(video, url);
+    let playerBase = PLAYER_BASE;
+
+    // Add more server options here if you have their valid URLs.
+    if (server === "vidsrc") {
+      playerBase = "https://vidsrc.sh/embed";
+    }
+
+    const movieURL = isMovie
+      ? `${playerBase}/movie/${id}`
+      : `${playerBase}/tv/${id}/${safeSeason}/${safeEpisode}`;
+
+    createPlayOverlay(video, movieURL);
 
     const message = $("player-message");
+
     if (message) {
-      message.textContent =
-        "Press PLAY MOVIE to start watching.";
+      message.textContent = "Press Play to Start Watching.";
     }
   }
 
-  /* =========================
-     SEARCH
-  ========================= */
+  // ------------------------------
+  // Search
+  // ------------------------------
 
   async function searchTMDB(query) {
     const section = $("search-section");
@@ -436,12 +502,13 @@
     }
   }
 
-  /* =========================
-     INITIALIZATION
-  ========================= */
+  // ------------------------------
+  // Initialize homepage
+  // ------------------------------
 
   async function init() {
     const year = $("year");
+
     if (year) {
       year.textContent = new Date().getFullYear();
     }
@@ -454,8 +521,8 @@
 
     const animeIds = new Set(anime.map(item => item.id));
 
-    const regularTV = tv.filter(item =>
-      !animeIds.has(item.id)
+    const regularTV = tv.filter(
+      item => !animeIds.has(item.id)
     );
 
     displayBanner(movies[0]);
@@ -465,26 +532,27 @@
     displayList(movies.slice(0, 6), "recommended-list");
   }
 
-  /* =========================
-     EVENT LISTENERS
-  ========================= */
+  // ------------------------------
+  // Event listeners
+  // ------------------------------
 
   const hamburger = $("hamburger");
+
   if (hamburger) {
     hamburger.addEventListener("click", toggleNav);
   }
 
   const closeButton = $("close-modal");
+
   if (closeButton) {
     closeButton.addEventListener("click", closeModal);
   }
 
   const modal = $("modal");
+
   if (modal) {
     modal.addEventListener("click", event => {
-      if (event.target === modal) {
-        closeModal();
-      }
+      if (event.target === modal) closeModal();
     });
   }
 
@@ -498,6 +566,7 @@
   });
 
   const heroPlay = $("hero-play");
+
   if (heroPlay) {
     heroPlay.addEventListener("click", () => {
       if (heroItem) showDetails(heroItem);
@@ -505,6 +574,7 @@
   }
 
   const server = $("server");
+
   if (server) {
     server.addEventListener("change", () => {
       if (currentItem) {
@@ -517,6 +587,7 @@
   }
 
   const playEpisode = $("play-episode");
+
   if (playEpisode) {
     playEpisode.addEventListener("click", () => {
       changeServer(
@@ -527,15 +598,17 @@
   }
 
   const searchInput = $("search-input");
+
   if (searchInput) {
     searchInput.addEventListener("input", event => {
       clearTimeout(searchTimer);
 
       const query = event.target.value;
 
-      searchTimer = setTimeout(() => {
-        searchTMDB(query);
-      }, 300);
+      searchTimer = setTimeout(
+        () => searchTMDB(query),
+        300
+      );
     });
   }
 
