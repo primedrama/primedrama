@@ -1271,3 +1271,63 @@ main {
     animation-duration: 0.01ms !important;
   }
 }
+/* FIX NAVBAR OVERLAP — PHONE VIEW ONLY */
+@media (max-width: 600px) {
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-inner > a {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .brand-title {
+    gap: 2px;
+    font-size: 16px;
+    letter-spacing: -0.6px;
+    white-space: nowrap;
+  }
+
+  .search-wrapper {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    max-width: none;
+    margin-left: auto;
+  }
+
+  #search-input {
+    width: 100%;
+    min-width: 0;
+    padding: 9px 8px;
+    font-size: 11px;
+  }
+
+  .hamburger {
+    flex: 0 0 35px;
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* EXTRA SMALL PHONES */
+@media (max-width: 360px) {
+  .nav-inner {
+    gap: 5px;
+  }
+
+  .brand-title {
+    gap: 1px;
+    font-size: 13px;
+    letter-spacing: -0.4px;
+  }
+
+  .hamburger {
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}
