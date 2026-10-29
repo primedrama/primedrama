@@ -3,12 +3,18 @@
 (() => {
   "use strict";
 
-  /* CONFIG */
+  /* =========================
+     PRIME DRAMA CONFIGURATION
+  ========================= */
+
   const BASE = "https://api.themoviedb.org/3";
   const IMG = "https://image.tmdb.org/t/p/original";
   const POSTER = "https://image.tmdb.org/t/p/w500";
 
   const PLAYER_BASE = "https://vidsrc.sh/embed";
+
+  // ILAGAY DITO ANG IYONG DIRECT ADS URL
+  const DIRECT_AD_LINK = "PASTE_YOUR_DIRECT_AD_LINK_HERE";
 
   // Existing TMDB key configuration.
   const keyParts = [
@@ -27,7 +33,10 @@
 
   const $ = id => document.getElementById(id);
 
-  /* API */
+  /* =========================
+     TMDB API
+  ========================= */
+
   function apiURL(path, params = {}) {
     const url = new URL(`${BASE}${path}`);
     url.searchParams.set("api_key", API_KEY);
@@ -74,7 +83,10 @@
     );
   }
 
-  /* NAVIGATION */
+  /* =========================
+     NAVIGATION
+  ========================= */
+
   function toggleNav() {
     const menu = $("mobile-menu");
     if (!menu) return;
@@ -83,13 +95,17 @@
       menu.style.display === "flex" ? "none" : "flex";
   }
 
-  /* HERO */
+  /* =========================
+     HERO BANNER
+  ========================= */
+
   function displayBanner(item) {
     if (!item) return;
 
     heroItem = item;
 
     const banner = $("banner");
+    if (!banner) return;
 
     banner.style.backgroundImage = item.backdrop_path
       ? `url("${IMG}${item.backdrop_path}")`
@@ -102,7 +118,10 @@
       item.overview || "Discover trending entertainment.";
   }
 
-  /* MOVIE CARDS */
+  /* =========================
+     MOVIE CARDS
+  ========================= */
+
   function createCard(item) {
     if (!item.poster_path) return null;
 
@@ -149,7 +168,10 @@
     });
   }
 
-  /* MODAL */
+  /* =========================
+     MOVIE DETAILS MODAL
+  ========================= */
+
   function showDetails(item) {
     if (!item) return;
 
@@ -192,7 +214,18 @@
   }
 
   function closeModal() {
-    $("modal-video").src = "";
+    const video = $("modal-video");
+
+    if (video) {
+      video.src = "";
+    }
+
+    // Remove the custom Play overlay.
+    if (video?.parentElement) {
+      video.parentElement
+        .querySelector(".prime-play-overlay")
+        ?.remove();
+    }
 
     $("modal").classList.remove("show");
     $("modal").setAttribute("aria-hidden", "true");
@@ -208,7 +241,122 @@
     }
   }
 
-  /* VIDSRC PLAYER */
+  /* =========================
+     DIRECT ADS VALIDATION
+  ========================= */
+
+  function getValidAdURL() {
+    try {
+      const value = DIRECT_AD_LINK.trim();
+
+      if (
+        !value ||
+        value === "PASTE_YOUR_DIRECT_AD_LINK_HERE"
+      ) {
+        return null;
+      }
+
+      const url = new URL(value);
+
+      // Accept HTTPS ad destinations only.
+      if (url.protocol !== "https:") {
+        return null;
+      }
+
+      return url.href;
+    } catch {
+      return null;
+    }
+  }
+
+  /* =========================
+     CUSTOM PLAY OVERLAY
+  ========================= */
+
+  function createPlayOverlay(video, movieURL) {
+    const wrapper = video.parentElement;
+    if (!wrapper) return;
+
+    // Remove an existing overlay before creating another.
+    wrapper
+      .querySelector(".prime-play-overlay")
+      ?.remove();
+
+    // Prepare the player area.
+    wrapper.style.position = "relative";
+
+    video.src = "";
+
+    const overlay = document.createElement("div");
+    overlay.className = "prime-play-overlay";
+
+    Object.assign(overlay.style, {
+      position: "absolute",
+      inset: "0",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#111",
+      zIndex: "10"
+    });
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "▶ PLAY MOVIE";
+    button.setAttribute("aria-label", "Play movie");
+
+    Object.assign(button.style, {
+      padding: "15px 25px",
+      background: "#e50914",
+      color: "#fff",
+      border: "0",
+      borderRadius: "6px",
+      fontSize: "17px",
+      fontWeight: "bold",
+      cursor: "pointer"
+    });
+
+    button.addEventListener("click", () => {
+      // Prevent repeated clicks while the player loads.
+      if (button.disabled) return;
+      button.disabled = true;
+
+      const adURL = getValidAdURL();
+
+      if (adURL) {
+        // Open the ad directly in response to the user's click.
+        // Browser popup settings may still block the new tab.
+        window.open(
+          adURL,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      } else {
+        console.warn(
+          "Direct ads URL is missing or invalid. " +
+          "Update DIRECT_AD_LINK in home.js."
+        );
+      }
+
+      // Load the selected movie or TV episode.
+      video.src = movieURL;
+
+      overlay.remove();
+
+      const message = $("player-message");
+      if (message) {
+        message.textContent = "Loading video...";
+      }
+    });
+
+    overlay.appendChild(button);
+    wrapper.appendChild(overlay);
+  }
+
+  /* =========================
+     VIDSRC PLAYER
+  ========================= */
+
   function changeServer(season = 1, episode = 1) {
     if (!currentItem) return;
 
@@ -230,16 +378,27 @@
       ? `${PLAYER_BASE}/movie/${id}`
       : `${PLAYER_BASE}/tv/${id}/${safeSeason}/${safeEpisode}`;
 
-    video.src = url;
+    // Display our Play button before loading the embed.
+    createPlayOverlay(video, url);
 
-    $("player-message").textContent =
-      "Loading external video player. Availability depends on the provider.";
+    const message = $("player-message");
+    if (message) {
+      message.textContent =
+        "Press PLAY MOVIE to start watching.";
+    }
   }
 
-  /* SEARCH */
+  /* =========================
+     SEARCH
+  ========================= */
+
   async function searchTMDB(query) {
     const section = $("search-section");
     const results = $("search-results");
+    const input = $("search-input");
+
+    if (!section || !results || !input) return;
+
     const q = query.trim();
 
     if (!q) {
@@ -255,7 +414,7 @@
     );
 
     if (requestId !== requestNumber) return;
-    if ($("search-input").value.trim() !== q) return;
+    if (input.value.trim() !== q) return;
 
     results.replaceChildren();
     section.hidden = false;
@@ -277,9 +436,15 @@
     }
   }
 
-  /* INIT */
+  /* =========================
+     INITIALIZATION
+  ========================= */
+
   async function init() {
-    $("year").textContent = new Date().getFullYear();
+    const year = $("year");
+    if (year) {
+      year.textContent = new Date().getFullYear();
+    }
 
     const [movies, tv, anime] = await Promise.all([
       fetchTrending("movie"),
@@ -300,45 +465,79 @@
     displayList(movies.slice(0, 6), "recommended-list");
   }
 
-  /* EVENTS */
-  $("hamburger").addEventListener("click", toggleNav);
-  $("close-modal").addEventListener("click", closeModal);
+  /* =========================
+     EVENT LISTENERS
+  ========================= */
 
-  $("modal").addEventListener("click", event => {
-    if (event.target === $("modal")) closeModal();
-  });
+  const hamburger = $("hamburger");
+  if (hamburger) {
+    hamburger.addEventListener("click", toggleNav);
+  }
+
+  const closeButton = $("close-modal");
+  if (closeButton) {
+    closeButton.addEventListener("click", closeModal);
+  }
+
+  const modal = $("modal");
+  if (modal) {
+    modal.addEventListener("click", event => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+  }
 
   document.addEventListener("keydown", event => {
     if (
       event.key === "Escape" &&
-      $("modal").classList.contains("show")
+      $("modal")?.classList.contains("show")
     ) {
       closeModal();
     }
   });
 
-  $("hero-play").addEventListener("click", () => {
-    if (heroItem) showDetails(heroItem);
-  });
+  const heroPlay = $("hero-play");
+  if (heroPlay) {
+    heroPlay.addEventListener("click", () => {
+      if (heroItem) showDetails(heroItem);
+    });
+  }
 
-  $("server").addEventListener("change", changeServer);
+  const server = $("server");
+  if (server) {
+    server.addEventListener("change", () => {
+      if (currentItem) {
+        changeServer(
+          $("season")?.value || 1,
+          $("episode")?.value || 1
+        );
+      }
+    });
+  }
 
-  $("play-episode").addEventListener("click", () => {
-    changeServer(
-      $("season").value,
-      $("episode").value
-    );
-  });
+  const playEpisode = $("play-episode");
+  if (playEpisode) {
+    playEpisode.addEventListener("click", () => {
+      changeServer(
+        $("season")?.value || 1,
+        $("episode")?.value || 1
+      );
+    });
+  }
 
-  $("search-input").addEventListener("input", event => {
-    clearTimeout(searchTimer);
+  const searchInput = $("search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", event => {
+      clearTimeout(searchTimer);
 
-    const query = event.target.value;
+      const query = event.target.value;
 
-    searchTimer = setTimeout(() => {
-      searchTMDB(query);
-    }, 300);
-  });
+      searchTimer = setTimeout(() => {
+        searchTMDB(query);
+      }, 300);
+    });
+  }
 
   init();
 })();
