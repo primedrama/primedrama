@@ -1,3 +1,4 @@
+
 (() => {
   "use strict";
 
@@ -171,6 +172,32 @@
   }
 
   // ------------------------------
+  // Set player poster background
+  // ------------------------------
+
+  function setPlayerPoster(item) {
+    const video = $("modal-video");
+    const wrapper = video?.parentElement;
+
+    if (!wrapper) return;
+
+    const posterURL = item?.poster_path
+      ? `${POSTER}${item.poster_path}`
+      : "";
+
+    wrapper.style.setProperty(
+      "--movie-poster",
+      posterURL ? `url("${posterURL}")` : "none"
+    );
+
+    wrapper.classList.add("player-wrapper");
+
+    // Inline fallback background if the CSS pseudo-element
+    // is not available or the stylesheet has not been updated.
+    wrapper.style.backgroundColor = "#09090b";
+  }
+
+  // ------------------------------
   // Open movie or TV details
   // ------------------------------
 
@@ -218,6 +245,9 @@
         : "";
     }
 
+    // Automatically use the selected title's poster.
+    setPlayerPoster(item);
+
     const isMovie = Boolean(item.title);
     const episodeControls = $("episode-controls");
 
@@ -241,12 +271,16 @@
   function closeModal() {
     const video = $("modal-video");
 
-    if (video) video.src = "";
+    if (video) {
+      video.src = "";
+    }
 
     if (video?.parentElement) {
       video.parentElement
         .querySelector(".prime-play-overlay")
         ?.remove();
+
+      video.parentElement.style.removeProperty("--movie-poster");
     }
 
     const modal = $("modal");
@@ -307,8 +341,16 @@
     if (!wrapper) return;
 
     wrapper.querySelector(".prime-play-overlay")?.remove();
+
+    wrapper.classList.add("player-wrapper");
     wrapper.style.position = "relative";
+    wrapper.style.isolation = "isolate";
+    wrapper.style.overflow = "hidden";
+
     video.src = "";
+    video.style.position = "relative";
+    video.style.zIndex = "4";
+    video.style.backgroundColor = "transparent";
 
     const overlay = document.createElement("div");
     overlay.className = "prime-play-overlay";
@@ -321,7 +363,7 @@
       justifyContent: "center",
       padding: "20px",
       boxSizing: "border-box",
-      background: "#09090b",
+      background: "transparent",
       zIndex: "10"
     });
 
@@ -331,14 +373,17 @@
     watchButton.setAttribute("aria-label", "Watch now");
 
     Object.assign(watchButton.style, {
-      padding: "13px 25px",
+      padding: "14px 28px",
       background: "#e50914",
       color: "#fff",
       border: "0",
       borderRadius: "7px",
-      fontSize: "15px",
+      fontSize: "16px",
       fontWeight: "800",
-      cursor: "pointer"
+      cursor: "pointer",
+      boxShadow: "0 4px 18px rgba(0,0,0,0.5)",
+      position: "relative",
+      zIndex: "11"
     });
 
     watchButton.addEventListener("click", () => {
@@ -392,6 +437,8 @@
       ? `${playerBase}/movie/${id}`
       : `${playerBase}/tv/${id}/${safeSeason}/${safeEpisode}`;
 
+    // Refresh the selected title poster and overlay.
+    setPlayerPoster(currentItem);
     createPlayOverlay(video, movieURL);
 
     const message = $("player-message");
