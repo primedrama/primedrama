@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Contact Us | PrimeDrama</title>
+  <meta name="description" content="Contact PrimeDrama for general questions, copyright concerns, privacy inquiries, and website feedback.">
+
+  <link rel="stylesheet" href="css/home.css">
+
+  <style>
+    .contact-page {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 35px;
+      color: #e8e8e8;
+      background: #151515;
+      border: 1px solid #292929;
+      border-radius: 12px;
+      line-height: 1.8;
+    }
+
+    .contact-page h1 {
+      color: #ff3030;
+      margin-bottom: 10px;
+    }
+
+    .contact-page h2 {
+      margin-top: 30px;
+      color: #ffffff;
+      font-size: 20px;
+    }
+
+    .contact-page p,
+    .contact-page li {
+      color: #c8c8c8;
+    }
+
+    .contact-page a {
+      color: #ff4545;
+      text-decoration: none;
+    }
+
+    .contact-page a:hover {
+      text-decoration: underline;
+    }
+
+    .contact-card {
+      margin-top: 25px;
+      padding: 24px;
+      background: #202020;
+      border: 1px solid #353535;
+      border-radius: 10px;
+    }
+
+    .email-button {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 20px;
+      background: #e50914;
+      color: #ffffff !important;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none !important;
+    }
+
+    .email-button:hover {
+      background: #bd0811;
+    }
+
+    .back-home {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 10px 18px;
+      background: #292929;
+      color: #ffffff !important;
+      border-radius: 6px;
+      text-decoration: none !important;
+    }
+
+    @media (max-width: 600px) {
+      .contact-page {
+        margin: 20px 12px;
+        padding: 22px 18px;
+      }
+
+      .contact-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" aria-label="PrimeDrama home">
+        <img
+          class="logo"
+          src="https://i.ibb.co/d4dXkX6V/logo.png"
+          alt="PrimeDrama">
+      </a>
+    </div>
+  </header>
+
+  <main class="contact-page">
+
+    <h1>Contact Us</h1>
+
+    <p>
+      Have a question, suggestion, or concern about PrimeDrama?
+      We'd love to hear from you. You can contact us using the
+      email address below.
+    </p>
+
+    <div class="contact-card">
+      <h2 style="margin-top: 0;">Get in Touch</h2>
+
+      <p>
+        <strong>PrimeDrama Support</strong>
+      </p>
+
+      <p>
+        Email:
+        <a href="mailto:primedrama.email@gmail.com">
+          primedrama.email@gmail.com
+        </a>
+      </p>
+
+      <a
+        class="email-button"
+        href="mailto:primedrama.email@gmail.com?subject=PrimeDrama%20Inquiry">
+        Email Us
+      </a>
+    </div>
+
+    <h2>What Can You Contact Us About?</h2>
+
+    <ul>
+      <li>
+        <strong>General Inquiries:</strong>
+        Questions or feedback about the website.
+      </li>
+      <li>
+        <strong>Copyright Concerns:</strong>
+        Reports about content that may infringe intellectual property rights.
+        Please see our <a href="copyright.html">Copyright Policy</a>.
+      </li>
+      <li>
+        <strong>Privacy Requests:</strong>
+        Questions about privacy or personal information.
+        Read our <a href="privacy.html">Privacy Policy</a>.
+      </li>
+      <li>
+        <strong>Technical Issues:</strong>
+        Reports about broken pages, website errors, or unavailable features.
+      </li>
+      <li>
+        <strong>Advertising Inquiries:</strong>
+        Questions about advertisements displayed on PrimeDrama.
+      </li>
+    </ul>
+
+    <h2>Before Contacting Us</h2>
+
+    <p>
+      Please include a clear subject and enough details to help
+      us understand your inquiry. If you are reporting an issue,
+      include the relevant page link and a description of the problem.
+      For copyright reports, identify the material and explain your
+      relationship to the rights involved.
+    </p>
+
+    <p>
+      We will review messages as reasonably possible. A response
+      is not guaranteed, and response times may vary.
+    </p>
+
+    <h2>Important Notice</h2>
+
+    <p>
+      PrimeDrama may use third-party video players, advertising
+      providers, and external websites. For issues concerning
+      services operated by another provider, you may also need
+      to contact that provider directly.
+    </p>
+
+    <p>
+      <a href="copyright.html">Copyright Policy</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Service</a>
+    </p>
+
+    <a class="back-home" href="index.html">← Back to Home</a>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> PrimeDrama. All Rights Reserved.</p>
+
+    <p>
+      <a href="copyright.html">Copyright Policy</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Service</a> |
+      <a href="contact.html">Contact Us</a>
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
+
+</body>
+</html>
