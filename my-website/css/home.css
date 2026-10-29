@@ -1775,3 +1775,12 @@ main {
     font-size: 23px;
   }
 }
+/* FIX: Panatilihing malinaw ang movie description */
+#modal-description {
+  filter: none !important;
+  -webkit-filter: none !important;
+  user-select: text !important;
+  pointer-events: auto !important;
+}
+
+/* Background image lang ang dapat i-blur */
