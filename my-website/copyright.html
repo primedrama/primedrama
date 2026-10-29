@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,12 @@
 
   <title>Copyright Policy | Prime Drama</title>
 
-  <meta name="description" content="Read the Prime Drama copyright policy and learn how to submit copyright concerns.">
+  <meta
+    name="description"
+    content="Read the Prime Drama copyright policy and learn how to submit copyright concerns."
+  >
+
+  <meta name="theme-color" content="#080808">
 
   <link rel="stylesheet" href="css/home.css">
 
@@ -39,6 +45,13 @@
 
     .policy-page a {
       color: #e50914;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .policy-page a:hover {
+      color: #ff4d57;
+      text-decoration: underline;
     }
 
     .policy-date {
@@ -47,15 +60,50 @@
       margin-bottom: 30px;
     }
 
-    .policy-back {
+    .policy-page .policy-back {
       display: inline-block;
       margin-bottom: 30px;
-      color: #fff !important;
+      color: #fff;
       text-decoration: none;
     }
 
-    .policy-back:hover {
-      color: #e50914 !important;
+    .policy-page .policy-back:hover {
+      color: #e50914;
+    }
+
+    .policy-contact {
+      margin-top: 18px;
+      padding: 20px;
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 10px;
+    }
+
+    .policy-contact strong {
+      color: #fff;
+    }
+
+    .policy-contact .email-link {
+      display: inline-block;
+      margin-top: 5px;
+      color: #ff3541;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .policy-home-link {
+      display: inline-block;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 600px) {
+      .policy-page {
+        padding: 32px 18px 50px;
+      }
+
+      .policy-page h2 {
+        font-size: 19px;
+      }
     }
   </style>
 </head>
@@ -70,7 +118,9 @@
 
     <h1>Copyright Policy</h1>
 
-    <p class="policy-date">Last Updated: October 29, 2026</p>
+    <p class="policy-date">
+      Last Updated: October 29, 2026
+    </p>
 
     <p>
       Prime Drama respects intellectual property rights and aims
@@ -148,22 +198,29 @@
 
     <p>
       For copyright concerns, permissions, or other intellectual
-      property inquiries, please contact:
+      property inquiries, please contact us using the email below.
     </p>
 
-    <p>
-      <strong>Prime Drama</strong><br>
-      Email: <strong>primedrama.email@gmail.com</strong>
-    </p>
+    <div class="policy-contact">
+      <p>
+        <strong>Prime Drama</strong>
+      </p>
 
-    <p>
-      Please replace the email placeholder with an email address
-      that you actively monitor before publishing this page.
-    </p>
+      <p>
+        Copyright Inquiries:
+        <br>
+        <a
+          class="email-link"
+          href="mailto:primedrama.email@gmail.com?subject=Prime%20Drama%20Copyright%20Inquiry"
+        >
+          primedrama.email@gmail.com
+        </a>
+      </p>
+    </div>
 
-    <p>
-      <a href="index.html">Return to Prime Drama homepage</a>
-    </p>
+    <a class="policy-home-link" href="index.html">
+      ← Return to Prime Drama homepage
+    </a>
 
   </main>
 
