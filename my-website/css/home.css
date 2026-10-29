@@ -1331,3 +1331,38 @@ main {
     height: 32px;
   }
 }
+/* FIX CLOSE X BUTTON — MOVIE PLAYER ON PHONE */
+@media (max-width: 600px) {
+  .modal,
+  .video-modal,
+  .player-modal {
+    overflow: visible;
+  }
+
+  .close,
+  .close-btn,
+  .modal-close,
+  .close-modal,
+  .player-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #e50914;
+    color: #fff;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+    visibility: visible;
+    opacity: 1;
+  }
+}
