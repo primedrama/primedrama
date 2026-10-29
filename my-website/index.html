@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,11 +24,13 @@
   <meta name="twitter:description" content="Discover trending movies, TV shows, and anime.">
   <meta name="twitter:image" content="https://i.ibb.co/7t6dYh1g/primedrama.png">
 
-  <!-- Premium Red Theme -->
+  <!-- Website Icon -->
   <link rel="icon" href="https://i.ibb.co/d4dXkX6V/logo.png">
+
+  <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/home.css">
 
-  <!-- Load existing site functionality -->
+  <!-- Website Functionality -->
   <script defer src="js/home.js"></script>
 </head>
 
@@ -39,14 +40,12 @@
   <header class="navbar">
     <div class="nav-inner">
 
-      <a href="index.html" aria-label="PrimeDrama home">
-        <img
-          class="logo"
-          src="https://i.ibb.co/d4dXkX6V/logo.png"
-          alt="PrimeDrama"
-          fetchpriority="high">
+      <!-- PREMIUM TEXT LOGO -->
+      <a href="index.html" class="brand-title" aria-label="PrimeDrama home">
+        PRIME<span>DRAMA</span>
       </a>
 
+      <!-- SEARCH BAR -->
       <div class="search-wrapper">
         <input
           id="search-input"
@@ -56,6 +55,7 @@
           aria-label="Search movies and TV shows">
       </div>
 
+      <!-- MOBILE MENU BUTTON -->
       <button
         class="hamburger"
         id="hamburger"
@@ -66,6 +66,7 @@
 
     </div>
 
+    <!-- MOBILE NAVIGATION -->
     <nav class="mobile-menu" id="mobile-menu" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="#movies-list">Movies</a>
