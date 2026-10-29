@@ -1377,24 +1377,21 @@ main {
   overflow-wrap: break-word;
 }
 
+
 /* =========================================
-   PRIMEDRAMA PLAYER DESIGN UPDATE
+   PRIMEDRAMA — CLEAN PLAYER STYLES
 ========================================= */
 
-/* Movie description: subtle blur */
+/* Movie description: malinaw, walang blur */
 #modal-description {
-  filter: blur(1.2px);
-  transition: filter 0.25s ease;
-  cursor: pointer;
+  filter: none !important;
+  -webkit-filter: none !important;
+  user-select: text;
+  pointer-events: auto;
+  cursor: text;
 }
 
-#modal-description:hover,
-#modal-description:focus,
-#modal-description:active {
-  filter: blur(0);
-}
-
-/* Video Server dropdown */
+/* Server dropdown */
 #server {
   display: block !important;
   width: 100%;
@@ -1406,73 +1403,52 @@ main {
   font-size: 14px;
   font-weight: 700;
   background: linear-gradient(145deg, #25252c, #111114);
-  border: 1px solid #ed1020;
+  border: 1px solid var(--red);
   border-radius: 9px;
-  outline: none;
-  box-shadow: 0 0 12px rgba(237, 16, 32, 0.12);
-  cursor: pointer;
 }
 
-#server:focus,
-#server:hover {
-  border-color: #ff4655;
-  box-shadow: 0 0 0 3px rgba(237, 16, 32, 0.18);
-}
-
-#server option {
-  color: #fff;
-  background: #151519;
-}
-
-/* Red player message */
+/* Player message */
 #player-message {
   display: inline-block;
   max-width: 100%;
-  margin-top: 12px;
-  padding: 10px 14px;
+  margin-top: 10px;
   color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.5;
-  background: #e50914;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 7px;
-  box-shadow: 0 5px 18px rgba(229, 9, 20, 0.2);
+  font-size: 12px;
   overflow-wrap: anywhere;
 }
 
-/* Play overlay background */
+#player-message:empty {
+  display: none !important;
+}
+
+/* WATCH NOW overlay */
 .prime-play-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #09090b !important;
   border: 1px solid rgba(237, 16, 32, 0.35);
   border-radius: 12px;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(140, 0, 18, 0.3),
-      transparent 70%
-    ),
-    #09090b !important;
 }
 
-/* Red "Press Play to Start Watching" message */
+/* Hide extra instruction text */
 .prime-play-overlay > div {
-  max-width: 100%;
-  padding: 10px 16px !important;
-  color: #fff !important;
-  font-size: 14px !important;
-  font-weight: 800 !important;
-  line-height: 1.5;
-  text-align: center;
-  background: #e50914 !important;
-  border-radius: 6px;
-  box-shadow: 0 5px 20px rgba(237, 16, 32, 0.2);
+  display: none !important;
 }
 
-/* PLAY and PLAY MOVIE buttons */
+/* WATCH NOW button */
 .prime-play-overlay button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
   min-width: 150px;
   min-height: 46px;
-  padding: 13px 22px !important;
+  padding: 13px 25px !important;
   color: #fff !important;
   font-size: 15px !important;
   font-weight: 800 !important;
@@ -1494,7 +1470,7 @@ main {
   outline-offset: 3px;
 }
 
-/* Keep the close X visible above the player */
+/* Keep close X visible */
 .modal-content {
   position: relative;
 }
@@ -1526,7 +1502,7 @@ main {
   background: #b90012;
 }
 
-/* Mobile player adjustments */
+/* Phone adjustments */
 @media (max-width: 600px) {
   #server {
     width: 100%;
@@ -1535,227 +1511,6 @@ main {
     font-size: 13px;
   }
 
-  #player-message {
-    display: inline-block;
-    max-width: 100%;
-    font-size: 11px;
-  }
-
-  .modal-content > .close {
-    top: 5px;
-    right: 5px;
-    width: 36px;
-    height: 36px;
-    font-size: 23px;
-  }
-
-  .prime-play-overlay {
-    padding: 12px !important;
-    gap: 12px !important;
-  }
-
-  .prime-play-overlay button {
-    min-width: 135px;
-    min-height: 42px;
-    padding: 11px 18px !important;
-    font-size: 14px !important;
-  }
-
-  .prime-play-overlay > div {
-    font-size: 12px !important;
-  }
-}
-/* =========================================
-   PRIMEDRAMA — WATCH NOW PLAYER
-========================================= */
-
-/* Permanently blur movie description */
-#modal-description {
-  filter: blur(4px) !important;
-  user-select: none;
-  pointer-events: none;
-}
-
-/* Hide the extra player instructions */
-.prime-play-overlay > div {
-  display: none !important;
-}
-
-/* Player overlay */
-.prime-play-overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #09090b !important;
-  border: 1px solid rgba(237, 16, 32, 0.35);
-  border-radius: 12px;
-}
-
-/* WATCH NOW button */
-.prime-play-overlay button {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  min-width: 155px;
-  min-height: 48px;
-  padding: 13px 25px !important;
-  color: #fff !important;
-  background: linear-gradient(135deg, #ff2638, #b90012) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 7px !important;
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  cursor: pointer;
-  box-shadow: 0 5px 20px rgba(237, 16, 32, 0.25);
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.prime-play-overlay button:hover {
-  filter: brightness(1.12);
-  transform: translateY(-2px);
-}
-
-/* Player message */
-#player-message {
-  color: #fff;
-  font-size: 12px;
-}
-
-/* Close button remains visible */
-.modal-content {
-  position: relative;
-}
-
-.modal-content > .close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  color: #fff;
-  font-size: 24px;
-  background: #e50914;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-@media (max-width: 600px) {
-  .prime-play-overlay button {
-    min-width: 140px;
-    min-height: 44px;
-    font-size: 14px !important;
-  }
-
-  .modal-content > .close {
-    top: 5px;
-    right: 5px;
-    width: 36px;
-    height: 36px;
-    font-size: 22px;
-  }
-}
-/* =========================================
-   PRIMEDRAMA — WATCH NOW UPDATE
-========================================= */
-
-/* Permanently blur movie description */
-#modal-description {
-  filter: blur(5px) !important;
-  user-select: none;
-  -webkit-user-select: none;
-  pointer-events: none;
-  cursor: default;
-}
-
-/* Prevent hover or click from removing the blur */
-#modal-description:hover,
-#modal-description:focus,
-#modal-description:active {
-  filter: blur(5px) !important;
-}
-
-/* WATCH NOW overlay */
-.prime-play-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
-  background: #09090b !important;
-  border: 1px solid rgba(237, 16, 32, 0.35);
-  border-radius: 12px;
-  z-index: 10;
-}
-
-/* WATCH NOW button */
-.prime-play-overlay button {
-  display: inline-block !important;
-  min-width: 150px;
-  min-height: 46px;
-  padding: 13px 25px !important;
-  color: #fff !important;
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  background: linear-gradient(135deg, #ff2638, #b90012) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 7px !important;
-  box-shadow: 0 6px 22px rgba(237, 16, 32, 0.3);
-  cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.prime-play-overlay button:hover {
-  filter: brightness(1.15);
-  transform: translateY(-2px);
-}
-
-.prime-play-overlay button:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-
-/* Hide the old instruction message */
-.prime-play-overlay > div {
-  display: none !important;
-}
-
-/* Hide the empty player message */
-#player-message:empty {
-  display: none !important;
-}
-
-/* Keep the close button visible */
-.modal-content > .close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  color: #fff;
-  font-size: 25px;
-  font-weight: 800;
-  background: #e50914;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  visibility: visible;
-  opacity: 1;
-  cursor: pointer;
-}
-
-/* Phone adjustments */
-@media (max-width: 600px) {
   .prime-play-overlay {
     padding: 12px !important;
   }
@@ -1775,12 +1530,4 @@ main {
     font-size: 23px;
   }
 }
-/* FIX: Panatilihing malinaw ang movie description */
-#modal-description {
-  filter: none !important;
-  -webkit-filter: none !important;
-  user-select: text !important;
-  pointer-events: auto !important;
-}
 
-/* Background image lang ang dapat i-blur */
