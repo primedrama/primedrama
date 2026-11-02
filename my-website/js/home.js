@@ -1,4 +1,3 @@
-
 (() => {
   "use strict";
 
@@ -7,7 +6,6 @@
   const POSTER = "https://image.tmdb.org/t/p/w500";
   const PLAYER_BASE = "https://vidsrc.sh/embed";
 
-  // Direct ads URL
   const DIRECT_AD_LINK =
     "https://directyp.org/4/aaa4649f8b7c3dfb008b8bfb6e3e05d2";
 
@@ -27,6 +25,19 @@
 
   const $ = id => document.getElementById(id);
 
+  const GENRE_NAMES = {
+    28: "Action", 12: "Adventure", 16: "Animation",
+    35: "Comedy", 80: "Crime", 99: "Documentary",
+    18: "Drama", 10751: "Family", 14: "Fantasy",
+    36: "History", 27: "Horror", 10402: "Music",
+    9648: "Mystery", 10749: "Romance", 878: "Science Fiction",
+    10770: "TV Movie", 53: "Thriller", 10752: "War",
+    37: "Western", 10759: "Action & Adventure",
+    10762: "Kids", 10763: "News", 10764: "Reality",
+    10765: "Sci-Fi & Fantasy", 10766: "Soap",
+    10767: "Talk", 10768: "War & Politics"
+  };
+
   // ------------------------------
   // TMDB API
   // ------------------------------
@@ -35,9 +46,11 @@
     const url = new URL(`${BASE}${path}`);
     url.searchParams.set("api_key", API_KEY);
 
-    for (const [key, value] of Object.entries(params)) {
-      url.searchParams.set(key, value);
-    }
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(key, value);
+      }
+    });
 
     return url.toString();
   }
@@ -47,7 +60,7 @@
       const response = await fetch(url);
 
       if (!response.ok) {
-        console.error("Request failed:", response.status);
+        console.error("TMDB request failed:", response.status);
         return null;
       }
 
@@ -85,8 +98,8 @@
     const menu = $("mobile-menu");
     if (!menu) return;
 
-    menu.style.display =
-      menu.style.display === "flex" ? "none" : "flex";
+    menu.classList.toggle("open");
+    menu.classList.toggle("active");
   }
 
   // ------------------------------
@@ -105,41 +118,41 @@
       ? `url("${IMG}${item.backdrop_path}")`
       : "";
 
-    const bannerTitle = $("banner-title");
-    const bannerOverview = $("banner-overview");
+    const title = $("banner-title");
+    const overview = $("banner-overview");
 
-    if (bannerTitle) {
-      bannerTitle.textContent =
-        item.title || item.name || "PrimeDrama";
+    if (title) {
+      title.textContent = item.title || item.name || "PrimeDrama";
     }
 
-    if (bannerOverview) {
-      bannerOverview.textContent =
+    if (overview) {
+      overview.textContent =
         item.overview || "Discover trending entertainment.";
     }
   }
 
   // ------------------------------
-  // Movie and TV cards
+  // Movie cards
   // ------------------------------
 
   function createCard(item) {
-    if (!item.poster_path) return null;
+    if (!item?.poster_path) return null;
 
     const card = document.createElement("div");
     card.className = "card";
     card.tabIndex = 0;
     card.setAttribute("role", "button");
 
-    const titleText =
-      item.title || item.name || "Untitled";
-
+    const titleText = item.title || item.name || "Untitled";
     card.setAttribute("aria-label", `Open ${titleText}`);
 
     const img = document.createElement("img");
     img.src = POSTER + item.poster_path;
     img.alt = titleText;
     img.loading = "lazy";
+
+    const info = document.createElement("div");
+    info.className = "card-info";
 
     const title = document.createElement("div");
     title.className = "card-title";
@@ -161,7 +174,8 @@
     ratingEl.textContent = score ? `★ ${score.toFixed(1)}` : "—";
 
     meta.append(yearEl, ratingEl);
-    card.append(img, title, meta);
+    info.append(title, meta);
+    card.append(img, info);
 
     card.addEventListener("click", () => showDetails(item));
 
@@ -188,7 +202,7 @@
   }
 
   // ------------------------------
-  // Set player poster background
+  // Player poster background
   // ------------------------------
 
   function setPlayerPoster(item) {
@@ -207,14 +221,11 @@
     );
 
     wrapper.classList.add("player-wrapper");
-
-    // Inline fallback background if the CSS pseudo-element
-    // is not available or the stylesheet has not been updated.
     wrapper.style.backgroundColor = "#09090b";
   }
 
   // ------------------------------
-  // Open movie or TV details
+  // Movie details modal
   // ------------------------------
 
   function showDetails(item) {
@@ -236,7 +247,9 @@
     const title = $("modal-title");
     const description = $("modal-description");
     const rating = $("modal-rating");
-    const info = $("info-wrapper");
+    const meta = $("modal-meta");
+    const genres = $("modal-genres");
+    const recommendations = $("recommendations-list");
 
     if (title) {
       title.textContent = item.title || item.name || "Untitled";
@@ -252,37 +265,31 @@
     if (rating) {
       rating.textContent = score
         ? `★ ${score.toFixed(1)} / 10`
-        : "";
+        : "Rating unavailable";
     }
-
-    if (info) {
-      info.style.backgroundImage = item.poster_path
-        ? `url("${POSTER}${item.poster_path}")`
-        : "";
-    }
-
-    // Automatically use the selected title's poster.
-    setPlayerPoster(item);
 
     const isMovie = Boolean(item.title);
-    const meta = $("modal-meta");
+    const dateValue = item.release_date || item.first_air_date || "";
+
     if (meta) {
-      const dateValue = item.release_date || item.first_air_date || "";
       meta.textContent = [
         dateValue ? dateValue.slice(0, 4) : "Year unavailable",
         isMovie ? "Movie" : "TV Series"
       ].join(" • ");
     }
 
-    const genres = $("modal-genres");
-    if (genres) genres.textContent = (item.genre_ids || [])
-      .map(id => GENRE_NAMES[id])
-      .filter(Boolean)
-      .join(" • ");
+    if (genres) {
+      genres.textContent = (item.genre_ids || [])
+        .map(id => GENRE_NAMES[id])
+        .filter(Boolean)
+        .join(" • ");
+    }
 
-    const recommendations = $("recommendations-list");
-    if (recommendations) recommendations.replaceChildren();
+    if (recommendations) {
+      recommendations.replaceChildren();
+    }
 
+    setPlayerPoster(item);
     loadTitleExtras(item);
 
     const episodeControls = $("episode-controls");
@@ -300,66 +307,106 @@
     $("close-modal")?.focus();
   }
 
-  const GENRE_NAMES = {
-    28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy",
-    80: "Crime", 99: "Documentary", 18: "Drama", 10751: "Family",
-    14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music",
-    9648: "Mystery", 10749: "Romance", 878: "Science Fiction",
-    10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western",
-    10759: "Action & Adventure", 10762: "Kids", 10763: "News",
-    10764: "Reality", 10765: "Sci-Fi & Fantasy", 10766: "Soap",
-    10767: "Talk", 10768: "War & Politics"
-  };
+  // ------------------------------
+  // Extra movie details
+  // ------------------------------
 
   async function loadTitleExtras(item) {
     const type = item.title ? "movie" : "tv";
-    const details = await fetchJSON(apiURL(`/${type}/${item.id}`));
+
+    const details = await fetchJSON(
+      apiURL(`/${type}/${item.id}`, {
+        append_to_response: "release_dates,content_ratings"
+      })
+    );
+
     if (!details || currentItem?.id !== item.id) return;
 
     const meta = $("modal-meta");
+
     if (meta) {
-      const dateValue = details.release_date || details.first_air_date || "";
-      const year = dateValue ? dateValue.slice(0, 4) : "Year unavailable";
+      const dateValue =
+        details.release_date || details.first_air_date || "";
+
+      const year = dateValue
+        ? dateValue.slice(0, 4)
+        : "Year unavailable";
+
       const runtime = details.runtime
         ? `${details.runtime} min`
-        : (details.episode_run_time?.[0] ? `${details.episode_run_time[0]} min/episode` : "");
-      const age = details.release_dates?.results
-        ?.find(x => x.iso_3166_1 === "US")?.release_dates?.find(x => x.certification)?.certification
-        || details.content_ratings?.results?.find(x => x.iso_3166_1 === "US")?.rating || "";
-      meta.textContent = [year, runtime, age].filter(Boolean).join(" • ");
+        : details.episode_run_time?.[0]
+          ? `${details.episode_run_time[0]} min/episode`
+          : "";
+
+      let age = "";
+
+      if (type === "movie") {
+        age = details.release_dates?.results
+          ?.find(x => x.iso_3166_1 === "US")
+          ?.release_dates?.find(x => x.certification)?.certification || "";
+      } else {
+        age = details.content_ratings?.results
+          ?.find(x => x.iso_3166_1 === "US")?.rating || "";
+      }
+
+      meta.textContent = [
+        year,
+        runtime,
+        age ? `Rated ${age}` : ""
+      ].filter(Boolean).join(" • ");
     }
 
     const genres = $("modal-genres");
-    if (genres) genres.textContent = (details.genres || []).map(g => g.name).join(" • ");
 
+    if (genres) {
+      genres.textContent = (details.genres || [])
+        .map(genre => genre.name)
+        .join(" • ");
+    }
+
+    await loadRecommendations(item, type);
+  }
+
+  // ------------------------------
+  // Recommendations
+  // ------------------------------
+
+  async function loadRecommendations(item, type) {
     const list = $("recommendations-list");
-    if (list) {
-      const rec = await fetchJSON(apiURL(`/${type}/${item.id}/recommendations`));
-      if (currentItem?.id !== item.id) return;
-      list.replaceChildren();
-      (rec?.results || []).slice(0, 10).forEach(suggestion => {
+    if (!list) return;
+
+    const data = await fetchJSON(
+      apiURL(`/${type}/${item.id}/recommendations`)
+    );
+
+    if (currentItem?.id !== item.id) return;
+
+    list.replaceChildren();
+
+    (data?.results || [])
+      .filter(suggestion => suggestion.poster_path)
+      .slice(0, 10)
+      .forEach(suggestion => {
         const card = createCard(suggestion);
         if (card) list.appendChild(card);
       });
-      if (!list.children.length) {
-        const empty = document.createElement("p");
-        empty.className = "recommendations-empty";
-        empty.textContent = "No recommendations available yet.";
-        list.appendChild(empty);
-      }
+
+    if (!list.children.length) {
+      const empty = document.createElement("p");
+      empty.className = "recommendations-empty";
+      empty.textContent = "No recommendations available yet.";
+      list.appendChild(empty);
     }
   }
 
   // ------------------------------
-  // Close player modal
+  // Close modal
   // ------------------------------
 
   function closeModal() {
     const video = $("modal-video");
 
-    if (video) {
-      video.src = "";
-    }
+    if (video) video.src = "";
 
     if (video?.parentElement) {
       video.parentElement
@@ -390,36 +437,27 @@
   }
 
   // ------------------------------
-  // Open direct ad
+  // Direct advertisement
   // ------------------------------
 
   function openDirectAd() {
     try {
       const url = new URL(DIRECT_AD_LINK);
 
-      if (url.protocol !== "https:") {
-        console.warn("Invalid ads URL.");
-        return;
-      }
+      if (url.protocol !== "https:") return;
 
-      const adWindow = window.open(
+      window.open(
         url.href,
         "_blank",
         "noopener,noreferrer"
       );
-
-      if (!adWindow) {
-        console.warn(
-          "The ad tab may have been blocked by the browser."
-        );
-      }
     } catch (error) {
       console.error("Invalid ads URL:", error);
     }
   }
 
   // ------------------------------
-  // WATCH NOW overlay
+  // Watch Now overlay
   // ------------------------------
 
   function createPlayOverlay(video, movieURL) {
@@ -453,43 +491,41 @@
       zIndex: "10"
     });
 
-    const watchButton = document.createElement("button");
-    watchButton.type = "button";
-    watchButton.textContent = "WATCH NOW";
-    watchButton.setAttribute("aria-label", "Watch now");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "WATCH NOW";
+    button.setAttribute("aria-label", "Watch now");
 
-    Object.assign(watchButton.style, {
+    Object.assign(button.style, {
       padding: "14px 28px",
-      background: "#e50914",
+      background: "linear-gradient(135deg,#ff2638,#a90010)",
       color: "#fff",
-      border: "0",
-      borderRadius: "7px",
+      border: "1px solid rgba(255,255,255,.2)",
+      borderRadius: "8px",
       fontSize: "16px",
       fontWeight: "800",
       cursor: "pointer",
-      boxShadow: "0 4px 18px rgba(0,0,0,0.5)",
+      boxShadow: "0 0 25px rgba(237,16,32,.4)",
       position: "relative",
       zIndex: "11"
     });
 
-    watchButton.addEventListener("click", () => {
+    button.addEventListener("click", () => {
       openDirectAd();
 
       video.src = movieURL;
       overlay.remove();
 
-      const playerMessage = $("player-message");
-      if (playerMessage) {
-        playerMessage.textContent = "Loading video...";
-      }
+      const message = $("player-message");
+      if (message) message.textContent = "Loading video...";
     });
 
-    overlay.appendChild(watchButton);
+    overlay.appendChild(button);
     wrapper.appendChild(overlay);
   }
 
   // ------------------------------
-  // CHANGE SERVER
+  // Change server / episode
   // ------------------------------
 
   function changeServer(season = 1, episode = 1) {
@@ -501,36 +537,23 @@
 
     if (!id || !video) return;
 
-    const safeSeason = Math.max(
-      1,
-      parseInt(season, 10) || 1
-    );
-
-    const safeEpisode = Math.max(
-      1,
-      parseInt(episode, 10) || 1
-    );
+    const safeSeason = Math.max(1, parseInt(season, 10) || 1);
+    const safeEpisode = Math.max(1, parseInt(episode, 10) || 1);
 
     const server = $("server")?.value || "vidsrc";
-
-    let playerBase = PLAYER_BASE;
-
-    if (server === "vidsrc") {
-      playerBase = "https://vidsrc.sh/embed";
-    }
+    const playerBase = server === "vidsrc"
+      ? PLAYER_BASE
+      : PLAYER_BASE;
 
     const movieURL = isMovie
       ? `${playerBase}/movie/${id}`
       : `${playerBase}/tv/${id}/${safeSeason}/${safeEpisode}`;
 
-    // Refresh the selected title poster and overlay.
     setPlayerPoster(currentItem);
     createPlayOverlay(video, movieURL);
 
     const message = $("player-message");
-    if (message) {
-      message.textContent = "";
-    }
+    if (message) message.textContent = "";
   }
 
   // ------------------------------
@@ -615,25 +638,12 @@
   // Event listeners
   // ------------------------------
 
-  const hamburger = $("hamburger");
+  $("hamburger")?.addEventListener("click", toggleNav);
+  $("close-modal")?.addEventListener("click", closeModal);
 
-  if (hamburger) {
-    hamburger.addEventListener("click", toggleNav);
-  }
-
-  const closeButton = $("close-modal");
-
-  if (closeButton) {
-    closeButton.addEventListener("click", closeModal);
-  }
-
-  const modal = $("modal");
-
-  if (modal) {
-    modal.addEventListener("click", event => {
-      if (event.target === modal) closeModal();
-    });
-  }
+  $("modal")?.addEventListener("click", event => {
+    if (event.target === $("modal")) closeModal();
+  });
 
   document.addEventListener("keydown", event => {
     if (
@@ -644,52 +654,36 @@
     }
   });
 
-  const heroPlay = $("hero-play");
+  $("hero-play")?.addEventListener("click", () => {
+    if (heroItem) showDetails(heroItem);
+  });
 
-  if (heroPlay) {
-    heroPlay.addEventListener("click", () => {
-      if (heroItem) showDetails(heroItem);
-    });
-  }
-
-  const server = $("server");
-
-  if (server) {
-    server.addEventListener("change", () => {
-      if (currentItem) {
-        changeServer(
-          $("season")?.value || 1,
-          $("episode")?.value || 1
-        );
-      }
-    });
-  }
-
-  const playEpisode = $("play-episode");
-
-  if (playEpisode) {
-    playEpisode.addEventListener("click", () => {
+  $("server")?.addEventListener("change", () => {
+    if (currentItem) {
       changeServer(
         $("season")?.value || 1,
         $("episode")?.value || 1
       );
-    });
-  }
+    }
+  });
 
-  const searchInput = $("search-input");
+  $("play-episode")?.addEventListener("click", () => {
+    changeServer(
+      $("season")?.value || 1,
+      $("episode")?.value || 1
+    );
+  });
 
-  if (searchInput) {
-    searchInput.addEventListener("input", event => {
-      clearTimeout(searchTimer);
+  $("search-input")?.addEventListener("input", event => {
+    clearTimeout(searchTimer);
 
-      const query = event.target.value;
+    const query = event.target.value;
 
-      searchTimer = setTimeout(
-        () => searchTMDB(query),
-        300
-      );
-    });
-  }
+    searchTimer = setTimeout(
+      () => searchTMDB(query),
+      300
+    );
+  });
 
   init();
 })();
