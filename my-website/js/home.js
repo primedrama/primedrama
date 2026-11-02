@@ -145,7 +145,23 @@
     title.className = "card-title";
     title.textContent = titleText;
 
-    card.append(img, title);
+    const meta = document.createElement("div");
+    meta.className = "card-meta";
+
+    const dateValue = item.release_date || item.first_air_date || "";
+    const year = dateValue ? dateValue.slice(0, 4) : "Year N/A";
+    const score = Number(item.vote_average) || 0;
+
+    const yearEl = document.createElement("span");
+    yearEl.className = "card-year";
+    yearEl.textContent = year;
+
+    const ratingEl = document.createElement("span");
+    ratingEl.className = "card-rating";
+    ratingEl.textContent = score ? `★ ${score.toFixed(1)}` : "—";
+
+    meta.append(yearEl, ratingEl);
+    card.append(img, title, meta);
 
     card.addEventListener("click", () => showDetails(item));
 
@@ -249,6 +265,26 @@
     setPlayerPoster(item);
 
     const isMovie = Boolean(item.title);
+    const meta = $("modal-meta");
+    if (meta) {
+      const dateValue = item.release_date || item.first_air_date || "";
+      meta.textContent = [
+        dateValue ? dateValue.slice(0, 4) : "Year unavailable",
+        isMovie ? "Movie" : "TV Series"
+      ].join(" • ");
+    }
+
+    const genres = $("modal-genres");
+    if (genres) genres.textContent = (item.genre_ids || [])
+      .map(id => GENRE_NAMES[id])
+      .filter(Boolean)
+      .join(" • ");
+
+    const recommendations = $("recommendations-list");
+    if (recommendations) recommendations.replaceChildren();
+
+    loadTitleExtras(item);
+
     const episodeControls = $("episode-controls");
 
     if (episodeControls) {
@@ -262,6 +298,56 @@
     changeServer(1, 1);
 
     $("close-modal")?.focus();
+  }
+
+  const GENRE_NAMES = {
+    28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy",
+    80: "Crime", 99: "Documentary", 18: "Drama", 10751: "Family",
+    14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music",
+    9648: "Mystery", 10749: "Romance", 878: "Science Fiction",
+    10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western",
+    10759: "Action & Adventure", 10762: "Kids", 10763: "News",
+    10764: "Reality", 10765: "Sci-Fi & Fantasy", 10766: "Soap",
+    10767: "Talk", 10768: "War & Politics"
+  };
+
+  async function loadTitleExtras(item) {
+    const type = item.title ? "movie" : "tv";
+    const details = await fetchJSON(apiURL(`/${type}/${item.id}`));
+    if (!details || currentItem?.id !== item.id) return;
+
+    const meta = $("modal-meta");
+    if (meta) {
+      const dateValue = details.release_date || details.first_air_date || "";
+      const year = dateValue ? dateValue.slice(0, 4) : "Year unavailable";
+      const runtime = details.runtime
+        ? `${details.runtime} min`
+        : (details.episode_run_time?.[0] ? `${details.episode_run_time[0]} min/episode` : "");
+      const age = details.release_dates?.results
+        ?.find(x => x.iso_3166_1 === "US")?.release_dates?.find(x => x.certification)?.certification
+        || details.content_ratings?.results?.find(x => x.iso_3166_1 === "US")?.rating || "";
+      meta.textContent = [year, runtime, age].filter(Boolean).join(" • ");
+    }
+
+    const genres = $("modal-genres");
+    if (genres) genres.textContent = (details.genres || []).map(g => g.name).join(" • ");
+
+    const list = $("recommendations-list");
+    if (list) {
+      const rec = await fetchJSON(apiURL(`/${type}/${item.id}/recommendations`));
+      if (currentItem?.id !== item.id) return;
+      list.replaceChildren();
+      (rec?.results || []).slice(0, 10).forEach(suggestion => {
+        const card = createCard(suggestion);
+        if (card) list.appendChild(card);
+      });
+      if (!list.children.length) {
+        const empty = document.createElement("p");
+        empty.className = "recommendations-empty";
+        empty.textContent = "No recommendations available yet.";
+        list.appendChild(empty);
+      }
+    }
   }
 
   // ------------------------------
