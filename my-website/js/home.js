@@ -143,18 +143,16 @@
   }
 
   // =========================================
-  // PINOY RATED R PH MOVIES
+  // PHILIPPINE MOVIES — ALL RATINGS
   // =========================================
 
-  async function fetchPinoyRatedMovies() {
+  async function fetchPHMovies() {
     const pages = await Promise.all(
-      [1, 2, 3, 4].map(page =>
+      [1, 2, 3, 4, 5].map(page =>
         fetchJSON(apiURL("/discover/movie", {
-          with_original_language: "tl",
-          certification_country: "PH",
-          "certification.gte": "R-13",
-          "certification.lte": "R-18",
+          with_origin_country: "PH",
           sort_by: "popularity.desc",
+          include_adult: true,
           page
         }))
       )
@@ -162,9 +160,18 @@
 
     const results = pages.flatMap(data => data?.results || []);
 
-    return [...new Map(
-      results.map(item => [item.id, item])
-    ).values()].filter(item => item.poster_path);
+    const uniqueMovies = [
+      ...new Map(
+        results.map(item => [item.id, item])
+      ).values()
+    ];
+
+    return uniqueMovies
+      .filter(item => item.poster_path)
+      .sort((a, b) =>
+        (Number(b.popularity) || 0) -
+        (Number(a.popularity) || 0)
+      );
   }
 
   // =========================================
@@ -173,11 +180,33 @@
 
   function toggleNav() {
     const menu = $("mobile-menu");
+    const hamburger = $("hamburger");
 
     if (!menu) return;
 
-    menu.classList.toggle("open");
-    menu.classList.toggle("active");
+    const isOpen = menu.classList.toggle("open");
+
+    menu.classList.toggle("active", isOpen);
+
+    hamburger?.setAttribute(
+      "aria-expanded",
+      String(isOpen)
+    );
+  }
+
+  function setupNavigationLinks() {
+    document.querySelectorAll("#mobile-menu a").forEach(link => {
+      link.addEventListener("click", () => {
+        const menu = $("mobile-menu");
+
+        menu?.classList.remove("open", "active");
+
+        $("hamburger")?.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+      });
+    });
   }
 
   // =========================================
@@ -331,8 +360,6 @@
 
     if (!select) return;
 
-    const previousValue = select.value;
-
     select.replaceChildren();
 
     VIDEO_SERVERS.forEach((server, index) => {
@@ -344,10 +371,7 @@
       select.appendChild(option);
     });
 
-    select.value =
-      previousValue === "1" || previousValue === "2"
-        ? previousValue
-        : "0";
+    select.value = "0";
   }
 
   function getSelectedServer() {
@@ -397,6 +421,7 @@
     const meta = $("modal-meta");
     const genres = $("modal-genres");
     const recommendations = $("recommendations-list");
+    const shareMessage = $("share-message");
 
     if (title) {
       title.textContent = item.title || item.name || "Untitled";
@@ -436,6 +461,10 @@
 
     if (recommendations) {
       recommendations.replaceChildren();
+    }
+
+    if (shareMessage) {
+      shareMessage.textContent = "";
     }
 
     setPlayerPoster(item);
@@ -836,7 +865,6 @@
       }
 
     } catch (error) {
-      // Fallback for browsers that block Clipboard API
       const input = document.createElement("textarea");
 
       input.value = shareURL;
@@ -1017,17 +1045,18 @@
 
     setupServers();
     setupShareButtons();
+    setupNavigationLinks();
 
     const [
       movies,
       tv,
       anime,
-      pinoyRated
+      phMovies
     ] = await Promise.all([
       fetchTrending("movie"),
       fetchTrending("tv"),
       fetchTrendingAnime(),
-      fetchPinoyRatedMovies()
+      fetchPHMovies()
     ]);
 
     const animeIds = new Set(
@@ -1038,11 +1067,28 @@
       item => !animeIds.has(item.id)
     );
 
-    // Combine trending movies + Pinoy Rated PH movies
-    const combinedMovies = [
+    // Trending Movies stays separate.
+    const cleanTrendingMovies = [
       ...new Map(
-        [...movies, ...pinoyRated]
+        movies
           .filter(item => item?.poster_path)
+          .map(item => [item.id, item])
+      ).values()
+    ];
+
+    // PH Movies stays in its own category.
+    const cleanPHMovies = [
+      ...new Map(
+        phMovies
+          .filter(item => item?.poster_path)
+          .map(item => [item.id, item])
+      ).values()
+    ];
+
+    // Combine both categories only for recommendations.
+    const recommendedMovies = [
+      ...new Map(
+        [...cleanTrendingMovies, ...cleanPHMovies]
           .map(item => [item.id, item])
       ).values()
     ].sort((a, b) =>
@@ -1050,11 +1096,16 @@
       (Number(a.popularity) || 0)
     );
 
-    displayBanner(movies[0]);
+    displayBanner(cleanTrendingMovies[0]);
 
     displayList(
-      combinedMovies,
+      cleanTrendingMovies,
       "movies-list"
+    );
+
+    displayList(
+      cleanPHMovies,
+      "ph-movies-list"
     );
 
     displayList(
@@ -1068,11 +1119,10 @@
     );
 
     displayList(
-      combinedMovies.slice(0, 6),
+      recommendedMovies.slice(0, 10),
       "recommended-list"
     );
 
-    // Open the title when the visitor arrives through a shared URL
     await openSharedMovie();
   }
 
