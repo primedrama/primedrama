@@ -1540,3 +1540,93 @@ select:focus-visible {
     animation-duration: .01ms !important;
   }
 }
+/* =========================================
+   SHARE MOVIE — PREMIUM BUTTONS
+========================================= */
+
+.share-panel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.share-label {
+  color: #ff9a75;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 1.2px;
+}
+
+.share-buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.share-btn {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  color: #fff;
+  font-size: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: transform .2s ease, filter .2s ease, box-shadow .2s ease;
+}
+
+.share-btn:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.15);
+  box-shadow: 0 5px 16px rgba(0,0,0,.3);
+}
+
+.share-btn.facebook {
+  background: #1877f2;
+}
+
+.share-btn.messenger {
+  background: #087cff;
+}
+
+.share-btn.whatsapp {
+  background: #25d366;
+}
+
+.share-btn.x-twitter {
+  background: #111;
+}
+
+.share-btn.copy-link {
+  background: linear-gradient(135deg,#ff542e,#ed1020,#a90010);
+  border-color: rgba(255,100,75,.5);
+}
+
+#share-message {
+  flex-basis: 100%;
+  min-height: 15px;
+  color: #ff796d;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .share-panel {
+    gap: 9px;
+  }
+
+  .share-buttons {
+    gap: 7px;
+  }
+
+  .share-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+  }
+}
