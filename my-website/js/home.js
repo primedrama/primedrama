@@ -1,4 +1,3 @@
-
 (() => {
   "use strict";
 
@@ -47,6 +46,7 @@
 
   let currentSeason = 1;
   let currentEpisode = 1;
+  let loadedSeason = null;
   let seasonEpisodes = [];
   let episodeRequestNumber = 0;
 
@@ -149,7 +149,7 @@
   }
 
   // =========================================
-  // PHILIPPINE MOVIES — ALL RATINGS
+  // PHILIPPINE MOVIES
   // =========================================
 
   async function fetchPHMovies() {
@@ -396,7 +396,7 @@
   }
 
   // =========================================
-  // EPISODE CONTROLS UI
+  // EPISODE NAVIGATION UI
   // =========================================
 
   function setupEpisodeInterface() {
@@ -444,10 +444,25 @@
       ></div>
     `;
 
-    video.parentElement.insertAdjacentElement(
-      "afterend",
-      panel
+    /*
+      IMPORTANT:
+      Ilalagay ang episode navigation pagkatapos ng watch-panel.
+      Kaya ang order ay:
+      PLAYER → SERVER/SHARE → EPISODES → TITLE DETAILS
+    */
+
+    const watchPanel = document.querySelector(
+      "#modal .watch-panel"
     );
+
+    if (watchPanel) {
+      watchPanel.insertAdjacentElement("afterend", panel);
+    } else {
+      video.parentElement.insertAdjacentElement(
+        "afterend",
+        panel
+      );
+    }
 
     $("previous-episode")?.addEventListener(
       "click",
@@ -474,8 +489,11 @@
   // LOAD SEASON EPISODES
   // =========================================
 
-  async function loadSeasonEpisodes(seasonNumber, preferredEpisode = 1) {
-    if (!currentItem || currentItem.title) return;
+  async function loadSeasonEpisodes(
+    seasonNumber,
+    preferredEpisode = 1
+  ) {
+    if (!currentItem || currentItem.title) return false;
 
     const selectedSeason = Math.max(
       1,
@@ -483,8 +501,7 @@
     );
 
     const requestId = ++episodeRequestNumber;
-
-    currentSeason = selectedSeason;
+    const selectedItemId = currentItem.id;
 
     const list = $("episode-list");
     const count = $("episode-count");
@@ -498,21 +515,27 @@
     }
 
     const data = await fetchJSON(
-      apiURL(`/tv/${currentItem.id}/season/${selectedSeason}`)
+      apiURL(`/tv/${selectedItemId}/season/${selectedSeason}`)
     );
 
     if (
       requestId !== episodeRequestNumber ||
       !currentItem ||
+      currentItem.id !== selectedItemId ||
       currentItem.title
     ) {
-      return;
+      return false;
     }
 
-    seasonEpisodes = (data?.episodes || [])
-      .filter(episode => Number(episode.episode_number) > 0);
+    const episodes = (data?.episodes || [])
+      .filter(episode =>
+        Number(episode.episode_number) > 0
+      );
 
-    if (!seasonEpisodes.length) {
+    if (!episodes.length) {
+      seasonEpisodes = [];
+      loadedSeason = null;
+
       if (count) {
         count.textContent = "No episodes available.";
       }
@@ -522,16 +545,31 @@
       }
 
       updateEpisodeButtons();
-      return;
+
+      return false;
     }
 
+    seasonEpisodes = episodes;
+    loadedSeason = selectedSeason;
+    currentSeason = selectedSeason;
+
     const requested = seasonEpisodes.find(
-      episode => episode.episode_number === Number(preferredEpisode)
+      episode =>
+        Number(episode.episode_number) ===
+        Number(preferredEpisode)
     );
 
     currentEpisode = requested
-      ? requested.episode_number
-      : seasonEpisodes[0].episode_number;
+      ? Number(requested.episode_number)
+      : Number(seasonEpisodes[0].episode_number);
+
+    if ($("season")) {
+      $("season").value = currentSeason;
+    }
+
+    if ($("episode")) {
+      $("episode").value = currentEpisode;
+    }
 
     renderEpisodeList();
     updateEpisodeButtons();
@@ -541,13 +579,7 @@
         `${seasonEpisodes.length} episodes`;
     }
 
-    if ($("season")) {
-      $("season").value = currentSeason;
-    }
-
-    if ($("episode")) {
-      $("episode").value = currentEpisode;
-    }
+    return true;
   }
 
   // =========================================
@@ -567,29 +599,33 @@
       button.type = "button";
       button.className = "episode-item";
 
-      if (episode.episode_number === currentEpisode) {
+      const episodeNumber = Number(episode.episode_number);
+
+      if (episodeNumber === currentEpisode) {
         button.classList.add("active");
       }
 
       const episodeName =
-        episode.name || `Episode ${episode.episode_number}`;
+        episode.name || `Episode ${episodeNumber}`;
 
       button.textContent =
-        `EP ${episode.episode_number} · ${episodeName}`;
+        `EP ${episodeNumber} · ${episodeName}`;
 
       button.setAttribute(
         "aria-label",
-        `Play episode ${episode.episode_number}: ${episodeName}`
+        `Play episode ${episodeNumber}: ${episodeName}`
       );
 
       button.addEventListener("click", () => {
-        playEpisode(currentSeason, episode.episode_number);
+        playEpisode(currentSeason, episodeNumber);
       });
 
       list.appendChild(button);
     });
 
-    const active = list.querySelector(".episode-item.active");
+    const active = list.querySelector(
+      ".episode-item.active"
+    );
 
     active?.scrollIntoView({
       behavior: "smooth",
@@ -599,7 +635,7 @@
   }
 
   // =========================================
-  // EPISODE NAVIGATION
+  // EPISODE BUTTONS
   // =========================================
 
   function updateEpisodeButtons() {
@@ -609,7 +645,8 @@
     if (!previous || !next) return;
 
     const index = seasonEpisodes.findIndex(
-      episode => episode.episode_number === currentEpisode
+      episode =>
+        Number(episode.episode_number) === currentEpisode
     );
 
     previous.disabled =
@@ -618,6 +655,10 @@
     next.disabled =
       index < 0 || index >= seasonEpisodes.length - 1;
   }
+
+  // =========================================
+  // PLAY SELECTED EPISODE
+  // =========================================
 
   async function playEpisode(season, episode) {
     if (!currentItem || currentItem.title) return;
@@ -632,73 +673,105 @@
       parseInt(episode, 10) || 1
     );
 
-    currentSeason = selectedSeason;
-    currentEpisode = selectedEpisode;
+    /*
+      Reload episodes kapag ibang season ang pinili.
+      Hindi na ikukumpara ang season sa input matapos itong baguhin.
+    */
 
-    if ($("season")) {
-      $("season").value = selectedSeason;
+    if (loadedSeason !== selectedSeason) {
+      const loaded = await loadSeasonEpisodes(
+        selectedSeason,
+        selectedEpisode
+      );
+
+      if (!loaded) return;
+
+    } else {
+      const exists = seasonEpisodes.some(
+        item =>
+          Number(item.episode_number) === selectedEpisode
+      );
+
+      if (!exists) return;
+
+      currentSeason = selectedSeason;
+      currentEpisode = selectedEpisode;
+
+      if ($("season")) {
+        $("season").value = selectedSeason;
+      }
+
+      if ($("episode")) {
+        $("episode").value = selectedEpisode;
+      }
+
+      renderEpisodeList();
+      updateEpisodeButtons();
     }
-
-    if ($("episode")) {
-      $("episode").value = selectedEpisode;
-    }
-
-    const existingEpisode = seasonEpisodes.find(
-      item => item.episode_number === selectedEpisode
-    );
-
-    if (!existingEpisode || selectedSeason !== Number($("season")?.value)) {
-      await loadSeasonEpisodes(selectedSeason, selectedEpisode);
-    }
-
-    renderEpisodeList();
-    updateEpisodeButtons();
 
     changeServer(currentSeason, currentEpisode);
   }
+
+  // =========================================
+  // PREVIOUS EPISODE
+  // =========================================
 
   async function playPreviousEpisode() {
     if (!currentItem || currentItem.title) return;
 
     const index = seasonEpisodes.findIndex(
-      episode => episode.episode_number === currentEpisode
+      episode =>
+        Number(episode.episode_number) === currentEpisode
     );
 
     if (index > 0) {
       await playEpisode(
         currentSeason,
-        seasonEpisodes[index - 1].episode_number
+        Number(seasonEpisodes[index - 1].episode_number)
       );
 
       return;
     }
 
-    if (currentSeason > 1) {
-      await loadSeasonEpisodes(currentSeason - 1, 1);
+    if (currentSeason <= 1) return;
 
-      if (seasonEpisodes.length) {
-        const lastEpisode =
-          seasonEpisodes[seasonEpisodes.length - 1];
+    const previousSeason = currentSeason - 1;
 
-        await playEpisode(
-          currentSeason,
-          lastEpisode.episode_number
-        );
-      }
-    }
+    const loaded = await loadSeasonEpisodes(
+      previousSeason,
+      999999
+    );
+
+    if (!loaded || !seasonEpisodes.length) return;
+
+    const lastEpisode =
+      seasonEpisodes[seasonEpisodes.length - 1];
+
+    await playEpisode(
+      previousSeason,
+      Number(lastEpisode.episode_number)
+    );
   }
+
+  // =========================================
+  // NEXT EPISODE
+  // =========================================
 
   async function playNextEpisode() {
     if (!currentItem || currentItem.title) return;
 
     const index = seasonEpisodes.findIndex(
-      episode => episode.episode_number === currentEpisode
+      episode =>
+        Number(episode.episode_number) === currentEpisode
     );
 
-    if (index >= 0 && index < seasonEpisodes.length - 1) {
+    if (
+      index >= 0 &&
+      index < seasonEpisodes.length - 1
+    ) {
       await playEpisode(
         currentSeason,
-        seasonEpisodes[index + 1].episode_number
+        Number(seasonEpisodes[index + 1].episode_number)
       );
 
       return;
@@ -706,18 +779,18 @@
 
     const nextSeason = currentSeason + 1;
 
-    const details = await fetchJSON(
-      apiURL(`/tv/${currentItem.id}/season/${nextSeason}`)
+    const loaded = await loadSeasonEpisodes(
+      nextSeason,
+      1
     );
 
-    if (!details?.episodes?.length) return;
+    if (!loaded || !seasonEpisodes.length) return;
 
-    await loadSeasonEpisodes(nextSeason, 1);
     await playEpisode(nextSeason, 1);
   }
 
   // =========================================
-  // MOVIE DETAILS MODAL
+  // MOVIE / TV DETAILS MODAL
   // =========================================
 
   function showDetails(item) {
@@ -728,6 +801,7 @@
 
     currentSeason = 1;
     currentEpisode = 1;
+    loadedSeason = null;
     seasonEpisodes = [];
 
     episodeRequestNumber++;
@@ -758,7 +832,8 @@
     const shareMessage = $("share-message");
 
     if (title) {
-      title.textContent = item.title || item.name || "Untitled";
+      title.textContent =
+        item.title || item.name || "Untitled";
     }
 
     if (description) {
@@ -812,9 +887,17 @@
 
     setEpisodeInterfaceVisible(!isMovie);
 
-    if ($("season")) $("season").value = 1;
-    if ($("episode")) $("episode").value = 1;
-    if ($("server")) $("server").value = "0";
+    if ($("season")) {
+      $("season").value = 1;
+    }
+
+    if ($("episode")) {
+      $("episode").value = 1;
+    }
+
+    if ($("server")) {
+      $("server").value = "0";
+    }
 
     changeServer(1, 1);
 
@@ -826,7 +909,7 @@
   }
 
   // =========================================
-  // EXTRA MOVIE DETAILS
+  // EXTRA MOVIE / TV DETAILS
   // =========================================
 
   async function loadTitleExtras(item) {
@@ -869,19 +952,19 @@
           details.release_dates?.results || [];
 
         const phRelease = releaseResults.find(
-          item => item.iso_3166_1 === "PH"
+          result => result.iso_3166_1 === "PH"
         );
 
         const usRelease = releaseResults.find(
-          item => item.iso_3166_1 === "US"
+          result => result.iso_3166_1 === "US"
         );
 
         age =
           phRelease?.release_dates?.find(
-            item => item.certification
+            result => result.certification
           )?.certification ||
           usRelease?.release_dates?.find(
-            item => item.certification
+            result => result.certification
           )?.certification ||
           "";
 
@@ -891,10 +974,10 @@
 
         age =
           ratings.find(
-            item => item.iso_3166_1 === "PH"
+            result => result.iso_3166_1 === "PH"
           )?.rating ||
           ratings.find(
-            item => item.iso_3166_1 === "US"
+            result => result.iso_3166_1 === "US"
           )?.rating ||
           "";
       }
@@ -999,10 +1082,23 @@
     currentItem = null;
     playbackStarted = false;
 
+    currentSeason = 1;
+    currentEpisode = 1;
+    loadedSeason = null;
     seasonEpisodes = [];
-    episodeRequestNumber++;
 
+    episodeRequestNumber++;
     requestNumber++;
+
+    const episodeList = $("episode-list");
+
+    episodeList?.replaceChildren();
+
+    const episodeCount = $("episode-count");
+
+    if (episodeCount) {
+      episodeCount.textContent = "Episodes";
+    }
 
     if (lastFocusedElement?.focus) {
       lastFocusedElement.focus();
@@ -1186,6 +1282,7 @@
     const url = new URL(window.location.href);
 
     url.searchParams.set("movie", currentItem.id);
+
     url.searchParams.set(
       "type",
       currentItem.title ? "movie" : "tv"
@@ -1502,6 +1599,7 @@
     }
   });
 
+  // SERVER CHANGE
   $("server")?.addEventListener("change", () => {
     if (currentItem) {
       changeServer(
@@ -1511,7 +1609,8 @@
     }
   });
 
-  $("season")?.addEventListener("change", () => {
+  // SEASON CHANGE
+  $("season")?.addEventListener("change", async () => {
     if (!currentItem || currentItem.title) return;
 
     const season = Math.max(
@@ -1519,10 +1618,14 @@
       parseInt($("season").value, 10) || 1
     );
 
-    loadSeasonEpisodes(season, 1);
-    changeServer(season, 1);
+    const loaded = await loadSeasonEpisodes(season, 1);
+
+    if (loaded) {
+      changeServer(currentSeason, currentEpisode);
+    }
   });
 
+  // EPISODE CHANGE
   $("episode")?.addEventListener("change", () => {
     if (!currentItem || currentItem.title) return;
 
@@ -1532,6 +1635,7 @@
     );
   });
 
+  // LOAD EPISODE BUTTON
   $("play-episode")?.addEventListener("click", () => {
     if (!currentItem || currentItem.title) return;
 
@@ -1541,6 +1645,7 @@
     );
   });
 
+  // SEARCH
   $("search-input")?.addEventListener("input", event => {
     clearTimeout(searchTimer);
 
