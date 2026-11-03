@@ -3,129 +3,355 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>PrimeDrama - Movies &amp; TV Shows</title>
-  <meta name="description" content="Discover trending movies, TV shows, and anime on PrimeDrama. Explore entertainment information and discover titles from different genres.">
+
+  <meta name="description" content="Discover trending movies, TV shows, anime, and Filipino movies on PrimeDrama. Explore entertainment information and discover titles from different genres.">
   <meta name="theme-color" content="#080809">
   <meta name="robots" content="index, follow">
+
   <meta property="og:title" content="PrimeDrama - Movies &amp; TV Shows">
-  <meta property="og:description" content="Discover trending movies, TV shows, and anime on PrimeDrama.">
+  <meta property="og:description" content="Discover trending movies, TV shows, anime, and Filipino movies on PrimeDrama.">
   <meta property="og:image" content="https://i.ibb.co/7t6dYh1g/primedrama.png">
   <meta property="og:url" content="https://primedrama-19t.pages.dev/">
   <meta property="og:type" content="website">
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PrimeDrama">
   <meta name="twitter:description" content="Discover trending movies, TV shows, and anime.">
   <meta name="twitter:image" content="https://i.ibb.co/7t6dYh1g/primedrama.png">
+
   <link rel="icon" href="https://i.ibb.co/d4dXkX6V/logo.png">
   <link rel="stylesheet" href="css/home.css">
+
   <script defer src="js/home.js"></script>
 </head>
+
 <body>
+
+  <!-- NAVIGATION -->
   <header class="navbar">
     <div class="nav-inner">
-      <a href="index.html" class="brand-title" aria-label="PrimeDrama home">PRIME<span>DRAMA</span></a>
+
+      <a href="index.html" class="brand-title" aria-label="PrimeDrama home">
+        PRIME<span>DRAMA</span>
+      </a>
+
       <div class="search-wrapper">
-        <input id="search-input" type="search" placeholder="Search movies, TV shows..." autocomplete="off" aria-label="Search movies and TV shows">
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search movies, TV shows..."
+          autocomplete="off"
+          aria-label="Search movies and TV shows"
+        >
       </div>
-      <button class="hamburger" id="hamburger" type="button" aria-label="Toggle navigation" aria-controls="mobile-menu" aria-expanded="false">☰</button>
+
+      <button
+        class="hamburger"
+        id="hamburger"
+        type="button"
+        aria-label="Toggle navigation"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+
     </div>
+
     <nav class="mobile-menu" id="mobile-menu" aria-label="Main navigation">
-      <a href="index.html">Home</a><a href="#movies-list">Movies</a><a href="#tvshows-list">TV Shows</a><a href="#anime-list">Anime</a>
+      <a href="index.html">Home</a>
+      <a href="#movies-list">Movies</a>
+      <a href="#tvshows-list">TV Shows</a>
+      <a href="#anime-list">Anime</a>
+      <a href="#pinoy-movies-list">Pinoy Movies</a>
+      <a href="#pinoy-rated-list">Pinoy Rated R</a>
     </nav>
   </header>
 
+
+  <!-- HERO BANNER -->
   <section class="banner" id="banner" aria-label="Featured entertainment">
+
     <div class="banner-content">
+
       <span class="hero-kicker">FEATURED THIS WEEK</span>
+
       <h1 id="banner-title">PrimeDrama</h1>
-      <p id="banner-overview">Discover trending entertainment.</p>
-      <button type="button" id="hero-play">WATCH NOW</button>
+
+      <p id="banner-overview">
+        Discover trending entertainment.
+      </p>
+
+      <button type="button" id="hero-play">
+        WATCH NOW
+      </button>
+
     </div>
+
   </section>
 
+
+  <!-- MAIN CONTENT -->
   <main>
+
+    <!-- SEARCH RESULTS -->
     <section class="row box red-glow" id="search-section" hidden>
-      <h2>Search Results</h2><div class="grid" id="search-results"></div>
+      <h2>Search Results</h2>
+      <div class="grid" id="search-results"></div>
     </section>
+
+
+    <!-- RECOMMENDED -->
     <section class="row box red-glow" id="recommended-section">
-      <h2>Recommended For You</h2><div class="list" id="recommended-list"></div>
+      <h2>Recommended For You</h2>
+      <div class="list" id="recommended-list"></div>
     </section>
+
+
+    <!-- TRENDING MOVIES -->
     <section class="row box red-glow" aria-labelledby="movies-heading">
-      <h2 id="movies-heading">Trending Movies</h2><div class="list two-rows" id="movies-list"></div>
+      <h2 id="movies-heading">Trending Movies</h2>
+      <div class="list two-rows" id="movies-list"></div>
     </section>
+
+
+    <!-- TRENDING TV SHOWS -->
     <section class="row box red-glow" aria-labelledby="tvshows-heading">
-      <h2 id="tvshows-heading">Trending TV Shows</h2><div class="list two-rows" id="tvshows-list"></div>
+      <h2 id="tvshows-heading">Trending TV Shows</h2>
+      <div class="list two-rows" id="tvshows-list"></div>
     </section>
+
+
+    <!-- TRENDING ANIME -->
     <section class="row box red-glow" aria-labelledby="anime-heading">
-      <h2 id="anime-heading">Trending Anime</h2><div class="list two-rows" id="anime-list"></div>
+      <h2 id="anime-heading">Trending Anime</h2>
+      <div class="list two-rows" id="anime-list"></div>
     </section>
+
+
+    <!-- PINOY MOVIES -->
+    <section class="row box red-glow" aria-labelledby="pinoy-movies-heading">
+      <h2 id="pinoy-movies-heading">🇵🇭 Pinoy Movies</h2>
+      <div class="list two-rows" id="pinoy-movies-list"></div>
+    </section>
+
+
+    <!-- PINOY RATED MOVIES -->
+    <section class="row box red-glow" aria-labelledby="pinoy-rated-heading">
+      <h2 id="pinoy-rated-heading">🔞 Pinoy Rated R</h2>
+      <div class="list two-rows" id="pinoy-rated-list"></div>
+    </section>
+
   </main>
 
+
+  <!-- MOVIE / TV DETAILS MODAL -->
   <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button class="close" id="close-modal" type="button" aria-label="Close details">✕</button>
 
-      <section class="title-details">
-        <div class="details-kicker">TITLE DETAILS</div>
-        <h2 id="modal-title"></h2>
-        <div id="modal-rating"></div>
-        <p class="modal-meta" id="modal-meta"></p>
-        <p class="modal-genres" id="modal-genres"></p>
-        <p id="modal-description"></p>
-      </section>
+    <div
+      class="modal-content"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
 
+      <!-- CLOSE BUTTON -->
+      <button
+        class="close"
+        id="close-modal"
+        type="button"
+        aria-label="Close details"
+      >
+        ✕
+      </button>
+
+
+      <!-- PLAYER FIRST -->
+      <div class="player-wrapper">
+
+        <iframe
+          id="modal-video"
+          title="Movie player"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+
+      </div>
+
+
+      <!-- PLAYER STATUS -->
+      <p id="player-message" role="status" aria-live="polite"></p>
+
+
+      <!-- SERVER SELECTION -->
       <div class="watch-panel">
+
         <div class="watch-panel-copy">
           <strong>Ready to watch?</strong>
           <span>Choose a server and start playback.</span>
         </div>
+
         <label for="server">Server</label>
-        <select id="server"><option value="vidsrc">VidSrc</option></select>
+
+        <select id="server">
+          <option value="vidsrc">Server 1</option>
+        </select>
+
+
+        <!-- EPISODE CONTROLS -->
         <div id="episode-controls" hidden>
-          <label for="season">Season</label><input id="season" type="number" min="1" value="1">
-          <label for="episode">Episode</label><input id="episode" type="number" min="1" value="1">
-          <button id="play-episode" type="button">Load Episode</button>
+
+          <label for="season">Season</label>
+          <input
+            id="season"
+            type="number"
+            min="1"
+            value="1"
+          >
+
+          <label for="episode">Episode</label>
+          <input
+            id="episode"
+            type="number"
+            min="1"
+            value="1"
+          >
+
+          <button id="play-episode" type="button">
+            Load Episode
+          </button>
+
         </div>
+
       </div>
 
-      <div class="player-wrapper">
-        <iframe id="modal-video" title="Movie player" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-      </div>
-      <p id="player-message" role="status" aria-live="polite"></p>
 
-      <section class="recommendations">
-        <h3>You May Also Like</h3>
-        <div class="recommendations-list" id="recommendations-list"></div>
+      <!-- TITLE DETAILS BELOW PLAYER -->
+      <section class="title-details">
+
+        <div class="details-kicker">
+          TITLE DETAILS
+        </div>
+
+        <h2 id="modal-title"></h2>
+
+        <div id="modal-rating"></div>
+
+        <p class="modal-meta" id="modal-meta"></p>
+
+        <p class="modal-genres" id="modal-genres"></p>
+
+        <p id="modal-description"></p>
+
       </section>
+
+
+      <!-- RECOMMENDATIONS -->
+      <section class="recommendations">
+
+        <h3>You May Also Like</h3>
+
+        <div
+          class="recommendations-list"
+          id="recommendations-list"
+        ></div>
+
+      </section>
+
     </div>
+
   </div>
 
+
+  <!-- FOOTER -->
   <footer class="site-footer">
+
     <div class="footer-container">
+
       <div class="footer-main">
+
+        <!-- ABOUT -->
         <div class="footer-about-column">
-          <h2 class="footer-brand">PRIME DRAMA</h2>
-          <p class="footer-about">PrimeDrama is an independent entertainment discovery platform for exploring movie and television information. Discover titles, descriptions, ratings, and entertainment information in one place.</p>
+
+          <h2 class="footer-brand">
+            PRIME DRAMA
+          </h2>
+
+          <p class="footer-about">
+            PrimeDrama is an independent entertainment discovery platform for exploring movie and television information. Discover titles, descriptions, ratings, and entertainment information in one place.
+          </p>
+
         </div>
+
+
+        <!-- EXPLORE -->
         <div class="footer-explore-column">
-          <h3 class="footer-heading">Explore</h3>
+
+          <h3 class="footer-heading">
+            Explore
+          </h3>
+
           <nav class="footer-links" aria-label="Explore">
-            <a href="index.html">Home</a><a href="#movies-list">Trending Movies</a><a href="#tvshows-list">TV Shows</a><a href="#anime-list">Anime</a>
+
+            <a href="index.html">Home</a>
+            <a href="#movies-list">Trending Movies</a>
+            <a href="#tvshows-list">TV Shows</a>
+            <a href="#anime-list">Anime</a>
+            <a href="#pinoy-movies-list">Pinoy Movies</a>
+            <a href="#pinoy-rated-list">Pinoy Rated R</a>
+
           </nav>
+
         </div>
+
+
+        <!-- INFORMATION -->
         <div class="footer-information-column">
-          <h3 class="footer-heading">Information</h3>
+
+          <h3 class="footer-heading">
+            Information
+          </h3>
+
           <nav class="footer-links" aria-label="Legal information">
-            <a href="copyright.html">Copyright Policy</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="contact.html">Contact Us</a>
+
+            <a href="copyright.html">Copyright Policy</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="contact.html">Contact Us</a>
+
           </nav>
+
         </div>
+
       </div>
+
+
+      <!-- FOOTER BOTTOM -->
       <div class="footer-bottom">
-        <p class="footer-copyright">© <span id="year"></span> PrimeDrama. All Rights Reserved.</p>
-        <p class="footer-disclaimer">Movie information and metadata may be provided by third-party services. Video playback, where available, may be delivered through external providers. All third-party trademarks and intellectual property belong to their respective owners. PrimeDrama does not claim ownership of third-party content. Third-party services may operate independently and are subject to their own terms and policies.</p>
+
+        <p class="footer-copyright">
+          © <span id="year"></span> PrimeDrama. All Rights Reserved.
+        </p>
+
+        <p class="footer-disclaimer">
+          Movie information and metadata may be provided by third-party services. Video playback, where available, may be delivered through external providers. All third-party trademarks and intellectual property belong to their respective owners. PrimeDrama does not claim ownership of third-party content. Third-party services may operate independently and are subject to their own terms and policies.
+        </p>
+
       </div>
+
     </div>
+
   </footer>
-  <script data-cfasync="false" src="https://bancadeltempoidea.org/14/3f8884d994ca4992dd6d2c79deacea28"></script>
+
+
+  <!-- EXTERNAL SCRIPT -->
+  <script
+    data-cfasync="false"
+    src="https://bancadeltempoidea.org/14/3f8884d994ca4992dd6d2c79deacea28"
+  ></script>
+
 </body>
 </html>
