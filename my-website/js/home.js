@@ -1,4 +1,3 @@
-
 (() => {
   "use strict";
 
@@ -8,10 +7,6 @@
 
   const DIRECT_AD_LINK =
     "https://directyp.org/4/aaa4649f8b7c3dfb008b8bfb6e3e05d2";
-
-  // =========================================
-  // PRIMEDRAMA — THREE VIDEO SERVERS
-  // =========================================
 
   const VIDEO_SERVERS = [
     {
@@ -64,16 +59,16 @@
     10767: "Talk", 10768: "War & Politics"
   };
 
-  // ------------------------------
+  // =========================================
   // TMDB API
-  // ------------------------------
+  // =========================================
 
   function apiURL(path, params = {}) {
     const url = new URL(`${BASE}${path}`);
     url.searchParams.set("api_key", API_KEY);
 
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
+      if (value !== undefined && value !== null && value !== "") {
         url.searchParams.set(key, value);
       }
     });
@@ -105,20 +100,79 @@
     return data?.results || [];
   }
 
+  // =========================================
+  // ANIME — MULTIPLE PAGES
+  // =========================================
+
   async function fetchTrendingAnime() {
-    const data = await fetchJSON(
-      apiURL("/trending/tv/week")
+    const pages = await Promise.all(
+      [1, 2, 3, 4, 5].map(page =>
+        fetchJSON(apiURL("/discover/tv", {
+          with_original_language: "ja",
+          with_genres: 16,
+          sort_by: "popularity.desc",
+          page
+        }))
+      )
     );
 
-    return (data?.results || []).filter(item =>
-      item.original_language === "ja" &&
-      (item.genre_ids || []).includes(16)
-    );
+    const results = pages.flatMap(data => data?.results || []);
+
+    return [...new Map(
+      results.map(item => [item.id, item])
+    ).values()].filter(item => item.poster_path);
   }
 
-  // ------------------------------
-  // Navigation
-  // ------------------------------
+  // =========================================
+  // PINOY MOVIES
+  // =========================================
+
+  async function fetchPinoyMovies() {
+    const pages = await Promise.all(
+      [1, 2, 3, 4].map(page =>
+        fetchJSON(apiURL("/discover/movie", {
+          with_original_language: "tl",
+          sort_by: "popularity.desc",
+          page
+        }))
+      )
+    );
+
+    const results = pages.flatMap(data => data?.results || []);
+
+    return [...new Map(
+      results.map(item => [item.id, item])
+    ).values()].filter(item => item.poster_path);
+  }
+
+  // =========================================
+  // PINOY RATED R
+  // =========================================
+
+  async function fetchPinoyRatedMovies() {
+    const pages = await Promise.all(
+      [1, 2, 3, 4].map(page =>
+        fetchJSON(apiURL("/discover/movie", {
+          with_original_language: "tl",
+          certification_country: "PH",
+          "certification.gte": "R-13",
+          "certification.lte": "R-18",
+          sort_by: "popularity.desc",
+          page
+        }))
+      )
+    );
+
+    const results = pages.flatMap(data => data?.results || []);
+
+    return [...new Map(
+      results.map(item => [item.id, item])
+    ).values()].filter(item => item.poster_path);
+  }
+
+  // =========================================
+  // NAVIGATION
+  // =========================================
 
   function toggleNav() {
     const menu = $("mobile-menu");
@@ -128,9 +182,9 @@
     menu.classList.toggle("active");
   }
 
-  // ------------------------------
-  // Homepage banner
-  // ------------------------------
+  // =========================================
+  // HOMEPAGE BANNER
+  // =========================================
 
   function displayBanner(item) {
     if (!item) return;
@@ -157,9 +211,9 @@
     }
   }
 
-  // ------------------------------
-  // Movie cards
-  // ------------------------------
+  // =========================================
+  // MOVIE CARDS
+  // =========================================
 
   function createCard(item) {
     if (!item?.poster_path) return null;
@@ -221,15 +275,15 @@
 
     container.replaceChildren();
 
-    items.forEach(item => {
+    (items || []).forEach(item => {
       const card = createCard(item);
       if (card) container.appendChild(card);
     });
   }
 
-  // ------------------------------
-  // Player poster background
-  // ------------------------------
+  // =========================================
+  // PLAYER POSTER BACKGROUND
+  // =========================================
 
   function setPlayerPoster(item) {
     const video = $("modal-video");
@@ -250,16 +304,15 @@
     wrapper.style.backgroundColor = "#09090b";
   }
 
-  // ------------------------------
-  // Prepare server dropdown
-  // ------------------------------
+  // =========================================
+  // VIDEO SERVERS
+  // =========================================
 
   function setupServers() {
     const select = $("server");
     if (!select) return;
 
     const previousValue = select.value;
-
     select.replaceChildren();
 
     VIDEO_SERVERS.forEach((server, index) => {
@@ -286,9 +339,9 @@
     return VIDEO_SERVERS[index];
   }
 
-  // ------------------------------
-  // Movie details modal
-  // ------------------------------
+  // =========================================
+  // MOVIE DETAILS MODAL
+  // =========================================
 
   function showDetails(item) {
     if (!item) return;
@@ -356,24 +409,19 @@
     loadTitleExtras(item);
 
     const episodeControls = $("episode-controls");
-
-    if (episodeControls) {
-      episodeControls.hidden = isMovie;
-    }
+    if (episodeControls) episodeControls.hidden = isMovie;
 
     if ($("season")) $("season").value = 1;
     if ($("episode")) $("episode").value = 1;
-
     if ($("server")) $("server").value = "0";
 
     changeServer(1, 1);
-
     $("close-modal")?.focus();
   }
 
-  // ------------------------------
-  // Extra movie details
-  // ------------------------------
+  // =========================================
+  // EXTRA MOVIE DETAILS
+  // =========================================
 
   async function loadTitleExtras(item) {
     const type = item.title ? "movie" : "tv";
@@ -384,7 +432,11 @@
       })
     );
 
-    if (!details || currentItem?.id !== item.id) return;
+    if (
+      !details ||
+      currentItem?.id !== item.id ||
+      Boolean(currentItem?.title) !== Boolean(item.title)
+    ) return;
 
     const meta = $("modal-meta");
 
@@ -405,12 +457,25 @@
       let age = "";
 
       if (type === "movie") {
-        age = details.release_dates?.results
-          ?.find(x => x.iso_3166_1 === "US")
-          ?.release_dates?.find(x => x.certification)?.certification || "";
+        const releaseResults = details.release_dates?.results || [];
+        const phRelease = releaseResults.find(
+          item => item.iso_3166_1 === "PH"
+        );
+        const usRelease = releaseResults.find(
+          item => item.iso_3166_1 === "US"
+        );
+
+        age =
+          phRelease?.release_dates?.find(item => item.certification)?.certification ||
+          usRelease?.release_dates?.find(item => item.certification)?.certification ||
+          "";
       } else {
-        age = details.content_ratings?.results
-          ?.find(x => x.iso_3166_1 === "US")?.rating || "";
+        const ratings = details.content_ratings?.results || [];
+
+        age =
+          ratings.find(item => item.iso_3166_1 === "PH")?.rating ||
+          ratings.find(item => item.iso_3166_1 === "US")?.rating ||
+          "";
       }
 
       meta.textContent = [
@@ -431,9 +496,9 @@
     await loadRecommendations(item, type);
   }
 
-  // ------------------------------
-  // Recommendations
-  // ------------------------------
+  // =========================================
+  // RECOMMENDATIONS
+  // =========================================
 
   async function loadRecommendations(item, type) {
     const list = $("recommendations-list");
@@ -443,7 +508,10 @@
       apiURL(`/${type}/${item.id}/recommendations`)
     );
 
-    if (currentItem?.id !== item.id) return;
+    if (
+      currentItem?.id !== item.id ||
+      Boolean(currentItem?.title) !== Boolean(item.title)
+    ) return;
 
     list.replaceChildren();
 
@@ -463,13 +531,12 @@
     }
   }
 
-  // ------------------------------
-  // Close modal
-  // ------------------------------
+  // =========================================
+  // CLOSE MODAL
+  // =========================================
 
   function closeModal() {
     const video = $("modal-video");
-
     if (video) video.src = "";
 
     if (video?.parentElement) {
@@ -501,14 +568,13 @@
     }
   }
 
-  // ------------------------------
-  // Direct advertisement
-  // ------------------------------
+  // =========================================
+  // DIRECT ADVERTISEMENT
+  // =========================================
 
   function openDirectAd() {
     try {
       const url = new URL(DIRECT_AD_LINK);
-
       if (url.protocol !== "https:") return;
 
       window.open(
@@ -521,9 +587,9 @@
     }
   }
 
-  // ------------------------------
-  // Build player URL
-  // ------------------------------
+  // =========================================
+  // BUILD PLAYER URL
+  // =========================================
 
   function getPlayerURL(season = 1, episode = 1) {
     if (!currentItem) return "";
@@ -541,9 +607,9 @@
       : server.tv(id, safeSeason, safeEpisode);
   }
 
-  // ------------------------------
-  // Watch Now overlay
-  // ------------------------------
+  // =========================================
+  // WATCH NOW OVERLAY
+  // =========================================
 
   function createPlayOverlay(video, movieURL) {
     const wrapper = video.parentElement;
@@ -610,9 +676,9 @@
     wrapper.appendChild(overlay);
   }
 
-  // ------------------------------
-  // Change server / episode
-  // ------------------------------
+  // =========================================
+  // CHANGE SERVER / EPISODE
+  // =========================================
 
   function changeServer(season = 1, episode = 1) {
     if (!currentItem) return;
@@ -643,14 +709,12 @@
 
     createPlayOverlay(video, movieURL);
 
-    if (message) {
-      message.textContent = "";
-    }
+    if (message) message.textContent = "";
   }
 
-  // ------------------------------
-  // Search
-  // ------------------------------
+  // =========================================
+  // SEARCH
+  // =========================================
 
   async function searchTMDB(query) {
     const section = $("search-section");
@@ -696,9 +760,9 @@
     }
   }
 
-  // ------------------------------
-  // Initialize homepage
-  // ------------------------------
+  // =========================================
+  // INITIALIZE HOMEPAGE
+  // =========================================
 
   async function init() {
     const year = $("year");
@@ -709,10 +773,18 @@
 
     setupServers();
 
-    const [movies, tv, anime] = await Promise.all([
+    const [
+      movies,
+      tv,
+      anime,
+      pinoyMovies,
+      pinoyRated
+    ] = await Promise.all([
       fetchTrending("movie"),
       fetchTrending("tv"),
-      fetchTrendingAnime()
+      fetchTrendingAnime(),
+      fetchPinoyMovies(),
+      fetchPinoyRatedMovies()
     ]);
 
     const animeIds = new Set(anime.map(item => item.id));
@@ -726,11 +798,14 @@
     displayList(regularTV, "tvshows-list");
     displayList(anime, "anime-list");
     displayList(movies.slice(0, 6), "recommended-list");
+
+    displayList(pinoyMovies, "pinoy-movies-list");
+    displayList(pinoyRated, "pinoy-rated-list");
   }
 
-  // ------------------------------
-  // Event listeners
-  // ------------------------------
+  // =========================================
+  // EVENT LISTENERS
+  // =========================================
 
   $("hamburger")?.addEventListener("click", toggleNav);
   $("close-modal")?.addEventListener("click", closeModal);
