@@ -1,13 +1,38 @@
+
 (() => {
   "use strict";
 
   const BASE = "https://api.themoviedb.org/3";
   const IMG = "https://image.tmdb.org/t/p/original";
   const POSTER = "https://image.tmdb.org/t/p/w500";
-  const PLAYER_BASE = "https://vidsrc.sh/embed";
 
   const DIRECT_AD_LINK =
     "https://directyp.org/4/aaa4649f8b7c3dfb008b8bfb6e3e05d2";
+
+  // =========================================
+  // PRIMEDRAMA — THREE VIDEO SERVERS
+  // =========================================
+
+  const VIDEO_SERVERS = [
+    {
+      name: "Server 1",
+      movie: id => `https://vidsrc.sh/embed/movie/${id}`,
+      tv: (id, season, episode) =>
+        `https://vidsrc.sh/embed/tv/${id}/${season}/${episode}`
+    },
+    {
+      name: "Server 2",
+      movie: id => `https://embed.vidrift.net/embed/movie/${id}`,
+      tv: (id, season, episode) =>
+        `https://embed.vidrift.net/embed/tv/${id}/${season}/${episode}`
+    },
+    {
+      name: "Server 3",
+      movie: id => `https://embedwave.cc/embed/movie/${id}`,
+      tv: (id, season, episode) =>
+        `https://embedwave.cc/embed/tv/${id}/${season}/${episode}`
+    }
+  ];
 
   const keyParts = [
     "e343", "16a6", "fe45", "6fe2",
@@ -22,6 +47,7 @@
   let searchTimer = null;
   let requestNumber = 0;
   let lastFocusedElement = null;
+  let playbackStarted = false;
 
   const $ = id => document.getElementById(id);
 
@@ -225,6 +251,42 @@
   }
 
   // ------------------------------
+  // Prepare server dropdown
+  // ------------------------------
+
+  function setupServers() {
+    const select = $("server");
+    if (!select) return;
+
+    const previousValue = select.value;
+
+    select.replaceChildren();
+
+    VIDEO_SERVERS.forEach((server, index) => {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = server.name;
+      select.appendChild(option);
+    });
+
+    select.value =
+      previousValue === "1" || previousValue === "2"
+        ? previousValue
+        : "0";
+  }
+
+  function getSelectedServer() {
+    const select = $("server");
+    const index = Number.parseInt(select?.value ?? "0", 10);
+
+    if (!Number.isInteger(index) || !VIDEO_SERVERS[index]) {
+      return VIDEO_SERVERS[0];
+    }
+
+    return VIDEO_SERVERS[index];
+  }
+
+  // ------------------------------
   // Movie details modal
   // ------------------------------
 
@@ -232,6 +294,7 @@
     if (!item) return;
 
     currentItem = item;
+    playbackStarted = false;
     lastFocusedElement = document.activeElement;
 
     const modal = $("modal");
@@ -300,7 +363,8 @@
 
     if ($("season")) $("season").value = 1;
     if ($("episode")) $("episode").value = 1;
-    if ($("server")) $("server").value = "vidsrc";
+
+    if ($("server")) $("server").value = "0";
 
     changeServer(1, 1);
 
@@ -429,6 +493,7 @@
     document.documentElement.style.overflow = "";
 
     currentItem = null;
+    playbackStarted = false;
     requestNumber++;
 
     if (lastFocusedElement?.focus) {
@@ -454,6 +519,26 @@
     } catch (error) {
       console.error("Invalid ads URL:", error);
     }
+  }
+
+  // ------------------------------
+  // Build player URL
+  // ------------------------------
+
+  function getPlayerURL(season = 1, episode = 1) {
+    if (!currentItem) return "";
+
+    const id = currentItem.id;
+    const isMovie = Boolean(currentItem.title);
+
+    const safeSeason = Math.max(1, parseInt(season, 10) || 1);
+    const safeEpisode = Math.max(1, parseInt(episode, 10) || 1);
+
+    const server = getSelectedServer();
+
+    return isMovie
+      ? server.movie(id)
+      : server.tv(id, safeSeason, safeEpisode);
   }
 
   // ------------------------------
@@ -513,6 +598,7 @@
     button.addEventListener("click", () => {
       openDirectAd();
 
+      playbackStarted = true;
       video.src = movieURL;
       overlay.remove();
 
@@ -532,28 +618,34 @@
     if (!currentItem) return;
 
     const video = $("modal-video");
-    const id = currentItem.id;
-    const isMovie = Boolean(currentItem.title);
+    if (!video) return;
 
-    if (!id || !video) return;
-
-    const safeSeason = Math.max(1, parseInt(season, 10) || 1);
-    const safeEpisode = Math.max(1, parseInt(episode, 10) || 1);
-
-    const server = $("server")?.value || "vidsrc";
-    const playerBase = server === "vidsrc"
-      ? PLAYER_BASE
-      : PLAYER_BASE;
-
-    const movieURL = isMovie
-      ? `${playerBase}/movie/${id}`
-      : `${playerBase}/tv/${id}/${safeSeason}/${safeEpisode}`;
+    const movieURL = getPlayerURL(season, episode);
+    if (!movieURL) return;
 
     setPlayerPoster(currentItem);
-    createPlayOverlay(video, movieURL);
 
     const message = $("player-message");
-    if (message) message.textContent = "";
+
+    if (playbackStarted) {
+      video.src = movieURL;
+
+      video.parentElement
+        ?.querySelector(".prime-play-overlay")
+        ?.remove();
+
+      if (message) {
+        message.textContent = "Switching server...";
+      }
+
+      return;
+    }
+
+    createPlayOverlay(video, movieURL);
+
+    if (message) {
+      message.textContent = "";
+    }
   }
 
   // ------------------------------
@@ -614,6 +706,8 @@
     if (year) {
       year.textContent = new Date().getFullYear();
     }
+
+    setupServers();
 
     const [movies, tv, anime] = await Promise.all([
       fetchTrending("movie"),
