@@ -1,3 +1,4 @@
+
 (() => {
   "use strict";
 
@@ -43,6 +44,11 @@
   let requestNumber = 0;
   let lastFocusedElement = null;
   let playbackStarted = false;
+
+  let currentSeason = 1;
+  let currentEpisode = 1;
+  let seasonEpisodes = [];
+  let episodeRequestNumber = 0;
 
   const $ = id => document.getElementById(id);
 
@@ -390,6 +396,327 @@
   }
 
   // =========================================
+  // EPISODE CONTROLS UI
+  // =========================================
+
+  function setupEpisodeInterface() {
+    const video = $("modal-video");
+
+    if (!video?.parentElement) return;
+
+    let panel = $("episode-navigation");
+
+    if (panel) return;
+
+    panel = document.createElement("section");
+    panel.id = "episode-navigation";
+    panel.className = "episode-navigation";
+    panel.hidden = true;
+
+    panel.innerHTML = `
+      <div class="episode-navigation-header">
+        <h3>Episodes</h3>
+        <span id="episode-count">Loading episodes...</span>
+      </div>
+
+      <div class="episode-navigation-buttons">
+        <button
+          type="button"
+          id="previous-episode"
+          class="episode-prev"
+        >
+          ‹ Previous
+        </button>
+
+        <button
+          type="button"
+          id="next-episode"
+          class="episode-next"
+        >
+          Next ›
+        </button>
+      </div>
+
+      <div
+        id="episode-list"
+        class="episode-list"
+        aria-label="Episode selection"
+      ></div>
+    `;
+
+    video.parentElement.insertAdjacentElement(
+      "afterend",
+      panel
+    );
+
+    $("previous-episode")?.addEventListener(
+      "click",
+      playPreviousEpisode
+    );
+
+    $("next-episode")?.addEventListener(
+      "click",
+      playNextEpisode
+    );
+  }
+
+  function setEpisodeInterfaceVisible(visible) {
+    setupEpisodeInterface();
+
+    const panel = $("episode-navigation");
+
+    if (panel) {
+      panel.hidden = !visible;
+    }
+  }
+
+  // =========================================
+  // LOAD SEASON EPISODES
+  // =========================================
+
+  async function loadSeasonEpisodes(seasonNumber, preferredEpisode = 1) {
+    if (!currentItem || currentItem.title) return;
+
+    const selectedSeason = Math.max(
+      1,
+      parseInt(seasonNumber, 10) || 1
+    );
+
+    const requestId = ++episodeRequestNumber;
+
+    currentSeason = selectedSeason;
+
+    const list = $("episode-list");
+    const count = $("episode-count");
+
+    if (list) {
+      list.replaceChildren();
+    }
+
+    if (count) {
+      count.textContent = "Loading episodes...";
+    }
+
+    const data = await fetchJSON(
+      apiURL(`/tv/${currentItem.id}/season/${selectedSeason}`)
+    );
+
+    if (
+      requestId !== episodeRequestNumber ||
+      !currentItem ||
+      currentItem.title
+    ) {
+      return;
+    }
+
+    seasonEpisodes = (data?.episodes || [])
+      .filter(episode => Number(episode.episode_number) > 0);
+
+    if (!seasonEpisodes.length) {
+      if (count) {
+        count.textContent = "No episodes available.";
+      }
+
+      if (list) {
+        list.replaceChildren();
+      }
+
+      updateEpisodeButtons();
+      return;
+    }
+
+    const requested = seasonEpisodes.find(
+      episode => episode.episode_number === Number(preferredEpisode)
+    );
+
+    currentEpisode = requested
+      ? requested.episode_number
+      : seasonEpisodes[0].episode_number;
+
+    renderEpisodeList();
+    updateEpisodeButtons();
+
+    if (count) {
+      count.textContent =
+        `${seasonEpisodes.length} episodes`;
+    }
+
+    if ($("season")) {
+      $("season").value = currentSeason;
+    }
+
+    if ($("episode")) {
+      $("episode").value = currentEpisode;
+    }
+  }
+
+  // =========================================
+  // RENDER EPISODE LIST
+  // =========================================
+
+  function renderEpisodeList() {
+    const list = $("episode-list");
+
+    if (!list) return;
+
+    list.replaceChildren();
+
+    seasonEpisodes.forEach(episode => {
+      const button = document.createElement("button");
+
+      button.type = "button";
+      button.className = "episode-item";
+
+      if (episode.episode_number === currentEpisode) {
+        button.classList.add("active");
+      }
+
+      const episodeName =
+        episode.name || `Episode ${episode.episode_number}`;
+
+      button.textContent =
+        `EP ${episode.episode_number} · ${episodeName}`;
+
+      button.setAttribute(
+        "aria-label",
+        `Play episode ${episode.episode_number}: ${episodeName}`
+      );
+
+      button.addEventListener("click", () => {
+        playEpisode(currentSeason, episode.episode_number);
+      });
+
+      list.appendChild(button);
+    });
+
+    const active = list.querySelector(".episode-item.active");
+
+    active?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center"
+    });
+  }
+
+  // =========================================
+  // EPISODE NAVIGATION
+  // =========================================
+
+  function updateEpisodeButtons() {
+    const previous = $("previous-episode");
+    const next = $("next-episode");
+
+    if (!previous || !next) return;
+
+    const index = seasonEpisodes.findIndex(
+      episode => episode.episode_number === currentEpisode
+    );
+
+    previous.disabled =
+      index <= 0 && currentSeason <= 1;
+
+    next.disabled =
+      index < 0 || index >= seasonEpisodes.length - 1;
+  }
+
+  async function playEpisode(season, episode) {
+    if (!currentItem || currentItem.title) return;
+
+    const selectedSeason = Math.max(
+      1,
+      parseInt(season, 10) || 1
+    );
+
+    const selectedEpisode = Math.max(
+      1,
+      parseInt(episode, 10) || 1
+    );
+
+    currentSeason = selectedSeason;
+    currentEpisode = selectedEpisode;
+
+    if ($("season")) {
+      $("season").value = selectedSeason;
+    }
+
+    if ($("episode")) {
+      $("episode").value = selectedEpisode;
+    }
+
+    const existingEpisode = seasonEpisodes.find(
+      item => item.episode_number === selectedEpisode
+    );
+
+    if (!existingEpisode || selectedSeason !== Number($("season")?.value)) {
+      await loadSeasonEpisodes(selectedSeason, selectedEpisode);
+    }
+
+    renderEpisodeList();
+    updateEpisodeButtons();
+
+    changeServer(currentSeason, currentEpisode);
+  }
+
+  async function playPreviousEpisode() {
+    if (!currentItem || currentItem.title) return;
+
+    const index = seasonEpisodes.findIndex(
+      episode => episode.episode_number === currentEpisode
+    );
+
+    if (index > 0) {
+      await playEpisode(
+        currentSeason,
+        seasonEpisodes[index - 1].episode_number
+      );
+
+      return;
+    }
+
+    if (currentSeason > 1) {
+      await loadSeasonEpisodes(currentSeason - 1, 1);
+
+      if (seasonEpisodes.length) {
+        const lastEpisode =
+          seasonEpisodes[seasonEpisodes.length - 1];
+
+        await playEpisode(
+          currentSeason,
+          lastEpisode.episode_number
+        );
+      }
+    }
+  }
+
+  async function playNextEpisode() {
+    if (!currentItem || currentItem.title) return;
+
+    const index = seasonEpisodes.findIndex(
+      episode => episode.episode_number === currentEpisode
+    );
+
+    if (index >= 0 && index < seasonEpisodes.length - 1) {
+      await playEpisode(
+        currentSeason,
+        seasonEpisodes[index + 1].episode_number
+      );
+
+      return;
+    }
+
+    const nextSeason = currentSeason + 1;
+
+    const details = await fetchJSON(
+      apiURL(`/tv/${currentItem.id}/season/${nextSeason}`)
+    );
+
+    if (!details?.episodes?.length) return;
+
+    await loadSeasonEpisodes(nextSeason, 1);
+    await playEpisode(nextSeason, 1);
+  }
+
+  // =========================================
   // MOVIE DETAILS MODAL
   // =========================================
 
@@ -398,6 +725,13 @@
 
     currentItem = item;
     playbackStarted = false;
+
+    currentSeason = 1;
+    currentEpisode = 1;
+    seasonEpisodes = [];
+
+    episodeRequestNumber++;
+
     lastFocusedElement = document.activeElement;
 
     const modal = $("modal");
@@ -476,11 +810,17 @@
       episodeControls.hidden = isMovie;
     }
 
+    setEpisodeInterfaceVisible(!isMovie);
+
     if ($("season")) $("season").value = 1;
     if ($("episode")) $("episode").value = 1;
     if ($("server")) $("server").value = "0";
 
     changeServer(1, 1);
+
+    if (!isMovie) {
+      loadSeasonEpisodes(1, 1);
+    }
 
     $("close-modal")?.focus();
   }
@@ -658,6 +998,9 @@
 
     currentItem = null;
     playbackStarted = false;
+
+    seasonEpisodes = [];
+    episodeRequestNumber++;
 
     requestNumber++;
 
@@ -1046,6 +1389,7 @@
     setupServers();
     setupShareButtons();
     setupNavigationLinks();
+    setupEpisodeInterface();
 
     const [
       movies,
@@ -1067,7 +1411,6 @@
       item => !animeIds.has(item.id)
     );
 
-    // Trending Movies stays separate.
     const cleanTrendingMovies = [
       ...new Map(
         movies
@@ -1076,7 +1419,6 @@
       ).values()
     ];
 
-    // PH Movies stays in its own category.
     const cleanPHMovies = [
       ...new Map(
         phMovies
@@ -1085,7 +1427,6 @@
       ).values()
     ];
 
-    // Combine both categories only for recommendations.
     const recommendedMovies = [
       ...new Map(
         [...cleanTrendingMovies, ...cleanPHMovies]
@@ -1164,16 +1505,39 @@
   $("server")?.addEventListener("change", () => {
     if (currentItem) {
       changeServer(
-        $("season")?.value || 1,
-        $("episode")?.value || 1
+        currentSeason,
+        currentEpisode
       );
     }
   });
 
+  $("season")?.addEventListener("change", () => {
+    if (!currentItem || currentItem.title) return;
+
+    const season = Math.max(
+      1,
+      parseInt($("season").value, 10) || 1
+    );
+
+    loadSeasonEpisodes(season, 1);
+    changeServer(season, 1);
+  });
+
+  $("episode")?.addEventListener("change", () => {
+    if (!currentItem || currentItem.title) return;
+
+    playEpisode(
+      currentSeason,
+      $("episode").value || 1
+    );
+  });
+
   $("play-episode")?.addEventListener("click", () => {
-    changeServer(
-      $("season")?.value || 1,
-      $("episode")?.value || 1
+    if (!currentItem || currentItem.title) return;
+
+    playEpisode(
+      $("season")?.value || currentSeason,
+      $("episode")?.value || currentEpisode
     );
   });
 
