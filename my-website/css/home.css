@@ -2047,3 +2047,306 @@ select:focus-visible {
     flex-basis: 100%;
   }
 }
+/* =========================================
+   PRIMEDRAMA — PREMIUM EPISODE BUTTONS V2
+========================================= */
+
+/* Episode navigation container */
+#episode-navigation {
+  padding: 22px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(237,16,32,.18), transparent 45%),
+    linear-gradient(145deg, #171116, #0c0b0e 70%, #160d11);
+  border: 1px solid rgba(255,70,55,.22);
+  border-radius: 18px;
+  box-shadow:
+    0 15px 35px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* Header */
+.episode-navigation-header {
+  margin-bottom: 18px;
+}
+
+.episode-navigation-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 17px;
+  font-weight: 850;
+  letter-spacing: -.3px;
+}
+
+.episode-navigation-header h3::before {
+  content: "▶";
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  color: white;
+  font-size: 11px;
+  background: linear-gradient(135deg, #ff5938, #c9001c);
+  border-radius: 9px;
+  box-shadow: 0 4px 14px rgba(237,16,32,.3);
+}
+
+.episode-navigation-header span {
+  padding: 6px 11px;
+  color: #ffb09a;
+  background: rgba(237,16,32,.1);
+  border: 1px solid rgba(237,16,32,.2);
+  border-radius: 20px;
+}
+
+/* Previous and Next buttons */
+.episode-navigation-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 19px;
+}
+
+.episode-navigation-buttons button {
+  flex: 1;
+  min-height: 43px;
+  padding: 10px 16px;
+  color: #f5eeee;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  background: linear-gradient(145deg, #282027, #171216);
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 11px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  transition: all .22s ease;
+}
+
+.episode-navigation-buttons button:hover:not(:disabled) {
+  color: #fff;
+  background: linear-gradient(120deg, #ff5938, #d20b1d 75%, #990010);
+  border-color: rgba(255,130,100,.6);
+  box-shadow: 0 7px 20px rgba(237,16,32,.25);
+  transform: translateY(-2px);
+}
+
+.episode-navigation-buttons button:active:not(:disabled) {
+  transform: scale(.97);
+}
+
+.episode-navigation-buttons button:disabled {
+  opacity: .3;
+  filter: grayscale(1);
+}
+
+/* Episode cards grid */
+.episode-list {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 11px;
+  max-height: 340px;
+  padding: 3px 5px 7px 3px;
+}
+
+/* Individual episode button */
+.episode-item {
+  position: relative;
+  min-height: 65px;
+  gap: 12px;
+  padding: 11px 13px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #211a20, #141116);
+  border: 1px solid rgba(255,255,255,.075);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+  transition: all .22s ease;
+}
+
+.episode-item::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 3px;
+  content: "";
+  background: linear-gradient(180deg, #ff5938, #b90016);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.episode-item:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, #302027, #1b1117);
+  border-color: rgba(255,90,65,.45);
+  box-shadow: 0 7px 18px rgba(0,0,0,.28);
+}
+
+/* Episode number */
+.episode-item-number {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  color: #ffad91;
+  font-size: 12px;
+  font-weight: 900;
+  background: linear-gradient(145deg, rgba(237,16,32,.2), rgba(100,0,15,.15));
+  border: 1px solid rgba(255,80,60,.25);
+  border-radius: 10px;
+}
+
+/* Episode title and details */
+.episode-item-info {
+  gap: 5px;
+}
+
+.episode-item-info strong {
+  color: #f8f3f3;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.episode-item-info span {
+  color: #aaa0a5;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Currently playing episode */
+.episode-item.active,
+.episode-item.selected,
+.episode-item[aria-current="true"] {
+  background:
+    linear-gradient(110deg, rgba(237,16,32,.3), rgba(80,0,15,.18)),
+    #21151b;
+  border-color: rgba(255,75,65,.85);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,80,65,.12),
+    0 5px 18px rgba(237,16,32,.15);
+}
+
+.episode-item.active::after,
+.episode-item.selected::after,
+.episode-item[aria-current="true"]::after {
+  opacity: 1;
+}
+
+.episode-item.active .episode-item-number,
+.episode-item.selected .episode-item-number {
+  color: #fff;
+  background: linear-gradient(135deg, #ff603c, #d0001d);
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(237,16,32,.3);
+}
+
+.episode-item.active .episode-item-info strong,
+.episode-item.selected .episode-item-info strong {
+  color: #fff;
+}
+
+/* Play episode button */
+#play-episode {
+  min-height: 42px;
+  padding: 10px 18px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 850;
+  background: linear-gradient(120deg, #ff603c, #e20b20 70%, #a90010);
+  border: 1px solid rgba(255,140,110,.35);
+  border-radius: 10px;
+  box-shadow: 0 5px 16px rgba(237,16,32,.22);
+  transition: all .2s ease;
+}
+
+#play-episode:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 7px 22px rgba(237,16,32,.35);
+  transform: translateY(-2px);
+}
+
+/* Season and episode selectors */
+#episode-controls select,
+#episode-controls input {
+  min-height: 41px;
+  padding: 9px 12px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(145deg, #272027, #151116);
+  border: 1px solid rgba(255,85,65,.3);
+  border-radius: 10px;
+  outline: none;
+}
+
+#episode-controls select:focus,
+#episode-controls input:focus {
+  border-color: #ff654d;
+  box-shadow: 0 0 0 3px rgba(237,16,32,.12);
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  #episode-navigation {
+    padding: 15px 12px;
+    border-radius: 14px;
+  }
+
+  .episode-navigation-header h3 {
+    font-size: 14px;
+  }
+
+  .episode-navigation-buttons {
+    gap: 8px;
+  }
+
+  .episode-navigation-buttons button {
+    min-height: 40px;
+    padding: 9px 8px;
+    font-size: 11px;
+    border-radius: 9px;
+  }
+
+  .episode-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    max-height: 290px;
+  }
+
+  .episode-item {
+    min-height: 57px;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 9px;
+  }
+
+  .episode-item-number {
+    flex-basis: 30px;
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
+
+  .episode-item-info strong {
+    font-size: 10px;
+  }
+
+  .episode-item-info span {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 360px) {
+  .episode-list {
+    gap: 6px;
+  }
+
+  .episode-item {
+    gap: 6px;
+    padding: 7px 6px;
+  }
+
+  .episode-item-number {
+    flex-basis: 27px;
+    width: 27px;
+    height: 27px;
+  }
+}
