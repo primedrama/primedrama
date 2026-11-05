@@ -236,7 +236,7 @@
     const overview = $("banner-overview");
 
     if (title) {
-      title.textContent = item.title || item.name || "PrimeDrama";
+      title.textContent = item.title || item.name || "Moviezden";
     }
 
     if (overview) {
@@ -358,6 +358,180 @@
   }
 
   // =========================================
+  // COMPACT PLAYER TOOLS LAYOUT
+  // =========================================
+
+  function setupWatchPanelLayout() {
+    const watchPanel = document.querySelector("#modal .watch-panel");
+    const serverLabel = $("server")?.previousElementSibling;
+    const serverSelect = $("server");
+    const sharePanel = document.querySelector("#modal .share-panel");
+
+    if (!watchPanel || !serverSelect || !sharePanel) return;
+
+    let toolsRow = $("watch-tools-row");
+
+    if (!toolsRow) {
+      toolsRow = document.createElement("div");
+      toolsRow.id = "watch-tools-row";
+      toolsRow.className = "watch-tools-row";
+
+      const serverControl = document.createElement("div");
+      serverControl.className = "server-control";
+
+      if (serverLabel?.tagName === "LABEL" && serverLabel.htmlFor === "server") {
+        serverControl.appendChild(serverLabel);
+      }
+
+      serverControl.appendChild(serverSelect);
+      toolsRow.append(serverControl, sharePanel);
+
+      const episodeControls = $("episode-controls");
+
+      if (episodeControls && episodeControls.parentElement === watchPanel) {
+        watchPanel.insertBefore(toolsRow, episodeControls);
+      } else {
+        watchPanel.appendChild(toolsRow);
+      }
+    }
+
+    if (!$("watch-tools-layout-style")) {
+      const style = document.createElement("style");
+      style.id = "watch-tools-layout-style";
+
+      style.textContent = `
+        #modal .watch-panel {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        #modal .watch-panel-copy {
+          margin: 0;
+        }
+
+        #modal .watch-tools-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          width: 100%;
+          min-width: 0;
+        }
+
+        #modal .server-control {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex: 0 1 190px;
+          min-width: 0;
+        }
+
+        #modal .server-control label {
+          margin: 0;
+          white-space: nowrap;
+        }
+
+        #modal .server-control select {
+          width: 100%;
+          min-width: 0;
+          max-width: 125px;
+          margin: 0;
+        }
+
+        #modal .watch-tools-row .share-panel {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 8px;
+          flex: 1 1 auto;
+          min-width: 0;
+          margin: 0;
+        }
+
+        #modal .watch-tools-row .share-label {
+          white-space: nowrap;
+        }
+
+        #modal .watch-tools-row .share-buttons {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          flex-wrap: nowrap;
+          gap: 6px;
+        }
+
+        #modal .watch-tools-row .share-btn {
+          flex: 0 0 auto;
+        }
+
+        @media (max-width: 600px) {
+          #modal .watch-tools-row {
+            gap: 8px;
+          }
+
+          #modal .server-control {
+            flex: 0 1 42%;
+            gap: 5px;
+          }
+
+          #modal .server-control label {
+            font-size: 12px;
+          }
+
+          #modal .server-control select {
+            max-width: 100px;
+            min-height: 38px;
+            font-size: 13px;
+          }
+
+          #modal .watch-tools-row .share-panel {
+            gap: 5px;
+          }
+
+          #modal .watch-tools-row .share-label {
+            display: none;
+          }
+
+          #modal .watch-tools-row .share-buttons {
+            gap: 5px;
+          }
+
+          #modal .watch-tools-row .share-btn {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            padding: 0;
+          }
+        }
+
+        @media (max-width: 360px) {
+          #modal .server-control {
+            flex-basis: 44%;
+          }
+
+          #modal .server-control label {
+            font-size: 11px;
+          }
+
+          #modal .server-control select {
+            max-width: 88px;
+            font-size: 12px;
+          }
+
+          #modal .watch-tools-row .share-btn {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+          }
+        }
+      `;
+
+      document.head.appendChild(style);
+    }
+  }
+
+  // =========================================
   // VIDEO SERVERS
   // =========================================
 
@@ -394,8 +568,7 @@
 
     return VIDEO_SERVERS[index];
   }
-
-  // =========================================
+    // =========================================
   // EPISODE NAVIGATION UI
   // =========================================
 
@@ -877,6 +1050,7 @@
     }
 
     setPlayerPoster(item);
+    setupWatchPanelLayout();
     loadTitleExtras(item);
 
     const episodeControls = $("episode-controls");
@@ -907,8 +1081,7 @@
 
     $("close-modal")?.focus();
   }
-
-  // =========================================
+    // =========================================
   // EXTRA MOVIE / TV DETAILS
   // =========================================
 
@@ -1335,7 +1508,7 @@
 
     const shareURL = getMovieShareURL();
 
-    const text = `Watch ${title} on PrimeDrama!`;
+    const text = `Watch ${title} on Moviezden!`;
 
     const encodedURL = encodeURIComponent(shareURL);
     const encodedText = encodeURIComponent(text);
@@ -1383,8 +1556,7 @@
       });
     });
   }
-
-  // =========================================
+    // =========================================
   // OPEN MOVIE FROM SHARED LINK
   // =========================================
 
@@ -1484,6 +1656,7 @@
     }
 
     setupServers();
+    setupWatchPanelLayout();
     setupShareButtons();
     setupNavigationLinks();
     setupEpisodeInterface();
