@@ -2760,3 +2760,13 @@ select:focus-visible {
     height: 36px !important;
   }
 }
+/* Movie Description - Justified Text */
+#modal #movie-description,
+#modal .movie-description,
+#modal .overview,
+#modal .movie-desc {
+    text-align: justify !important;
+    text-justify: inter-word;
+    line-height: 1.7;
+    overflow-wrap: break-word;
+}
