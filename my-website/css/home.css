@@ -2350,3 +2350,101 @@ select:focus-visible {
     height: 27px;
   }
 }
+/* =====================================
+   MOVIEZDEN - UNIFORM POSTER SIZES
+===================================== */
+
+#recommended-list,
+#movies-list,
+#ph-movies-list,
+#tvshows-list,
+#anime-list {
+    display: grid !important;
+    grid-auto-flow: column;
+    grid-auto-columns: 150px;
+    gap: 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 5px 15px;
+    scroll-snap-type: x mandatory;
+}
+
+#recommended-list .card,
+#movies-list .card,
+#ph-movies-list .card,
+#tvshows-list .card,
+#anime-list .card {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    scroll-snap-align: start;
+    overflow: hidden;
+}
+
+#recommended-list .card img,
+#movies-list .card img,
+#ph-movies-list .card img,
+#tvshows-list .card img,
+#anime-list .card img {
+    display: block;
+    width: 100% !important;
+    height: 225px !important;
+    min-height: 225px !important;
+    max-height: 225px !important;
+    object-fit: cover !important;
+    border-radius: 8px;
+}
+
+#recommended-list .card-info,
+#movies-list .card-info,
+#ph-movies-list .card-info,
+#tvshows-list .card-info,
+#anime-list .card-info {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#recommended-list .card-title,
+#movies-list .card-title,
+#ph-movies-list .card-title,
+#tvshows-list .card-title,
+#anime-list .card-title {
+    font-size: 13px;
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* MOBILE VIEW */
+@media (max-width: 600px) {
+    #recommended-list,
+    #movies-list,
+    #ph-movies-list,
+    #tvshows-list,
+    #anime-list {
+        grid-auto-columns: 125px;
+        gap: 12px;
+    }
+
+    #recommended-list .card,
+    #movies-list .card,
+    #ph-movies-list .card,
+    #tvshows-list .card,
+    #anime-list .card {
+        width: 125px !important;
+        min-width: 125px !important;
+        max-width: 125px !important;
+    }
+
+    #recommended-list .card img,
+    #movies-list .card img,
+    #ph-movies-list .card img,
+    #tvshows-list .card img,
+    #anime-list .card img {
+        height: 188px !important;
+        min-height: 188px !important;
+        max-height: 188px !important;
+    }
+}
