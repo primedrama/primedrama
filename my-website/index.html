@@ -197,9 +197,13 @@
             SERVERS
           </label>
 
-          <select id="server">
+          <select id="server" aria-describedby="server-status">
             <option value="0">Server 1</option>
           </select>
+
+          <p id="server-status" class="server-status" role="status" aria-live="polite">
+            ACTIVE SERVER: Server 1
+          </p>
 
         </div>
 
