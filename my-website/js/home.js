@@ -363,172 +363,37 @@
 
   function setupWatchPanelLayout() {
     const watchPanel = document.querySelector("#modal .watch-panel");
-    const serverLabel = $("server")?.previousElementSibling;
-    const serverSelect = $("server");
+    const serverSection = document.querySelector("#modal .server-section");
     const sharePanel = document.querySelector("#modal .share-panel");
+    const episodeControls = $("episode-controls");
+    const serverSelect = $("server");
 
-    if (!watchPanel || !serverSelect || !sharePanel) return;
+    if (!watchPanel || !serverSection || !sharePanel || !serverSelect) return;
 
-    let toolsRow = $("watch-tools-row");
+    // Keep the intended DOM order: server selector, share buttons, episode controls.
+    watchPanel.append(serverSection, sharePanel);
+    if (episodeControls) watchPanel.appendChild(episodeControls);
 
-    if (!toolsRow) {
-      toolsRow = document.createElement("div");
-      toolsRow.id = "watch-tools-row";
-      toolsRow.className = "watch-tools-row";
-
-      const serverControl = document.createElement("div");
-      serverControl.className = "server-control";
-
-      if (serverLabel?.tagName === "LABEL" && serverLabel.htmlFor === "server") {
-        serverControl.appendChild(serverLabel);
-      }
-
-      serverControl.appendChild(serverSelect);
-      toolsRow.append(serverControl, sharePanel);
-
-      const episodeControls = $("episode-controls");
-
-      if (episodeControls && episodeControls.parentElement === watchPanel) {
-        watchPanel.insertBefore(toolsRow, episodeControls);
-      } else {
-        watchPanel.appendChild(toolsRow);
-      }
+    let status = $("server-status");
+    if (!status) {
+      status = document.createElement("p");
+      status.id = "server-status";
+      status.className = "server-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      serverSection.appendChild(status);
     }
 
-    if (!$("watch-tools-layout-style")) {
-      const style = document.createElement("style");
-      style.id = "watch-tools-layout-style";
+    updateServerStatus();
+  }
 
-      style.textContent = `
-        #modal .watch-panel {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
+  function updateServerStatus() {
+    const status = $("server-status");
+    const select = $("server");
+    if (!status || !select) return;
 
-        #modal .watch-panel-copy {
-          margin: 0;
-        }
-
-        #modal .watch-tools-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-          width: 100%;
-          min-width: 0;
-        }
-
-        #modal .server-control {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex: 0 1 190px;
-          min-width: 0;
-        }
-
-        #modal .server-control label {
-          margin: 0;
-          white-space: nowrap;
-        }
-
-        #modal .server-control select {
-          width: 100%;
-          min-width: 0;
-          max-width: 125px;
-          margin: 0;
-        }
-
-        #modal .watch-tools-row .share-panel {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          gap: 8px;
-          flex: 1 1 auto;
-          min-width: 0;
-          margin: 0;
-        }
-
-        #modal .watch-tools-row .share-label {
-          white-space: nowrap;
-        }
-
-        #modal .watch-tools-row .share-buttons {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          flex-wrap: nowrap;
-          gap: 6px;
-        }
-
-        #modal .watch-tools-row .share-btn {
-          flex: 0 0 auto;
-        }
-
-        @media (max-width: 600px) {
-          #modal .watch-tools-row {
-            gap: 8px;
-          }
-
-          #modal .server-control {
-            flex: 0 1 42%;
-            gap: 5px;
-          }
-
-          #modal .server-control label {
-            font-size: 12px;
-          }
-
-          #modal .server-control select {
-            max-width: 100px;
-            min-height: 38px;
-            font-size: 13px;
-          }
-
-          #modal .watch-tools-row .share-panel {
-            gap: 5px;
-          }
-
-          #modal .watch-tools-row .share-label {
-            display: none;
-          }
-
-          #modal .watch-tools-row .share-buttons {
-            gap: 5px;
-          }
-
-          #modal .watch-tools-row .share-btn {
-            width: 34px;
-            height: 34px;
-            min-width: 34px;
-            padding: 0;
-          }
-        }
-
-        @media (max-width: 360px) {
-          #modal .server-control {
-            flex-basis: 44%;
-          }
-
-          #modal .server-control label {
-            font-size: 11px;
-          }
-
-          #modal .server-control select {
-            max-width: 88px;
-            font-size: 12px;
-          }
-
-          #modal .watch-tools-row .share-btn {
-            width: 30px;
-            height: 30px;
-            min-width: 30px;
-          }
-        }
-      `;
-
-      document.head.appendChild(style);
-    }
+    const selected = VIDEO_SERVERS[Number.parseInt(select.value, 10)] || VIDEO_SERVERS[0];
+    status.textContent = `ACTIVE SERVER: ${selected.name}`;
   }
 
   // =========================================
@@ -552,6 +417,7 @@
     });
 
     select.value = "0";
+    updateServerStatus();
   }
 
   function getSelectedServer() {
@@ -1071,6 +937,7 @@
 
     if ($("server")) {
       $("server").value = "0";
+      updateServerStatus();
     }
 
     changeServer(1, 1);
@@ -1774,6 +1641,7 @@
 
   // SERVER CHANGE
   $("server")?.addEventListener("change", () => {
+    updateServerStatus();
     if (currentItem) {
       changeServer(
         currentSeason,
@@ -1831,6 +1699,12 @@
   });
 
   // START WEBSITE
-  init();
 
+  // Start after the DOM is ready.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })();
+
