@@ -484,23 +484,29 @@
     `;
 
     /*
-      IMPORTANT:
-      Ilalagay ang episode navigation pagkatapos ng watch-panel.
-      Kaya ang order ay:
-      PLAYER → SERVER/SHARE → EPISODES → TITLE DETAILS
+      Episode navigation is placed AFTER the movie/TV description.
+      Layout order:
+      PLAYER → SERVER/SHARE/SEASON CONTROLS → TITLE DESCRIPTION
+      → EPISODES → RECOMMENDATIONS
     */
 
-    const watchPanel = document.querySelector(
-      "#modal .watch-panel"
+    const titleDetails = document.querySelector(
+      "#modal .title-details"
     );
 
-    if (watchPanel) {
-      watchPanel.insertAdjacentElement("afterend", panel);
+    // Remove the small "TITLE DETAILS" label above the title.
+    document.querySelector("#modal .details-kicker")?.remove();
+
+    const recommendations = document.querySelector(
+      "#modal .recommendations"
+    );
+
+    if (titleDetails) {
+      titleDetails.insertAdjacentElement("afterend", panel);
+    } else if (recommendations) {
+      recommendations.insertAdjacentElement("beforebegin", panel);
     } else {
-      video.parentElement.insertAdjacentElement(
-        "afterend",
-        panel
-      );
+      video.parentElement.insertAdjacentElement("afterend", panel);
     }
 
     $("previous-episode")?.addEventListener(
