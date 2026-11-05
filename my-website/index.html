@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,24 +24,77 @@
   <link rel="icon" href="https://i.ibb.co/d4dXkX6V/logo.png">
   <link rel="stylesheet" href="css/home.css">
 
-  <!-- Font Awesome icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- MOVIEZ DEN PREMIUM LOGO STYLE -->
+  <style>
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 auto;
+      text-decoration: none;
+      line-height: 0;
+    }
+
+    .brand-logo-img {
+      display: block;
+      width: clamp(175px, 22vw, 260px);
+      max-height: 76px;
+      height: auto;
+      object-fit: contain;
+      object-position: left center;
+      filter: drop-shadow(0 0 7px rgba(229, 9, 20, 0.18));
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .brand-logo:hover .brand-logo-img {
+      transform: scale(1.035);
+      filter: drop-shadow(0 0 11px rgba(229, 9, 20, 0.42));
+    }
+
+    @media (max-width: 600px) {
+      .brand-logo-img {
+        width: 155px;
+        max-height: 58px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-logo-img {
+        transition: none;
+      }
+    }
+  </style>
+
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
 
+  <!-- MAIN JAVASCRIPT -->
   <script defer src="js/home.js"></script>
+
 </head>
 
 <body>
 
   <!-- NAVIGATION -->
   <header class="navbar">
+
     <div class="nav-inner">
 
-      <a href="index.html" class="brand-title" aria-label="Moviezden home">
-        MOVIEZ<span>DEN</span>
+      <!-- PREMIUM IMAGE LOGO -->
+      <a href="index.html" class="brand-logo" aria-label="Moviezden home">
+        <img
+          src="moviez-den-logo.png"
+          alt="Moviez Den"
+          class="brand-logo-img"
+          width="320"
+          height="110"
+        >
       </a>
 
+      <!-- SEARCH -->
       <div class="search-wrapper">
         <input
           id="search-input"
@@ -53,6 +105,7 @@
         >
       </div>
 
+      <!-- MOBILE MENU BUTTON -->
       <button
         class="hamburger"
         id="hamburger"
@@ -66,6 +119,7 @@
 
     </div>
 
+    <!-- MOBILE NAVIGATION -->
     <nav class="mobile-menu" id="mobile-menu" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="#movies-list">Movies</a>
@@ -73,17 +127,29 @@
       <a href="#tvshows-list">TV Shows</a>
       <a href="#anime-list">Anime</a>
     </nav>
+
   </header>
 
 
   <!-- HERO BANNER -->
   <section class="banner" id="banner" aria-label="Featured entertainment">
+
     <div class="banner-content">
+
       <span class="hero-kicker">FEATURED MOVIE THIS WEEK</span>
+
       <h1 id="banner-title">Moviezden</h1>
-      <p id="banner-overview">Discover trending entertainment.</p>
-      <button type="button" id="hero-play">WATCH NOW</button>
+
+      <p id="banner-overview">
+        Discover trending entertainment.
+      </p>
+
+      <button type="button" id="hero-play">
+        WATCH NOW
+      </button>
+
     </div>
+
   </section>
 
 
@@ -92,15 +158,21 @@
 
     <!-- SEARCH RESULTS -->
     <section class="row box red-glow" id="search-section" hidden>
+
       <h2>Search Results</h2>
+
       <div class="grid" id="search-results"></div>
+
     </section>
 
 
     <!-- RECOMMENDED -->
     <section class="row box red-glow" id="recommended-section">
+
       <h2>Recommended For You</h2>
+
       <div class="list" id="recommended-list"></div>
+
     </section>
 
 
@@ -110,8 +182,11 @@
       id="trending-movies-section"
       aria-labelledby="movies-heading"
     >
+
       <h2 id="movies-heading">Trending Movies</h2>
+
       <div class="list two-rows" id="movies-list"></div>
+
     </section>
 
 
@@ -121,8 +196,11 @@
       id="ph-movies-section"
       aria-labelledby="ph-movies-heading"
     >
+
       <h2 id="ph-movies-heading">PH Movies</h2>
+
       <div class="list two-rows" id="ph-movies-list"></div>
+
     </section>
 
 
@@ -132,8 +210,11 @@
       id="trending-tv-section"
       aria-labelledby="tvshows-heading"
     >
+
       <h2 id="tvshows-heading">Trending TV Shows</h2>
+
       <div class="list two-rows" id="tvshows-list"></div>
+
     </section>
 
 
@@ -143,8 +224,11 @@
       id="trending-anime-section"
       aria-labelledby="anime-heading"
     >
+
       <h2 id="anime-heading">Trending Anime</h2>
+
       <div class="list two-rows" id="anime-list"></div>
+
     </section>
 
   </main>
@@ -173,6 +257,7 @@
 
       <!-- PLAYER -->
       <div class="player-wrapper">
+
         <iframe
           id="modal-video"
           title="Movie player"
@@ -180,6 +265,7 @@
           allowfullscreen
           referrerpolicy="strict-origin-when-cross-origin"
         ></iframe>
+
       </div>
 
 
@@ -201,7 +287,12 @@
             <option value="0">Server 1</option>
           </select>
 
-          <p id="server-status" class="server-status" role="status" aria-live="polite">
+          <p
+            id="server-status"
+            class="server-status"
+            role="status"
+            aria-live="polite"
+          >
             ACTIVE SERVER: Server 1
           </p>
 
@@ -276,10 +367,22 @@
         <div id="episode-controls" hidden>
 
           <label for="season">Season</label>
-          <input id="season" type="number" min="1" value="1">
+
+          <input
+            id="season"
+            type="number"
+            min="1"
+            value="1"
+          >
 
           <label for="episode">Episode</label>
-          <input id="episode" type="number" min="1" value="1">
+
+          <input
+            id="episode"
+            type="number"
+            min="1"
+            value="1"
+          >
 
           <button id="play-episode" type="button">
             Load Episode
@@ -293,7 +396,9 @@
       <!-- TITLE DETAILS -->
       <section class="title-details">
 
-        <div class="details-kicker">TITLE DETAILS</div>
+        <div class="details-kicker">
+          TITLE DETAILS
+        </div>
 
         <h2 id="modal-title"></h2>
 
@@ -324,55 +429,80 @@
 
   </div>
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-container">
 
-    <div class="footer-main">
+  <!-- FOOTER -->
+  <footer class="site-footer">
 
-      <!-- EXPLORE -->
-      <div class="footer-explore-column">
-        <h3 class="footer-heading">Explore</h3>
-        <nav class="footer-links" aria-label="Explore">
-          <a href="index.html">Home</a>
-          <a href="#movies-list">Trending Movies</a>
-          <a href="#ph-movies-list">PH Movies</a>
-          <a href="#tvshows-list">TV Shows</a>
-          <a href="#anime-list">Anime</a>
-        </nav>
+    <div class="footer-container">
+
+      <div class="footer-main">
+
+        <!-- EXPLORE -->
+        <div class="footer-explore-column">
+
+          <h3 class="footer-heading">Explore</h3>
+
+          <nav class="footer-links" aria-label="Explore">
+
+            <a href="index.html">Home</a>
+
+            <a href="#movies-list">Trending Movies</a>
+
+            <a href="#ph-movies-list">PH Movies</a>
+
+            <a href="#tvshows-list">TV Shows</a>
+
+            <a href="#anime-list">Anime</a>
+
+          </nav>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+        <div class="footer-information-column">
+
+          <h3 class="footer-heading">Information</h3>
+
+          <nav class="footer-links" aria-label="Legal information">
+
+            <a href="copyright.html">Copyright Policy</a>
+
+            <a href="privacy.html">Privacy Policy</a>
+
+            <a href="terms.html">Terms of Service</a>
+
+            <a href="contact.html">Contact Us</a>
+
+          </nav>
+
+        </div>
+
       </div>
 
-      <!-- INFORMATION -->
-      <div class="footer-information-column">
-        <h3 class="footer-heading">Information</h3>
-        <nav class="footer-links" aria-label="Legal information">
-          <a href="copyright.html">Copyright Policy</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
-          <a href="contact.html">Contact Us</a>
-        </nav>
+
+      <!-- FOOTER BOTTOM -->
+      <div class="footer-bottom">
+
+        <p class="footer-copyright">
+          © <span id="year"></span> Moviezden. All Rights Reserved.
+        </p>
+
+        <p class="footer-disclaimer">
+          Movie information and metadata may be provided by third-party services.
+          Video playback, where available, may be delivered through external providers.
+          All third-party trademarks and intellectual property belong to their respective
+          owners. Moviezden does not claim ownership of third-party content.
+          Third-party services may operate independently and are subject to their own
+          terms and policies.
+        </p>
+
       </div>
 
     </div>
 
-    <!-- FOOTER BOTTOM -->
-    <div class="footer-bottom">
-      <p class="footer-copyright">
-        © <span id="year"></span> Moviezden. All Rights Reserved.
-      </p>
+  </footer>
 
-      <p class="footer-disclaimer">
-        Movie information and metadata may be provided by third-party services.
-        Video playback, where available, may be delivered through external providers.
-        All third-party trademarks and intellectual property belong to their respective
-        owners. Moviezden does not claim ownership of third-party content.
-        Third-party services may operate independently and are subject to their own
-        terms and policies.
-      </p>
-    </div>
-
-  </div>
-</footer>
 
   <!-- EXTERNAL SCRIPT -->
   <script
