@@ -2856,3 +2856,88 @@ select:focus-visible {
         font-size: 9px;
     }
 }
+/* =========================================
+   MOVIEZ DEN — PREMIUM IMAGE LOGO
+   Transparent • Responsive • Cinematic
+========================================= */
+
+.nav-inner > .brand-logo {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    min-width: 0;
+    line-height: 0;
+    text-decoration: none;
+}
+
+.brand-logo-img {
+    display: block;
+    width: clamp(175px, 20vw, 235px);
+    height: auto;
+    max-height: 66px;
+    object-fit: contain;
+    object-position: left center;
+
+    filter: drop-shadow(
+        0 2px 8px rgba(237, 16, 32, 0.18)
+    );
+
+    transition:
+        transform 0.25s ease,
+        filter 0.25s ease;
+}
+
+/* HOVER EFFECT */
+.brand-logo:hover .brand-logo-img {
+    transform: scale(1.025);
+
+    filter: drop-shadow(
+        0 2px 12px rgba(237, 16, 32, 0.42)
+    );
+}
+
+/* FOCUS EFFECT */
+.brand-logo:focus-visible {
+    outline: 2px solid #ff785b;
+    outline-offset: 5px;
+    border-radius: 5px;
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+    .brand-logo-img {
+        width: 175px;
+        max-height: 58px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .nav-inner {
+        gap: 8px;
+    }
+
+    .nav-inner > .brand-logo {
+        flex: 0 0 auto;
+    }
+
+    .brand-logo-img {
+        width: 125px;
+        max-height: 44px;
+    }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 360px) {
+    .brand-logo-img {
+        width: 108px;
+        max-height: 40px;
+    }
+}
+
+/* REDUCE ANIMATION */
+@media (prefers-reduced-motion: reduce) {
+    .brand-logo-img {
+        transition: none;
+    }
+}
