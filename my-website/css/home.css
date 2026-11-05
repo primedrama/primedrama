@@ -2448,3 +2448,104 @@ select:focus-visible {
         max-height: 188px !important;
     }
 }
+
+/* =========================================
+   MOVIEZDEN — BIG SERVER SELECTOR
+========================================= */
+
+.watch-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 16px !important;
+  width: 100%;
+  padding: 18px !important;
+}
+
+/* SERVER HEADING */
+
+.server-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.server-section label {
+  color: #fff;
+  font-size: 16px !important;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+/* SERVER DROPDOWN */
+
+#server {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 55px !important;
+  margin: 0 !important;
+  padding: 14px 16px !important;
+  color: #fff !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  background: linear-gradient(145deg, #292027, #120e12) !important;
+  border: 1px solid #ed1020 !important;
+  border-radius: 10px !important;
+  outline: none;
+}
+
+#server option {
+  color: #fff;
+  background: #171014;
+  font-size: 16px;
+}
+
+/* SHARE BELOW SERVERS */
+
+.share-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding-top: 16px !important;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+
+.share-label {
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px;
+}
+
+.share-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px !important;
+}
+
+.share-btn {
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 17px !important;
+  border-radius: 10px !important;
+}
+
+@media (max-width: 600px) {
+  .watch-panel {
+    padding: 14px !important;
+  }
+
+  #server {
+    min-height: 54px !important;
+    font-size: 16px !important;
+  }
+
+  .share-btn {
+    width: 42px !important;
+    height: 42px !important;
+  }
+}
