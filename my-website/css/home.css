@@ -2549,3 +2549,214 @@ select:focus-visible {
     height: 42px !important;
   }
 }
+
+/* =========================================================
+   FINAL PLAYER LAYOUT FIX
+   Order: PLAYER → SERVER SELECTOR → SHARE → EPISODES
+   These final rules intentionally override older layout rules.
+========================================================= */
+
+#modal .watch-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  flex-wrap: nowrap !important;
+  gap: 16px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 14px 0 16px !important;
+  padding: 16px !important;
+  overflow: hidden !important;
+}
+
+#modal .watch-panel .server-section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+#modal .watch-panel .server-heading {
+  display: block !important;
+  margin: 0 !important;
+  color: #ffb09a !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.2px !important;
+}
+
+#modal #server {
+  display: block !important;
+  width: min(100%, 360px) !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: 48px !important;
+  margin: 0 !important;
+  padding: 11px 14px !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  background: linear-gradient(145deg, #292027, #120e12) !important;
+  border: 1px solid #ed1020 !important;
+  border-radius: 10px !important;
+  outline: none !important;
+}
+
+#modal #server option {
+  color: #fff !important;
+  background: #171014 !important;
+}
+
+#modal #server:focus-visible {
+  border-color: #ff8a68 !important;
+  box-shadow: 0 0 0 3px rgba(237, 16, 32, .2) !important;
+}
+
+#modal .server-status {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 6px 10px !important;
+  color: #baffc9 !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .7px !important;
+  overflow-wrap: anywhere !important;
+  background: rgba(25, 211, 91, .10) !important;
+  border: 1px solid rgba(25, 211, 91, .32) !important;
+  border-radius: 7px !important;
+}
+
+#modal .watch-panel .share-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 14px 0 0 !important;
+  border-top: 1px solid rgba(255, 255, 255, .12) !important;
+  box-sizing: border-box !important;
+}
+
+#modal .share-label {
+  display: block !important;
+  margin: 0 !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.2px !important;
+}
+
+#modal .share-buttons {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: wrap !important;
+  gap: 9px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+
+#modal .share-btn {
+  display: grid !important;
+  flex: 0 0 42px !important;
+  place-items: center !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  max-width: 42px !important;
+  height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#modal #share-message {
+  display: block !important;
+  width: 100% !important;
+  min-height: 15px !important;
+  margin: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+#modal #episode-controls {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+#modal #episode-controls[hidden] {
+  display: none !important;
+}
+
+#modal .watch-panel > *,
+#modal .watch-panel .server-section > *,
+#modal .watch-panel .share-panel > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  #modal {
+    padding: 10px !important;
+  }
+
+  #modal .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px auto !important;
+    padding: 12px !important;
+  }
+
+  #modal .watch-panel {
+    gap: 14px !important;
+    padding: 13px !important;
+  }
+
+  #modal #server {
+    width: 100% !important;
+    min-height: 46px !important;
+    font-size: 14px !important;
+  }
+
+  #modal .share-buttons {
+    gap: 8px !important;
+  }
+
+  #modal .share-btn {
+    flex-basis: 40px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  #modal .share-buttons {
+    gap: 7px !important;
+  }
+
+  #modal .share-btn {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    height: 36px !important;
+  }
+}
